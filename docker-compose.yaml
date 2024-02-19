@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  # API
+  greenhurb_api:
+    build: ./
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $DOCKER_PORT:$APPLICATION_PORT
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+      - /app/node_modules
