@@ -1,7 +1,7 @@
 import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
 import { sequelize } from "@/core"
-import { Users } from "@/auth/model"
-import { Program } from "./program.model"
+import { Users } from "@/auth/model/user.model"
+import { Program } from "@/programs/models/program.model"
 
 export class UserPrograms extends Model<InferAttributes<UserPrograms>, InferCreationAttributes<UserPrograms>> {
     declare id: CreationOptional<string>

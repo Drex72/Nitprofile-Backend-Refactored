@@ -1,5 +1,5 @@
 import type { CorsOptions } from "cors"
-import { currentOrigin } from ".."
+import { currentOrigin } from "../utils/getCurrentOrigin"
 
 export const allowedOrigins: string | RegExp | (string | RegExp)[] = [currentOrigin]
 

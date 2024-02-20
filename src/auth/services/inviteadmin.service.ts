@@ -3,7 +3,7 @@ import type { InviteAdminPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
 import { tokenService, type TokenService } from "../helpers/token"
 import type { Users as IUsers } from "../model"
-import { Users } from "../model"
+import { Users } from "@/auth/model/user.model"
 import { dispatch } from "@/app"
 import { adminInvitationMail } from "@/mails"
 

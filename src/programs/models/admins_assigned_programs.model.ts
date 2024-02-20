@@ -1,7 +1,7 @@
-import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, UUIDV4, type ForeignKey } from "sequelize"
+import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
 import { sequelize } from "@/core"
-import { Users } from "@/auth/model"
-import { Program } from "."
+import { Users } from "@/auth/model/user.model.ts"
+import { Program } from "@/programs/models/program.model"
 
 export class AdminsAssignedPrograms extends Model<InferAttributes<AdminsAssignedPrograms>, InferCreationAttributes<AdminsAssignedPrograms>> {
     declare id: CreationOptional<string>
@@ -42,6 +42,5 @@ AdminsAssignedPrograms.init(
     },
 )
 
-
-AdminsAssignedPrograms.belongsTo(Users, { foreignKey: 'userId' });
-AdminsAssignedPrograms.belongsTo(Program, { foreignKey: 'programId' });
+// AdminsAssignedPrograms.belongsTo(Users, { foreignKey: "userId" })
+// AdminsAssignedPrograms.belongsTo(Program, { foreignKey: "programId" })

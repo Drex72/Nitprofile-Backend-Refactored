@@ -3,7 +3,7 @@ import type { SignInPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
 import { tokenService, type TokenService } from "../helpers/token"
 import type { Users as IUsers } from "../model"
-import { Users } from "../model"
+import { Users } from "@/auth/model/user.model"
 
 class SignIn {
     constructor(private readonly dbUser: typeof IUsers, private readonly tokenService: TokenService) {}

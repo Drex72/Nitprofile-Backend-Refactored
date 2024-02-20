@@ -106,4 +106,10 @@ export const config = Object.freeze({
         devOrigin: validatedEnvVars.DEV_ORIGIN,
         stagingOrigin: validatedEnvVars.STAGING_ORIGIN,
     },
+
+    cache: {
+        port: parseInt(process.env.REDIS_PORT!),
+        host: process.env.REDIS_HOST,
+        ttl: parseInt(process.env.REDIS_TTL!),
+    },
 })

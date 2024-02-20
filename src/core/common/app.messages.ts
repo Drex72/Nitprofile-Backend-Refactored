@@ -7,11 +7,13 @@ export const AppMessages = {
         FORBIDDEN_RESOURCE: "Forbidden Resource. You do not have the required permissions to access this resource",
         PROGRAM_EXISTS: "This Program already exists",
         INVALID_PROGRAM: "This Program doesn't exist",
+        FORBIDDEN_PROGRAM: "You don't have access to this program",
         INVALID_PROGRAM_NODE: "This Program Node doesn't exist",
         START_DATE_ERROR: "Start Date cannot be earlier than Current date",
         DATE_DURATION_ERROR: "Start Date cannot be later than End date",
         USER_ALREADY_ASSIGNED_TO_PROGRAM: "User already exists in this program",
         INVALID_PROFILE_PICTURE: "You must have a profile picture before you can generate your profile. kindly update your profile picture.",
+        PROFILE_GENERATION_NOT_AVAILABLE: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
     },
     SUCCESS: {
         LOGIN: "Login successful.",
@@ -30,6 +32,8 @@ export const AppMessages = {
         PROGRAM_NODE_DELETED: "Program Node deleted successfully",
 
         USERS_REGISTERED_SUCCESSFULLY: "Users registered for program successfully",
+
+        PROFILE_GENERATION_AVAILABLE:"Profile Generation is not available"
     },
     INFO: {
         INVALID_OPERATION: "Invalid operation.",

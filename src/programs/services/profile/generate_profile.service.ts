@@ -1,8 +1,10 @@
-import type { Users } from "@/auth/model"
-import { type Context, HttpStatus, BadRequestError, logger, imageUploadService, ForbiddenError, config, UnAuthorizedError } from "@/core"
+import { Users } from "@/auth/model"
+import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError, generateCloudinaryTransformationImage } from "@/core"
 import { AppMessages } from "@/core/common"
+import { placeHolderTextConverter } from "@/programs/helpers/placeholderText"
 import { Program, ProgramNodes, UserPrograms } from "@/programs/models"
-import { type AddProgramProfileFramePayload, type GenerateProgramProfilePayload } from "@/programs/payload_interfaces"
+import { type GenerateProgramProfilePayload } from "@/programs/payload_interfaces"
+import type { Node } from "@/programs/types"
 
 class GenerateProfile {
     constructor(
@@ -12,14 +14,14 @@ class GenerateProfile {
         private readonly dbUser: typeof Users,
     ) {}
 
-    handle = async ({ params, user, query, files }: Context<GenerateProgramProfilePayload>) => {
+    handle = async ({ params, user }: Context<GenerateProgramProfilePayload>) => {
         if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
         const { program_id } = params
 
         const existingUser = await this.dbUser.findOne({ where: { id: user.id } })
 
-        if (!existingUser || !existingUser.profilePicSecureUrl) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
+        if (!existingUser || !existingUser.profilePicPublicId) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
 
         const program = await this.dbPrograms.findOne({
             where: { id: program_id },
@@ -37,36 +39,60 @@ class GenerateProfile {
             where: { programId: program_id },
         })
 
-        if (!programNodes || programNodes.length === 0)
-            throw new BadRequestError("Profile generation is currently unavailable. Please reach out to the administrator for further details.")
+        if (!program.profileGenerationAvailable) {
+            throw new BadRequestError(AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE)
+        }
 
         let profile_url
 
         if (userProgram.profileImageUrl) profile_url = userProgram.profileImageUrl
 
         if (!userProgram.profileImageUrl || existingUser.changed("profilePicSecureUrl")) {
-            const uploadedImage = await imageUploadService.imageUpload(config.cloudinary.profileFrameFolder, files.frame)
+            const refactoredNodes: Node[] = []
 
-            if (!uploadedImage) throw new BadRequestError("Error while uploading Frame. Please Try again later")
+            await Promise.all(
+                programNodes.map(async (node) => {
+                    if (node.type === "image" && !node.overlay) {
+                        node.overlay = existingUser.profilePicPublicId!.replace(/\//g, ":")
 
-            userProgram.profileImageUrl = uploadedImage.secure_url
-            userProgram.profileGenerationDate = new Date()
+                        refactoredNodes.push(node)
+                    }
+
+                    if (node.type === "text" && node.placeholder) {
+                        const refactoredNode = await placeHolderTextConverter.convert_entity_placeholder(
+                            {
+                                ...node,
+                                type: "text",
+                            },
+                            { programId: program.id, userId: existingUser.id },
+                        )
+
+                        refactoredNode && refactoredNodes.push(refactoredNode)
+                    }
+                }),
+            )
+
+            const profileImageUrl = generateCloudinaryTransformationImage({
+                framePublicId: program.profileFramePublicId,
+                height: program.profileFrameHeight,
+                nodes: refactoredNodes,
+                width: program.profileFrameWidth,
+            })
+
+            userProgram.profileImageUrl = profileImageUrl
+            userProgram.profileGenerationDate = new Date(Date.now())
 
             await userProgram.save()
         }
-
-        existingUser.changed("profilePicSecureUrl")
-
-        
 
         logger.info(`Program with ID ${program.id} updated successfully`)
 
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.PROGRAM_UPDATED,
-            data: program,
+            data: userProgram.profileImageUrl,
         }
     }
 }
 
-export const generateProfile = new GenerateProfile(Program)
+export const generateProfile = new GenerateProfile(Program, UserPrograms, ProgramNodes, Users)

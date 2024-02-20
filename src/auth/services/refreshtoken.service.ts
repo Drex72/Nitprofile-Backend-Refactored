@@ -1,7 +1,7 @@
 import { type Context, convertArrayToObject, UnAuthorizedError, config, HttpStatus } from "@/core"
 import type { RefreshTokenPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
-import { Users } from "../model"
+import { Users } from "@/auth/model/user.model"
 import { type TokenService, tokenService } from "../helpers/token"
 
 class RefreshToken {

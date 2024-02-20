@@ -81,4 +81,4 @@ class PlaceholderText {
     }
 }
 
-const placeHolderText = new PlaceholderText(Program, Users)
+export const placeHolderTextConverter = new PlaceholderText(Program, Users)

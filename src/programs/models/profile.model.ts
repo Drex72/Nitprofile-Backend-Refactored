@@ -1,6 +1,6 @@
 import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, UUIDV4, type ForeignKey } from "sequelize"
 import { sequelize } from "@/core"
-import type { Program } from "./program.model"
+import { Program } from "@/programs/models/program.model"
 
 export class Profile extends Model<InferAttributes<Profile>, InferCreationAttributes<Profile>> {
     declare id: CreationOptional<string>

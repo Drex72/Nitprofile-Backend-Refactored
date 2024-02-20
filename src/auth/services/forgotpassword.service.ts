@@ -3,7 +3,7 @@ import { BadRequestError, HttpStatus, logger, type Context, currentOrigin, gener
 import { forgotPasswordMail } from "@/mails"
 import type { ForgotPasswordPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
-import { Users } from "@/auth/model"
+import { Users } from "@/auth/model/user.model"
 
 export class ForgotPassword {
     constructor(private readonly dbUser: typeof Users) {}

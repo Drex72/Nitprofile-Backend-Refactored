@@ -1,7 +1,7 @@
-import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, UUIDV4, type ForeignKey } from "sequelize"
+import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
 import { sequelize } from "@/core"
 import { placeholderTextNodeEntity, type INodeType, type IPlaceholderTextNodeEntity } from "../types"
-import { Program } from "./program.model"
+import { Program } from "@/programs/models/program.model"
 
 export class ProgramNodes extends Model<InferAttributes<ProgramNodes>, InferCreationAttributes<ProgramNodes>> {
     declare id: CreationOptional<string>
@@ -57,6 +57,9 @@ ProgramNodes.init(
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        overlay: {
+            type: DataTypes.STRING,
+        },
         width: {
             type: DataTypes.INTEGER,
         },
@@ -105,7 +108,7 @@ ProgramNodes.init(
             },
             textNodes: {
                 attributes: {
-                    exclude: ["width", "height", "gravity", "radius", "crop"],
+                    exclude: ["width", "height", "gravity", "radius", "crop", "overlay"],
                 },
             },
         },

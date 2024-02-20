@@ -1,7 +1,7 @@
-import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, UUIDV4, type ForeignKey } from "sequelize"
+import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
 import { sequelize } from "@/core"
-import { Users } from "@/auth/model"
-import { AdminsAssignedPrograms } from "@/programs/models"
+import { Users } from "@/auth/model/user.model"
+import { AdminsAssignedPrograms } from "@/programs/models/admins_assigned_programs.model"
 
 export class Program extends Model<InferAttributes<Program>, InferCreationAttributes<Program>> {
     declare id: CreationOptional<string>
@@ -16,12 +16,14 @@ export class Program extends Model<InferAttributes<Program>, InferCreationAttrib
     declare profileFramePublicId: CreationOptional<string>
     declare profileFrameWidth: CreationOptional<number>
     declare profileFrameHeight: CreationOptional<number>
+    declare profileGenerationAvailable: CreationOptional<boolean>
 
     // Profile
     declare certificateFrameSecureUrl: CreationOptional<string>
     declare certificateFramePublicId: CreationOptional<string>
     declare certificateFrameWidth: CreationOptional<number>
     declare certificateFrameHeight: CreationOptional<number>
+    declare certificateGenerationAvailable: CreationOptional<boolean>
 }
 
 Program.init(
@@ -75,6 +77,10 @@ Program.init(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
+        profileGenerationAvailable: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
 
         // Certificate
         certificateFrameSecureUrl: {
@@ -93,6 +99,10 @@ Program.init(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
+        certificateGenerationAvailable: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     },
     {
         modelName: "program",
@@ -110,4 +120,4 @@ Program.beforeUpdate(async (program, options) => {
     }
 })
 
-Program.hasMany(AdminsAssignedPrograms, { foreignKey: "programId" })
+// Program.hasMany(AdminsAssignedPrograms, { foreignKey: "programId" })

@@ -1,6 +1,5 @@
 import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, UUIDV4 } from "sequelize"
 import { sequelize, type IAuthRoles, auth_roles } from "@/core"
-import { AdminsAssignedPrograms } from "@/programs/models"
 
 export class Users extends Model<InferAttributes<Users>, InferCreationAttributes<Users>> {
     declare id: CreationOptional<string>
@@ -108,4 +107,4 @@ Users.init(
 )
 
 
-Users.hasMany(AdminsAssignedPrograms, { foreignKey: 'userId' });
+// Users.hasMany(AdminsAssignedPrograms, { foreignKey: 'userId' });

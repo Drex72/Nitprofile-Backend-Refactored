@@ -1,7 +1,7 @@
 import { HttpStatus, logger, type Context, ForbiddenError, hashData, isDateExpired } from "@/core"
 import type { ResetPasswordPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
-import { Users } from "../model"
+import { Users } from "@/auth/model/user.model"
 
 class ResetPassword {
     constructor(private readonly dbUser: typeof Users) {}
