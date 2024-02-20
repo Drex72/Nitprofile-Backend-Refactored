@@ -46,6 +46,3 @@ export class AppCacheManager extends Redis {
 }
 
 export const cache = new AppCacheManager({})
-
-const val = cache.read<{ user: string }>("sds")
-val.then((res) => res?.user)

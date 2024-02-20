@@ -18,7 +18,7 @@ export class Program extends Model<InferAttributes<Program>, InferCreationAttrib
     declare profileFrameHeight: CreationOptional<number>
     declare profileGenerationAvailable: CreationOptional<boolean>
 
-    // Profile
+    // Certificate
     declare certificateFrameSecureUrl: CreationOptional<string>
     declare certificateFramePublicId: CreationOptional<string>
     declare certificateFrameWidth: CreationOptional<number>
