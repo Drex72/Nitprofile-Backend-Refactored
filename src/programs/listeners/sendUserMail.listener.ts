@@ -3,7 +3,7 @@ import { programAcceptanceMail, sendEmail } from "@/mails"
 import type { SendEmailRequestInterface } from "@/mails/dto"
 import { UserPrograms } from "../models"
 
-interface ISendUsersEmail {
+export interface ISendUsersEmail {
     programName: string
     firstName: string
     lastName: string
@@ -16,30 +16,36 @@ interface ISendUsersEmail {
 class SendUserEmail {
     constructor(private readonly dbUserPrograms: typeof UserPrograms) {}
 
-    handle = async (input: ISendUsersEmail) => {
-        const { firstName, lastName, programName, token, email, programId, userId } = input
-
+    handle = async (input: ISendUsersEmail[]) => {
         const sentMails: Promise<SendEmailRequestInterface>[] = []
 
         try {
-            const sentMail = sendEmail({
-                to: email,
-                subject: "Confirmation Email",
-                body: programAcceptanceMail({
-                    lastName,
-                    firstName,
-                    programName,
-                    link: currentOrigin + token,
-                }),
-            })
+            await Promise.all(
+                input.map(async (user) => {
+                    const { firstName, lastName, programName, token, email } = user
 
-            sentMails.push(sentMail)
+                    const sentMail = sendEmail({
+                        to: email,
+                        subject: "Confirmation Email",
+                        body: programAcceptanceMail({
+                            lastName,
+                            firstName,
+                            programName,
+                            link: currentOrigin + token,
+                        }),
+                    })
+
+                    sentMails.push(sentMail)
+                }),
+            )
 
             const results = await Promise.allSettled(sentMails)
 
             results.forEach((result) => {
                 if (result.status === "fulfilled") {
-                    this.dbUserPrograms.update({ acceptanceMailSent: true }, { where: { userId, programId } })
+                    const user = input.find((item) => (item.email = result.value.to))
+
+                    this.dbUserPrograms.update({ acceptanceMailSent: true }, { where: { userId: user?.userId, programId: user?.programId } })
                 }
             })
         } catch (error: any) {

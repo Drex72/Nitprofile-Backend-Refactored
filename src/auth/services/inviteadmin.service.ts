@@ -6,6 +6,7 @@ import type { Users as IUsers } from "../model"
 import { Users } from "@/auth/model/user.model"
 import { dispatch } from "@/app"
 import { adminInvitationMail } from "@/mails"
+import { cache } from "@/app/app-cache"
 
 class InviteAdmin {
     constructor(private readonly dbUser: typeof IUsers, private readonly tokenService: TokenService) {}
@@ -20,6 +21,8 @@ class InviteAdmin {
         if (user) throw new UnAuthorizedError(AppMessages.FAILURE.EMAIL_EXISTS)
 
         const inviteToken = this.tokenService.generateAdminInviteToken({ email })
+
+        await cache.set(email, inviteToken, "EX", 1200)
 
         dispatch("event:sendMail", {
             to: email,

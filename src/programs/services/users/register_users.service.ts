@@ -6,6 +6,7 @@ import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, sequ
 import { customCsvToJsonConverter } from "@/programs/helpers/csvToJson"
 import { Program, UserPrograms } from "@/programs/models"
 import { type FindSingleProgram } from "@/programs/payload_interfaces"
+import type { ISendUsersEmail } from "@/programs/listeners"
 
 class RegisterProgramUsers {
     constructor(
@@ -31,6 +32,8 @@ class RegisterProgramUsers {
 
         try {
             const convertedJson = await customCsvToJsonConverter.convert(csvFile.tempFilePath)
+
+            const sendMailPayload: ISendUsersEmail[] = []
 
             await Promise.all(
                 convertedJson.map(async (user) => {
@@ -64,19 +67,21 @@ class RegisterProgramUsers {
                         { transaction: dbTransaction },
                     )
 
-                    dispatch("event:sendNewUserMail", {
-                        email: existingUser.email,
-                        firstName: existingUser.firstName,
-                        lastName: existingUser.lastName,
-                        userId: existingUser.id,
+                    sendMailPayload.push({
                         programName: program.name,
-                        programId: program.id,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
                         token: "",
+                        email: user.email,
+                        userId: existingUser.id,
+                        programId: program.id,
                     })
 
                     logger.info(`User with Name ${existingUser.firstName} Assigned to program ${program.name} successfully`)
                 }),
             )
+
+            dispatch("event:sendNewUserMail", sendMailPayload)
 
             await dbTransaction.commit()
         } catch (error: any) {
