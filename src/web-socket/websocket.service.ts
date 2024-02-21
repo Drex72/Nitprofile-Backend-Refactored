@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io"
 import { Server as HttpServer } from "http"
-import { UnAuthorizedError, allowedOrigins } from "@/core"
+import { UnAuthorizedError, allowedOrigins, logger } from "@/core"
 
 const WEBSOCKET_CORS = {
     origin: allowedOrigins,
@@ -19,6 +19,8 @@ export class Websocket extends Server {
     public static getInstance(httpServer?: HttpServer): Websocket {
         if (!Websocket.io && httpServer) {
             Websocket.io = new Websocket(httpServer)
+
+            logger.info("Websocket Instance created successfully")
         }
 
         return Websocket.io

@@ -6,5 +6,6 @@ import { RouteNotFoundError } from "../errors";
 export class NotFoundErrorHandler {
     handle = (req: Request, _: Response, next: NextFunction) => {
         next(new RouteNotFoundError(`request path "${req.path}" not found for ${req.method} method.`))
+        
     }
 }

@@ -1,5 +1,5 @@
 import Joi from "joi"
-import { ValidationSchema } from "@/core"
+import { type ValidationSchema } from "@/core"
 
 export const notificationQuerySchema: ValidationSchema = {
   querySchema: Joi.object({

@@ -1,5 +1,5 @@
 import { HttpStatus } from "../utils";
-import { ApiError, ErrorDetailsDescriptor } from "./apiError";
+import { ApiError, type ErrorDetailsDescriptor } from "./apiError";
 
 export class UnAuthorizedError extends ApiError {
   _statusCode = HttpStatus.UNAUTHORIZED;

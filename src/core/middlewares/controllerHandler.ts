@@ -48,7 +48,7 @@ export class ControllerHandler {
     }
 
     private async validateRequest(req: Request, options: ControllerHandlerOptions) {
-        if (!req.user || !req?.user?.id || !req?.user?.role ) {
+        if (!req.user || !req?.user?.id || !req?.user?.role) {
             const isRequestAllowed = await authGuard.guard(req.cookies)
 
             if (!isRequestAllowed) throw new UnAuthorizedError("Unauthorized")

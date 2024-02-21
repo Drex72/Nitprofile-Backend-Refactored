@@ -1,6 +1,6 @@
 import { Socket } from "socket.io"
-import { MySocketInterface } from "@/web-socket/"
-import { NextFunction } from "express"
+import { type MySocketInterface } from "@/web-socket/"
+import { type NextFunction } from "express"
 
 export class NotificationSocket implements MySocketInterface {
     handleConnection(socket: Socket) {

@@ -4,7 +4,7 @@ import { authRouter } from "@/auth"
 
 export const appRouter = Router()
 
-appRouter.use("/auth", authRateLimiter, authRouter)
+appRouter.use("/auth", authRouter)
 
 appRouter.get("/health", (_, res) => {
     res.status(HttpStatus.OK).json({

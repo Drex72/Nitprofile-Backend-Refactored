@@ -37,7 +37,7 @@ Users.init(
         },
         otherName: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
         },
         password: {
             type: DataTypes.STRING,
@@ -66,7 +66,7 @@ Users.init(
             allowNull: true,
         },
         refreshToken: {
-            type: DataTypes.STRING(400),
+            type: DataTypes.STRING(600),
             allowNull: true,
         },
         refreshTokenExp: {

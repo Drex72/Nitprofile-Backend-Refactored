@@ -2,11 +2,12 @@ import type { NextFunction, Request, Response } from "express"
 import { ApiError } from "../errors"
 import { logger } from "../logging"
 import { HttpStatus } from "../utils"
+import { config } from "@/core"
 
 export class ErrorHandler {
     handle = async (error: Error, _: Request, res: Response, __: NextFunction) => {
         let statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR
-        let message = "internal server error"
+        let message = error?.message ?? "internal server error"
 
         if (error instanceof ApiError) {
             logger.error("Error in middleware", error)
@@ -15,6 +16,14 @@ export class ErrorHandler {
         }
 
         if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR) logger.error(error)
-        res.status(statusCode).send({ status: false, error: message })
+
+        const response = {
+            status: false,
+            code: statusCode,
+            message,
+            stack: config.appEnvironment === "development" ? error.stack : undefined,
+        }
+
+        return res.status(statusCode).send(response)
     }
 }

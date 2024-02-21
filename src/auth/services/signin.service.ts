@@ -1,12 +1,11 @@
 import { HttpStatus, compareHashedData, logger, type Context, UnAuthorizedError } from "@/core"
 import type { SignInPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
-import { tokenService, type TokenService } from "../helpers/token"
-import type { Users as IUsers } from "../model"
+import { tokenService, type TokenService } from "@/auth/helpers/token"
 import { Users } from "@/auth/model/user.model"
 
 class SignIn {
-    constructor(private readonly dbUser: typeof IUsers, private readonly tokenService: TokenService) {}
+    constructor(private readonly dbUser: typeof Users, private readonly tokenService: TokenService) {}
 
     /**
      * Handles user login, performs necessary validations, and generates tokens for authentication.
@@ -29,22 +28,28 @@ class SignIn {
 
         if (!isPasswordValid) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_CREDENTIALS)
 
-        const [accessToken, refreshToken] = await this.tokenService.getTokens({
+        const [generatedAccessToken, generatedRefreshToken] = await this.tokenService.getTokens({
             id: user.id,
             email: user.email,
             role: user.role,
         })
 
-        await this.dbUser.update({ refreshToken, refreshTokenExp: new Date() }, { where: { email } })
+        user.refreshToken = generatedRefreshToken
 
-        headers["set-cookie"] = [`accessToken=${accessToken}; Path=/; HttpOnly`, `refreshToken=${refreshToken}; Path=/; HttpOnly`]
+        user.refreshTokenExp = new Date()
+
+        await user.save()
+
+        headers["set-cookie"] = [`accessToken=${generatedAccessToken}; Path=/; HttpOnly`, `refreshToken=${generatedRefreshToken}; Path=/; HttpOnly`]
 
         logger.info("Logged In Successfully")
+
+        const { password: dbPassword, refreshToken, refreshTokenExp, ...responsePayload } = user.dataValues
 
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.LOGIN,
-            data: user,
+            data: responsePayload,
         }
     }
 }

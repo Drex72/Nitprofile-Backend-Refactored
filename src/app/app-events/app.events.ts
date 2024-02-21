@@ -1,8 +1,8 @@
 import { EventEmitter2 as Event } from "eventemitter2"
 
-import { EventListenerMap, Listener } from "../../core"
+import { type EventListenerMap,type  Listener } from "../../core"
 import { register } from "./events.register"
-import { eventKeys, AppEventListnerMap } from "./event.types"
+import { type eventKeys, type AppEventListnerMap } from "./event.types"
 
 class AppEventManager extends Event {
     constructor(eventListenerMap: EventListenerMap) {

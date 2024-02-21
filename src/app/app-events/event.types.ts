@@ -1,4 +1,4 @@
-import { ExtractParams } from "../../core"
+import { type ExtractParams } from "../../core"
 import { register } from "./events.register"
 
 /**

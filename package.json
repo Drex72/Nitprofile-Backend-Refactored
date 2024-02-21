@@ -1,10 +1,13 @@
 {
     "name": "nitprofile-api",
     "module": "index.ts",
-    "type": "module",
     "scripts": {
-        "dev": "bun --hot run src/main.ts"
-        
+        "dev": "bun --hot run src/main.ts",
+        "migration:generate": "npx sequelize-cli migration:generate --name",
+        "seed:generate": "npx sequelize-cli seed:generate --name ",
+        "db:migrate": "npx sequelize-cli db:migrate",
+        "undo:db:migrate": "npx sequelize-cli db:migrate:undo --name",
+        "db:seed": "npx sequelize-cli db:seed:all"
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",
