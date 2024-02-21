@@ -4,6 +4,7 @@
     "type": "module",
     "scripts": {
         "dev": "bun --hot run src/main.ts"
+        
     },
     "devDependencies": {
         "@types/bcrypt": "^5.0.0",

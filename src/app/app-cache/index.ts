@@ -1,6 +1,5 @@
 import { Redis, type RedisOptions } from "ioredis"
 import { logger, config } from "@/core"
-import { dispatch } from "@/app"
 
 export class AppCacheManager extends Redis {
     public readonly TIME_TO_LIVE: number = config.cache.ttl
@@ -8,7 +7,7 @@ export class AppCacheManager extends Redis {
     constructor(options: RedisOptions) {
         super(options)
 
-        dispatch("cache:connection:established")
+        logger.info("cache:connection:established")
 
         super.on("close", () => {
             this.quit()
@@ -44,5 +43,6 @@ export class AppCacheManager extends Redis {
         }
     }
 }
+
 
 export const cache = new AppCacheManager({})

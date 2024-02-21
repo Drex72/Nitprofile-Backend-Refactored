@@ -1,4 +1,3 @@
-export * from "./signup.service"
 export * from "./signin.service"
 export * from "./signout.service"
 export * from "./resetpassword.service"

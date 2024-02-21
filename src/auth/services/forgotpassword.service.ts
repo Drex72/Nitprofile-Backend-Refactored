@@ -1,11 +1,12 @@
 import { dispatch } from "@/app"
 import { BadRequestError, HttpStatus, logger, type Context, currentOrigin, generateRandStr, computeExpiryDate } from "@/core"
 import { forgotPasswordMail } from "@/mails"
-import type { ForgotPasswordPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
-import { Users } from "@/auth/model/user.model"
 
-export class ForgotPassword {
+import { Users } from "@/auth/model/user.model"
+import type { ForgotPasswordPayload } from "@/auth/payload_interfaces"
+
+class ForgotPassword {
     constructor(private readonly dbUser: typeof Users) {}
 
     handle = async ({ input }: Context<ForgotPasswordPayload>) => {

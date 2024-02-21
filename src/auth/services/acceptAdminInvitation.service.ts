@@ -1,9 +1,11 @@
 import { HttpStatus, logger, type Context, UnAuthorizedError } from "@/core"
-import type { AcceptAdminInvitationPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
+
 import { tokenService, type TokenService } from "../helpers/token"
 import { create_user } from "../helpers/user"
+
 import { cache } from "@/app/app-cache"
+import type { AcceptAdminInvitationPayload } from "@/auth/payload_interfaces"
 
 class AcceptInvitation {
     constructor(private readonly tokenService: TokenService) {}
