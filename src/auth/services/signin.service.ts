@@ -15,7 +15,7 @@ class SignIn {
      * @throws {UnAuthorizedError} Thrown if login credentials are invalid or user email is not verified.
      */
 
-    handle = async ({ input, headers }: Context<SignInPayload>) => {
+    handle = async ({ input }: Context<SignInPayload>) => {
         const { email, password } = input
 
         const user = await this.dbUser.findOne({
@@ -40,8 +40,6 @@ class SignIn {
 
         await user.save()
 
-        headers["set-cookie"] = [`accessToken=${generatedAccessToken}; Path=/; HttpOnly`, `refreshToken=${generatedRefreshToken}; Path=/; HttpOnly`]
-
         logger.info("Logged In Successfully")
 
         const { password: dbPassword, refreshToken, refreshTokenExp, ...responsePayload } = user.dataValues
@@ -50,6 +48,9 @@ class SignIn {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.LOGIN,
             data: responsePayload,
+            headers: {
+                "Set-Cookie": [`accessToken=${generatedAccessToken}; Path=/; HttpOnly`, `refreshToken=${generatedRefreshToken}; Path=/; HttpOnly`],
+            },
         }
     }
 }

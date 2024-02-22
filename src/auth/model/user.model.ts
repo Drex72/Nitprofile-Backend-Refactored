@@ -11,8 +11,8 @@ export class Users extends Model<InferAttributes<Users>, InferCreationAttributes
     declare emailVerified: CreationOptional<boolean>
     declare profilePicPublicId: CreationOptional<string | null>
     declare profilePicSecureUrl: CreationOptional<string | null>
-    declare resetToken?: CreationOptional<string | null>
-    declare resetTokenExpiresIn?: CreationOptional<Date | null>
+    declare resetToken: CreationOptional<string | null>
+    declare resetTokenExpiresIn: CreationOptional<Date | null>
     declare refreshToken: CreationOptional<string>
     declare refreshTokenExp: CreationOptional<Date>
     declare isVerified: CreationOptional<boolean>
@@ -61,6 +61,10 @@ Users.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        resetTokenExpiresIn: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        },
         profilePicSecureUrl: {
             type: DataTypes.STRING,
             allowNull: true,
@@ -71,7 +75,6 @@ Users.init(
         },
         refreshTokenExp: {
             type: DataTypes.DATE,
-
             allowNull: true,
         },
 
@@ -105,6 +108,5 @@ Users.init(
         freezeTableName: true,
     },
 )
-
 
 // Users.hasMany(AdminsAssignedPrograms, { foreignKey: 'userId' });

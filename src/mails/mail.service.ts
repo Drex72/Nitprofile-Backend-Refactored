@@ -3,7 +3,7 @@ import sendgridTransport from "nodemailer-sendgrid"
 import { type SendEmailRequestInterface } from "./dto"
 import { config, logger } from "@/core"
 
-const getTransporter = () => {
+export const getTransporter = () => {
     const options = {
         apiKey: config.sendGrid.sendGridApikey,
     }
@@ -26,7 +26,7 @@ export const sendEmail = async (emailDto: SendEmailRequestInterface) => {
 
     await transporter.sendMail(mailOptions)
 
-    logger.info(`Mail sent Successfully to ${subject}`)
+    logger.info(`Mail sent Successfully to ${to}`)
 
     return emailDto
 }

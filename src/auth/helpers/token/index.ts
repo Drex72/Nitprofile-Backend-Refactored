@@ -23,19 +23,15 @@ export class TokenService {
         return tokenPayload
     }
 
-    generateAdminInviteToken(invited: { email: string }): string {
-        const { inviteTokenSecret, inviteTokenExpiresIn } = config.auth
+    _verifyToken(token: string, secret: string): JwtPayload {
+        try {
+            jwt.verify(token, secret) as JwtPayload
 
-        return jwt.sign({ invited }, inviteTokenSecret, {
-            expiresIn: inviteTokenExpiresIn,
-            jwtid: crypto.randomUUID(),
-        })
-    }
-
-    verifyAdminInviteToken(token: string): { email: string } {
-        const { inviteTokenSecret } = config.auth
-
-        return this._verifyToken(token, inviteTokenSecret) as { email: string }
+            return jwt.decode(token) as jwt.JwtPayload
+        } catch (err) {
+            logger.error(err)
+            throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
+        }
     }
 
     private _generateAccessToken(data: ITokenSignedPayload): string {
@@ -60,17 +56,6 @@ export class TokenService {
         })
 
         return this.encryptor.encrypt(refreshToken)
-    }
-
-    private _verifyToken(token: string, secret: string): JwtPayload {
-        try {
-            jwt.verify(token, secret) as JwtPayload
-
-            return jwt.decode(token) as jwt.JwtPayload
-        } catch (err) {
-            logger.error(err)
-            throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
-        }
     }
 
     private _generateToken({ data, secret, expiresIn }: { data: ITokenSignedPayload; expiresIn: string; secret: string }): string {

@@ -30,6 +30,7 @@ module.exports = {
                     emailVerified: true,
                     profilePicPublicId: null,
                     resetToken: null,
+                    resetTokenExpiresIn:null,
                     profilePicSecureUrl: null,
                     refreshToken: null,
                     refreshTokenExp: null,

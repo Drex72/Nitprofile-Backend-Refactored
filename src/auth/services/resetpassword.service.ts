@@ -1,5 +1,5 @@
 import { HttpStatus, logger, type Context, ForbiddenError, hashData, isDateExpired } from "@/core"
-import type { ResetPasswordPayload } from "../payload_interfaces"
+import type { ResetPasswordPayload } from "@/auth/payload_interfaces"
 import { AppMessages } from "@/core/common"
 import { Users } from "@/auth/model/user.model"
 
@@ -13,14 +13,16 @@ class ResetPassword {
 
         if (!user) throw new ForbiddenError("Invalid or Expired token")
 
-        if (!user.resetTokenExpiresIn || isDateExpired(user.resetTokenExpiresIn)) {
+        if (!user.resetToken || !user.resetTokenExpiresIn || isDateExpired(user?.resetTokenExpiresIn)) {
             throw new ForbiddenError("Token Expired, request a new password reset mail")
         }
 
         const hashedPassword = await hashData(password)
 
         user.password = hashedPassword
+
         user.resetToken = null
+
         user.resetTokenExpiresIn = null
 
         await user.save()

@@ -16,7 +16,7 @@ app.use(cookieParser())
 
 app.use(cors(corsOptions))
 app.use(express.static("public"))
-app.use(compression())
+// app.use(compression())
 app.use(express.urlencoded({ extended: false }))
 app.use("/api/v1", appRouter)
 app.use(

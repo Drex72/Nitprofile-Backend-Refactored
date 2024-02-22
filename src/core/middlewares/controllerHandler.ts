@@ -1,14 +1,27 @@
 import { HttpStatus, joiValidate, parseControllerArgs, ForbiddenError, UnAuthorizedError, UnProcessableError, logger } from "@/core"
 import type { Response, Request, NextFunction } from "express"
-import type { AnyFunction, ControllerHandlerOptions, ExpressCallbackFunction, IAuthRoles, ValidationSchema } from "@/core"
+import type { AnyFunction, ControllerHandlerOptions, ExpressCallbackFunction, IAuthRoles, ITokenSignedPayload, ValidationSchema } from "@/core"
 import { authGuard } from "@/auth/helpers/authGuard"
+import { AppMessages } from "../common"
+
+interface IValidateRequestOptions {
+    cookies: any
+    user: ITokenSignedPayload | null | undefined
+    options: ControllerHandlerOptions
+    callbackFn: (user: ITokenSignedPayload) => void
+}
 
 export class ControllerHandler {
     handle = (controllerFn: AnyFunction, schema: ValidationSchema | undefined = {}, options?: ControllerHandlerOptions): ExpressCallbackFunction => {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 if (options?.isPrivate) {
-                    await this.validateRequest(req, options)
+                    await this.validateRequest({
+                        options,
+                        user: req.user,
+                        cookies: req.cookies,
+                        callbackFn: (user) => (req.user = user),
+                    })
                 }
 
                 const controllerArgs = parseControllerArgs.parse(req)
@@ -40,26 +53,28 @@ export class ControllerHandler {
                     .status(code ?? HttpStatus.OK)
                     .send(data)
             } catch (error) {
-                logger.error(error)
+                logger.error(`error ${error}`)
 
                 next(error)
             }
         }
     }
 
-    private async validateRequest(req: Request, options: ControllerHandlerOptions) {
-        if (!req.user || !req?.user?.id || !req?.user?.role) {
-            const isRequestAllowed = await authGuard.guard(req.cookies)
+    private async validateRequest(data: IValidateRequestOptions) {
+        const { callbackFn, cookies, options, user } = data
 
-            if (!isRequestAllowed) throw new UnAuthorizedError("Unauthorized")
+        if (user && user.id && user?.role) return
 
-            if (options.allowedRoles && options.allowedRoles.length > 0) {
-                const isRequestAuthorized = options.allowedRoles?.includes(isRequestAllowed.role.toLocaleUpperCase() as IAuthRoles)
+        const isRequestAllowed = await authGuard.guard(cookies)
 
-                if (!isRequestAuthorized) throw new ForbiddenError("You do not have access to the requested resource")
-            }
+        if (!isRequestAllowed) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_CREDENTIALS)
 
-            req.user = isRequestAllowed
+        if (options.allowedRoles && options.allowedRoles.length > 0) {
+            const isRequestAuthorized = options.allowedRoles?.includes(isRequestAllowed.role.toLocaleUpperCase() as IAuthRoles)
+
+            if (!isRequestAuthorized) throw new ForbiddenError("You do not have access to the requested resource")
         }
+
+        callbackFn(isRequestAllowed)
     }
 }

@@ -43,6 +43,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
+            resetTokenExpiresIn:{
+                type: Sequelize.DATE,
+                allowNull: true,
+            },
             profilePicSecureUrl: {
                 type: Sequelize.STRING,
                 allowNull: true,

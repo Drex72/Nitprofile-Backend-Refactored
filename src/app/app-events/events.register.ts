@@ -11,7 +11,7 @@ export const register = {
         logger.info(`Server started successfully on port ${config.port}`)
         config.appEnvironment !== "development" && console.log(`Server started successfully on port ${config.port}`)
         const memoryUsage = process.memoryUsage()
-        logger.info(`Heap Used: ${memoryUsage.heapUsed / 1024 / 1024} MB`)
+        // logger.info(`Heap Used: ${memoryUsage.heapUsed / 1024 / 1024} MB`)
     },
     "cache:connection:established": () => logger.info(`Cache connection established`),
     "event:registeration:succesful": () => logger.info("Events listeners registered"),

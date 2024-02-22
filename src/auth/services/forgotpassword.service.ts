@@ -1,8 +1,7 @@
 import { dispatch } from "@/app"
-import { BadRequestError, HttpStatus, logger, type Context, currentOrigin, generateRandStr, computeExpiryDate } from "@/core"
+import { HttpStatus, logger, type Context, currentOrigin, generateRandStr, computeExpiryDate } from "@/core"
 import { forgotPasswordMail } from "@/mails"
 import { AppMessages } from "@/core/common"
-
 import { Users } from "@/auth/model/user.model"
 import type { ForgotPasswordPayload } from "@/auth/payload_interfaces"
 
@@ -21,19 +20,23 @@ class ForgotPassword {
             }
         }
 
-        if (user.emailVerified) throw new BadRequestError("Email already Verified")
-
         const token = generateRandStr(64)
 
-        await this.dbUser.update({ resetToken: token, resetTokenExpiresIn: computeExpiryDate(1800) }, { where: { email } })
+        user.resetToken = token
 
-        await dispatch("event:sendMail", {
+        const expDate = computeExpiryDate(1800)
+
+        user.resetTokenExpiresIn = expDate
+
+        await user.save()
+
+        dispatch("event:sendMail", {
             to: email,
             subject: "Forgot Password",
             body: forgotPasswordMail({
                 lastName: user.lastName,
                 firstName: user.firstName,
-                link: currentOrigin + token,
+                link: `${currentOrigin}/?token=${token}`,
             }),
         })
 

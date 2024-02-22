@@ -17,6 +17,7 @@ export const AppMessages = {
     },
     SUCCESS: {
         LOGIN: "Login successful.",
+        ADMIN_INVITED: "Invitation Sent successfully.",
         LOGOUT: "Logged out successfully.",
         SIGNUP: "Signup successful",
         EMAIL_SENT: "If you have an account with us, You will receive a mail to",

@@ -1,4 +1,4 @@
-import { HttpStatus, logger, type Context, UnAuthorizedError, currentOrigin } from "@/core"
+import { HttpStatus, logger, type Context, UnAuthorizedError, currentOrigin, generateRandStr } from "@/core"
 import type { InviteAdminPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
 import { tokenService, type TokenService } from "../helpers/token"
@@ -9,7 +9,7 @@ import { adminInvitationMail } from "@/mails"
 import { cache } from "@/app/app-cache"
 
 class InviteAdmin {
-    constructor(private readonly dbUser: typeof IUsers, private readonly tokenService: TokenService) {}
+    constructor(private readonly dbUser: typeof IUsers) {}
 
     handle = async ({ input }: Context<InviteAdminPayload>) => {
         const { email } = input
@@ -20,15 +20,15 @@ class InviteAdmin {
 
         if (user) throw new UnAuthorizedError(AppMessages.FAILURE.EMAIL_EXISTS)
 
-        const inviteToken = this.tokenService.generateAdminInviteToken({ email })
+        const inviteToken = generateRandStr(64)
 
-        await cache.set(email, inviteToken, "EX", 1200)
+        await cache.set(inviteToken, email, "EX", 1200)
 
         dispatch("event:sendMail", {
             to: email,
             subject: "NITProfile Admin Invitation",
             body: adminInvitationMail({
-                link: `${currentOrigin}?token=${inviteToken}`,
+                link: `${currentOrigin}/?token=${inviteToken}`,
             }),
         })
 
@@ -36,9 +36,9 @@ class InviteAdmin {
 
         return {
             code: HttpStatus.OK,
-            message: AppMessages.SUCCESS.LOGIN,
+            message: AppMessages.SUCCESS.ADMIN_INVITED,
         }
     }
 }
 
-export const inviteAdmin = new InviteAdmin(Users, tokenService)
+export const inviteAdmin = new InviteAdmin(Users)

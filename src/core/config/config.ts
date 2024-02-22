@@ -75,8 +75,6 @@ export const config = Object.freeze({
         accessTokenExpiresIn: validatedEnvVars.ACCESS_TOKEN_EXP,
         refreshTokenSecret: validatedEnvVars.REFRESH_TOKEN_SECRET,
         refreshTokenExpiresIn: validatedEnvVars.REFRESH_TOKEN_EXP,
-        inviteTokenSecret: validatedEnvVars.INVITE_TOKEN_SECRET,
-        inviteTokenExpiresIn: validatedEnvVars.INVITE_TOKEN_EXPIRES_IN,
         encryptorSecretKey: validatedEnvVars.ENCRYPTOR_SECRET_KEY,
     },
 

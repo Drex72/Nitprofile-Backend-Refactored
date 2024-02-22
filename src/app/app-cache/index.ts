@@ -44,5 +44,7 @@ export class AppCacheManager extends Redis {
     }
 }
 
-
-export const cache = new AppCacheManager({})
+export const cache = new AppCacheManager({
+    host: "localhost",
+    port: 6379,
+})

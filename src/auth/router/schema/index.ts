@@ -30,7 +30,6 @@ export const inviteAdminSchema: ValidationSchema = {
 export const acceptInvitationSchema: ValidationSchema = {
     inputSchema: Joi.object({
         password: Joi.string().trim().required(),
-        email: Joi.string().email().required().trim(),
         firstName: Joi.string().trim().required(),
         lastName: Joi.string().trim().required(),
         otherName: Joi.string().trim().optional(),
