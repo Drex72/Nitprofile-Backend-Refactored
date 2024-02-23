@@ -20,7 +20,7 @@ class AcceptInvitation {
 
         await cache.del(token)
 
-        logger.info(`User with email ${input.email} invited successfully`)
+        logger.info(`User with email ${email} invited successfully`)
 
         const { password, refreshToken, refreshTokenExp, ...responsePayload } = created_user.dataValues
 

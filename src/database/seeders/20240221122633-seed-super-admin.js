@@ -15,7 +15,7 @@ module.exports = {
          * }], {});
          */
         const password = "Damilola&12"
-        const hashedPassword = await bcrypt.hash(password, 15)
+        const hashedPassword = await bcrypt.hash(password, 12)
 
         await queryInterface.bulkInsert(
             "users",

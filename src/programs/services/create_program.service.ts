@@ -1,8 +1,8 @@
-import { type Context, HttpStatus, BadRequestError, logger } from "@/core"
+import { Users } from "@/auth/model"
+import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError } from "@/core"
 import { AppMessages } from "@/core/common"
 import { Program } from "@/programs/models"
 import { type CreateProgramPayload } from "@/programs/payload_interfaces"
-
 
 class CreateProgram {
     constructor(private readonly dbPrograms: typeof Program) {}
@@ -16,11 +16,17 @@ class CreateProgram {
 
         if (programExists) throw new BadRequestError(AppMessages.FAILURE.PROGRAM_EXISTS)
 
+        const existingUser = await Users.findOne({
+            where: { id: user?.id },
+        })
+
+        if (!existingUser) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_CREDENTIALS)
+
         if (startDate < new Date(Date.now())) throw new BadRequestError(AppMessages.FAILURE.START_DATE_ERROR)
 
         if (endDate < startDate) throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
 
-        const createdProgram = await this.dbPrograms.create({ ...input, createdBy: user?.id })
+        const createdProgram = await this.dbPrograms.create({ ...input, createdBy: existingUser?.id })
 
         logger.info(`Program with ID ${createdProgram.id} created successfully`)
 

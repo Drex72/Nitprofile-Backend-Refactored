@@ -2,6 +2,7 @@ import type { IncomingHttpHeaders } from "http"
 import "express"
 import type { Schema } from "joi"
 import type { IHttpMethod } from "@/auth/helpers/permissions/types"
+import type { auth_roles } from "@/auth/model"
 
 interface IResourcePermissions {
     resourceName: string
@@ -22,9 +23,6 @@ export interface ITokenSignedPayload {
 }
 
 // These are default Entity types that are prepopulated in the DB, if you add a new Entity Type, add it here also to avoid typographical errors
-
-export const auth_roles = ["SUPER ADMIN", "ADMIN", "USER", "DEVELOPER"] as const
-
 export type IAuthRoles = (typeof auth_roles)[number]
 
 interface IParams {
@@ -57,7 +55,7 @@ export interface RequestFileContents {
     truncated: boolean
     mimetype: string
     md5: string
-    mv: (path:string) => Promise<void>
+    mv: (path: string) => Promise<void>
 }
 export interface FileObjects {
     [key: string]: RequestFileContents | RequestFileContents[]

@@ -43,7 +43,7 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: true,
             },
-            resetTokenExpiresIn:{
+            resetTokenExpiresIn: {
                 type: Sequelize.DATE,
                 allowNull: true,
             },
@@ -64,17 +64,27 @@ module.exports = {
                 defaultValue: false,
             },
             role: {
-                type: Sequelize.ENUM("SUPER ADMIN", "ADMIN", "USER", "DEVELOPER"), 
+                type: Sequelize.ENUM("SUPER ADMIN", "ADMIN", "USER", "DEVELOPER"),
                 allowNull: false,
             },
             createdAt: {
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.NOW,
                 allowNull: false,
             },
             updatedAt: {
                 type: Sequelize.DATE,
+                defaultValue: Sequelize.NOW,
                 allowNull: false,
             },
+        })
+
+        await queryInterface.addIndex("users", ["email"], {
+            unique: true,
+        })
+
+        await queryInterface.addIndex("users", ["id"], {
+            unique: true,
         })
     },
 

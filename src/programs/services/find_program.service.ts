@@ -1,7 +1,13 @@
-import { type Context, HttpStatus, UnAuthorizedError, ForbiddenError } from "@/core"
+import { type Context, HttpStatus, UnAuthorizedError, ForbiddenError, type IAuthRoles } from "@/core"
 import { AppMessages } from "@/core/common"
 import { AdminsAssignedPrograms, Program, UserPrograms } from "@/programs/models"
 import { type FindSingleProgram } from "@/programs/payload_interfaces"
+
+interface IFindOneProgram {
+    userId: string
+    userRole: IAuthRoles
+    programId: string
+}
 
 class FindPrograms {
     constructor(
@@ -10,7 +16,24 @@ class FindPrograms {
         private readonly dbUserPrograms: typeof UserPrograms,
     ) {}
 
-    findAll = async () => {
+    findAll = async ({ query, user }: Context<FindSingleProgram>) => {
+        if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
+
+        const { programId } = query
+
+        const userRole = user?.role
+
+        if (programId)
+            return this._findOne({
+                programId: programId,
+                userId: user!.id,
+                userRole: userRole!,
+            })
+
+        if (userRole === "ADMIN") return this._findForAdmins(user!.id)
+
+        if (userRole === "USER") return this._findForUsers(user!.id)
+
         const allPrograms = await this.dbPrograms.findAll()
 
         return {
@@ -20,18 +43,14 @@ class FindPrograms {
         }
     }
 
-    findOne = async ({ query, user }: Context<FindSingleProgram>) => {
-        if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
-
-        const { id } = query
-
-        const userRole = user?.role
+    private _findOne = async (data: IFindOneProgram) => {
+        const { programId, userId, userRole } = data
 
         if (userRole === "ADMIN") {
             const adminProgram = await this.dbAdminPrograms.findOne({
                 where: {
-                    userId: user.id,
-                    programId: id,
+                    userId,
+                    programId,
                 },
             })
 
@@ -41,8 +60,8 @@ class FindPrograms {
         if (userRole === "USER") {
             const userProgram = await this.dbUserPrograms.findOne({
                 where: {
-                    userId: user.id,
-                    programId: id,
+                    userId,
+                    programId,
                 },
             })
 
@@ -50,7 +69,7 @@ class FindPrograms {
         }
 
         const program = await this.dbPrograms.findOne({
-            where: { id },
+            where: { id: programId },
         })
 
         return {
@@ -60,12 +79,10 @@ class FindPrograms {
         }
     }
 
-    findForUsers = async ({ user }: Context<FindSingleProgram>) => {
-        if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
-
+    private _findForUsers = async (userId: string) => {
         const userPrograms = await this.dbUserPrograms.findAll({
             where: {
-                userId: user.id,
+                userId,
             },
 
             include: [
@@ -85,12 +102,10 @@ class FindPrograms {
         }
     }
 
-    findForAdmins = async ({ user }: Context<FindSingleProgram>) => {
-        if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
-
+    private _findForAdmins = async (userId: string) => {
         const adminPrograms = await this.dbAdminPrograms.findAll({
             where: {
-                userId: user.id,
+                userId,
             },
 
             include: [

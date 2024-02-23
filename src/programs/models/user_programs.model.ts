@@ -13,7 +13,6 @@ export class UserPrograms extends Model<InferAttributes<UserPrograms>, InferCrea
     declare certificateImageUrl: CreationOptional<string>
     declare certificateGenerationDate: CreationOptional<Date>
     declare acceptanceMailSent: CreationOptional<boolean>
-
 }
 
 UserPrograms.init(
@@ -60,6 +59,12 @@ UserPrograms.init(
         },
     },
     {
+        indexes: [
+            {
+                unique: true,
+                fields: ["userId", "programId"],
+            },
+        ],
         modelName: "user_programs",
         tableName: "user_programs",
         sequelize,

@@ -3,43 +3,63 @@ import { AppMessages } from "@/core/common"
 import { Program } from "@/programs/models"
 import { type UpdateProgramPayload } from "@/programs/payload_interfaces"
 
+interface IDateValidator {
+    requestStartDate: Date | undefined
+    requestEndDate: Date | undefined
+    dbStartDate: Date
+    dbEndDate: Date
+}
+
 class UpdateProgram {
     constructor(private readonly dbPrograms: typeof Program) {}
 
     handle = async ({ input, query }: Context<UpdateProgramPayload>) => {
-        const { name, startDate, endDate } = input
+        const { startDate, endDate } = input
 
-        const { id } = query
+        const { programId } = query
 
         const program = await this.dbPrograms.findOne({
-            where: { name },
+            where: { id: programId },
         })
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        if (startDate && startDate < new Date(Date.now())) {
-            throw new BadRequestError(AppMessages.FAILURE.START_DATE_ERROR)
+        if (startDate || endDate) {
+            this._validateDates({
+                dbEndDate: program.endDate,
+                dbStartDate: program.startDate,
+                requestEndDate: endDate,
+                requestStartDate: startDate,
+            })
         }
 
-        if (startDate && endDate && endDate < startDate) {
-            throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
-        }
+        await this.dbPrograms.update(input, { where: { id: programId } })
 
-        if (startDate && !endDate && program.endDate < startDate) {
-            throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
-        }
-
-        if (endDate && !startDate && endDate < program.startDate) {
-            throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
-        }
-
-        await this.dbPrograms.update(input, { where: { id } })
-
-        logger.info(`Program with ID ${id} Updated successfully`)
+        logger.info(`Program with ID ${programId} Updated successfully`)
 
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.PROGRAM_UPDATED,
+        }
+    }
+
+    private _validateDates = (data: IDateValidator) => {
+        const { dbEndDate, dbStartDate, requestEndDate, requestStartDate } = data
+
+        if (requestStartDate && requestStartDate < new Date(Date.now())) {
+            throw new BadRequestError(AppMessages.FAILURE.START_DATE_ERROR)
+        }
+
+        if (requestStartDate && requestEndDate && dbEndDate < requestStartDate) {
+            throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
+        }
+
+        if (requestStartDate && !requestEndDate && dbEndDate < requestStartDate) {
+            throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
+        }
+
+        if (requestEndDate && !requestStartDate && dbEndDate < dbStartDate) {
+            throw new BadRequestError(AppMessages.FAILURE.DATE_DURATION_ERROR)
         }
     }
 }

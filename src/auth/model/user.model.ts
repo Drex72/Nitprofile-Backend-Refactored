@@ -1,7 +1,30 @@
-import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, UUIDV4 } from "sequelize"
-import { sequelize, type IAuthRoles, auth_roles } from "@/core"
+import {
+    DataTypes,
+    type CreationOptional,
+    type InferAttributes,
+    type InferCreationAttributes,
+    Model,
+    UUIDV4,
+    type BelongsToManyGetAssociationsMixin,
+    type NonAttribute,
+} from "sequelize"
+import { sequelize, type IAuthRoles } from "@/core"
+import { Program, UserPrograms } from "@/programs/models"
+
+export const auth_roles = ["SUPER ADMIN", "ADMIN", "USER", "DEVELOPER"] as const
 
 export class Users extends Model<InferAttributes<Users>, InferCreationAttributes<Users>> {
+    // BelongsToMany(()=>Program, {
+    //     through: UserPrograms,
+    //     foreignKey: "userId",
+    //     otherKey: "programId",
+    //     as: "program_user",
+    // })
+
+    // new BelongsToMany(() => Program, {
+    //     through: 'LikedToot',
+    //   })
+
     declare id: CreationOptional<string>
     declare firstName: string
     declare otherName: CreationOptional<string | null>
@@ -17,6 +40,8 @@ export class Users extends Model<InferAttributes<Users>, InferCreationAttributes
     declare refreshTokenExp: CreationOptional<Date>
     declare isVerified: CreationOptional<boolean>
     declare role: IAuthRoles
+    declare programs?: NonAttribute<Program[]>
+    declare getPrograms: BelongsToManyGetAssociationsMixin<Program>
 }
 
 Users.init(
@@ -87,6 +112,7 @@ Users.init(
             allowNull: false,
         },
     },
+
     {
         scopes: {
             withPassword: {
@@ -100,13 +126,21 @@ Users.init(
                 },
             },
         },
-
+        indexes: [
+            {
+                unique: true,
+                fields: ["email"],
+            },
+            {
+                unique: true,
+                fields: ["id"],
+            },
+        ],
         modelName: "users",
         tableName: "users",
         sequelize,
         timestamps: true,
         freezeTableName: true,
+        
     },
 )
-
-// Users.hasMany(AdminsAssignedPrograms, { foreignKey: 'userId' });

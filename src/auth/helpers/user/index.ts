@@ -14,7 +14,6 @@ class CreateUser {
      */
     public _create_single_user = async (input: ICreateUser) => {
         const { email, password } = input
-        console.log({input})
 
         const userExists = await this.dbUser.findOne({
             where: { email },

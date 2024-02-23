@@ -1,7 +1,14 @@
-import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
+import {
+    DataTypes,
+    type CreationOptional,
+    type InferAttributes,
+    type InferCreationAttributes,
+    Model,
+    type ForeignKey,
+    type BelongsToManyGetAssociationsMixin,
+} from "sequelize"
 import { sequelize } from "@/core"
 import { Users } from "@/auth/model/user.model"
-import { AdminsAssignedPrograms } from "@/programs/models/admins_assigned_programs.model"
 
 export class Program extends Model<InferAttributes<Program>, InferCreationAttributes<Program>> {
     declare id: CreationOptional<string>
@@ -24,6 +31,9 @@ export class Program extends Model<InferAttributes<Program>, InferCreationAttrib
     declare certificateFrameWidth: CreationOptional<number>
     declare certificateFrameHeight: CreationOptional<number>
     declare certificateGenerationAvailable: CreationOptional<boolean>
+
+    declare getRegisteredUsers: BelongsToManyGetAssociationsMixin<Users>
+    declare getAssignedAdmins: BelongsToManyGetAssociationsMixin<Users>
 }
 
 Program.init(
@@ -36,6 +46,7 @@ Program.init(
         },
         createdBy: {
             type: DataTypes.UUID,
+            allowNull: false,
             references: {
                 model: Users,
                 key: "id",
@@ -105,8 +116,8 @@ Program.init(
         },
     },
     {
-        modelName: "program",
-        tableName: "program",
+        modelName: "programs",
+        tableName: "programs",
         sequelize,
         timestamps: true,
         freezeTableName: true,
@@ -120,4 +131,3 @@ Program.beforeUpdate(async (program, options) => {
     }
 })
 
-// Program.hasMany(AdminsAssignedPrograms, { foreignKey: "programId" })

@@ -1,4 +1,4 @@
-import type { ContextTypes } from "@/core"
+import type { ContextTypes, RequestFileContents } from "@/core"
 import type { Node } from "../types"
 
 interface IBaseProgram {
@@ -17,17 +17,27 @@ export interface CreateProgramPayload extends ContextTypes {
     input: IBaseProgram
 }
 
+export interface AssignAdminToProgramPayload extends ContextTypes {
+    input: {
+        programId: string
+        adminId: string
+    }
+}
+
 export interface UpdateProgramPayload extends ContextTypes {
     input: Partial<IBaseProgram>
 
     query: {
-        id: string
+        programId: string
+    }
+    files: {
+        csv: any
     }
 }
 
 export interface FindSingleProgram extends ContextTypes {
     query: {
-        id: string
+        programId: string
     }
 }
 
@@ -62,5 +72,20 @@ export interface UpdateProgramNodePayload extends ContextTypes {
 export interface GenerateProgramProfilePayload extends ContextTypes {
     params: {
         program_id: string
+    }
+}
+
+export interface RegisterProgramUser extends ContextTypes {
+    input: {
+        email: string
+        firstName: string
+        lastName: string
+    }
+
+    query: {
+        programId: string
+    }
+    files: {
+        csv: RequestFileContents
     }
 }

@@ -5,8 +5,15 @@ import { create_user } from "@/auth/helpers/user"
 import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, sequelize, config } from "@/core"
 import { customCsvToJsonConverter } from "@/programs/helpers/csvToJson"
 import { Program, UserPrograms } from "@/programs/models"
-import { type FindSingleProgram } from "@/programs/payload_interfaces"
+import { type RegisterProgramUser } from "@/programs/payload_interfaces"
 import type { ISendUsersEmail } from "@/programs/listeners"
+
+interface IBaseUser {
+    email: string
+    firstName: string
+    lastName: string
+    programId: string
+}
 
 class RegisterProgramUsers {
     constructor(
@@ -15,18 +22,31 @@ class RegisterProgramUsers {
         private readonly dbUserPrograms: typeof UserPrograms,
     ) {}
 
-    handle = async ({ query, files }: Context<FindSingleProgram>) => {
-        if (!files || !files.csv || Array.isArray(files.csv)) throw new ForbiddenError("csv is required")
-
-        const csvFile = files.csv
-
-        const { id } = query
-
+    handle = async ({ input, query, files }: Context<RegisterProgramUser>) => {
         const program = await this.dbPrograms.findOne({
-            where: { id },
+            where: { id: query.programId },
         })
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
+
+        if (input) {
+            const user = await this._create_single_program_user({
+                email: input.email,
+                firstName: input.firstName,
+                lastName: input.lastName,
+                programId: query.programId,
+            })
+
+            return {
+                code: HttpStatus.CREATED,
+                message: AppMessages.SUCCESS.USERS_REGISTERED_SUCCESSFULLY,
+                data: user,
+            }
+        }
+
+        if (!files || !files.csv || Array.isArray(files.csv)) throw new ForbiddenError("csv is required")
+
+        const csvFile = files.csv
 
         const dbTransaction = await sequelize.transaction()
 
@@ -41,6 +61,14 @@ class RegisterProgramUsers {
                         where: { email: user.email },
                     })
 
+                    if (existingUser) {
+                        const userProgramExists = await this.dbUserPrograms.findOne({
+                            where: { userId: existingUser.id, programId: program.id },
+                        })
+
+                        if (userProgramExists) throw new BadRequestError(AppMessages.FAILURE.USER_ALREADY_ASSIGNED_TO_PROGRAM)
+                    }
+
                     if (!existingUser) {
                         existingUser = await create_user._create_single_user({
                             email: user.email,
@@ -52,12 +80,6 @@ class RegisterProgramUsers {
 
                         logger.info(`User with ID ${existingUser.id} created successfully`)
                     }
-
-                    const userProgramExists = await this.dbUserPrograms.findOne({
-                        where: { userId: existingUser.id, programId: program.id },
-                    })
-
-                    if (userProgramExists) throw new BadRequestError(AppMessages.FAILURE.USER_ALREADY_ASSIGNED_TO_PROGRAM)
 
                     await this.dbUserPrograms.create(
                         {
@@ -77,7 +99,7 @@ class RegisterProgramUsers {
                         programId: program.id,
                     })
 
-                    logger.info(`User with Name ${existingUser.firstName} Assigned to program ${program.name} successfully`)
+                    logger.info(`User with Name ${user.firstName} Assigned to program ${program.name} successfully`)
                 }),
             )
 
@@ -96,6 +118,27 @@ class RegisterProgramUsers {
             code: HttpStatus.CREATED,
             message: AppMessages.SUCCESS.USERS_REGISTERED_SUCCESSFULLY,
         }
+    }
+
+    private _create_single_program_user = async (input: IBaseUser) => {
+        const { email, firstName, lastName, programId } = input
+
+        const user = await create_user._create_single_user({
+            email,
+            firstName,
+            lastName,
+            password: config.userDefaultPassword,
+            role: "USER",
+        })
+
+        logger.info(`User with ID ${user.id} created successfully`)
+
+        await this.dbUserPrograms.create({
+            userId: user.id,
+            programId: programId,
+        })
+
+        return user
     }
 }
 

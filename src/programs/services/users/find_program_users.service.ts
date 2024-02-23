@@ -1,35 +1,34 @@
-import { Users } from "@/auth/model"
-import { type Context, HttpStatus, UnAuthorizedError } from "@/core"
+import { type Context, HttpStatus, UnAuthorizedError, BadRequestError } from "@/core"
 import { AppMessages } from "@/core/common"
-import { UserPrograms } from "@/programs/models"
+import { Program } from "@/programs/models"
 import { type FindSingleProgram } from "@/programs/payload_interfaces"
 
 class FindProgramUsers {
-    constructor(private readonly dbUserPrograms: typeof UserPrograms) {}
+    constructor(private readonly dbPrograms: typeof Program) {}
 
     handle = async ({ user, query }: Context<FindSingleProgram>) => {
         if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
-        const programUsers = await this.dbUserPrograms.findAll({
+        const program = await this.dbPrograms.findOne({
             where: {
-                programId: query.id,
+                id: query.programId,
             },
-
-            include: [
-                {
-                    model: Users,
-                },
-            ],
         })
 
-        const formattedProgramUsers = programUsers.map((programUser) => programUser.get("Users"))
+        if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
+
+        const programUsers = await program?.getRegisteredUsers({
+            attributes: {
+                exclude: ["refreshToken", "refreshTokenExp", "password"],
+            },
+        })
 
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.DATA_FETCHED,
-            data: formattedProgramUsers,
+            data: programUsers ?? [],
         }
     }
 }
 
-export const findProgramUsers = new FindProgramUsers(UserPrograms)
+export const findProgramUsers = new FindProgramUsers(Program)

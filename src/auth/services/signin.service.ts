@@ -34,11 +34,7 @@ class SignIn {
             role: user.role,
         })
 
-        user.refreshToken = generatedRefreshToken
-
-        user.refreshTokenExp = new Date()
-
-        await user.save()
+        await this.dbUser.update({ refreshToken: generatedRefreshToken, refreshTokenExp: new Date() }, { where: { id: user.id } })
 
         logger.info("Logged In Successfully")
 

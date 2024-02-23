@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt"
 
 export const hashData = async (data: string) => {
-  return await bcrypt.hash(data, 15)
+  return await bcrypt.hash(data, 12)
 }
 
 export const compareHashedData = async (plain: string, hash: string) => {
