@@ -90,6 +90,7 @@ export const config = Object.freeze({
         cloudName: validatedEnvVars.CLOUDINARY_NAME,
         apiKey: validatedEnvVars.CLOUDINARY_API_KEY,
         apiSecret: validatedEnvVars.CLOUDINARY_API_SECRET,
+        assetsFolder: 'NITPROFILE_ASSETS',
         profileFrameFolder: validatedEnvVars.CLOUDINARY_PROFILE_FRAME_FOLDER,
         certificateFrameFolder: validatedEnvVars.CLOUDINARY_CERTIFICATE_FRAME_FOLDER,
     },

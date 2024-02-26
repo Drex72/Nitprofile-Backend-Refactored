@@ -85,12 +85,12 @@ class GenerateProfile {
             await userProgram.save()
         }
 
-        logger.info(`Program with ID ${program.id} updated successfully`)
+        logger.info(`Profile for User ${existingUser.id} Generated successfully`)
 
         return {
             code: HttpStatus.OK,
-            message: AppMessages.SUCCESS.PROGRAM_UPDATED,
-            data: userProgram.profileImageUrl,
+            message: 'Profile for User Generated successfully',
+            data: profile_url,
         }
     }
 }

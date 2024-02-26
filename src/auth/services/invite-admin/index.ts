@@ -1,5 +1,5 @@
 import { HttpStatus, logger, type Context, UnAuthorizedError, currentOrigin, generateRandStr } from "@/core"
-import type { InviteAdminPayload } from "@/auth/payload_interfaces"
+import type { InviteAdminPayload } from "@/auth/interfaces"
 import { AppMessages } from "@/core/common"
 import { Users } from "@/auth/model/user.model"
 import { dispatch } from "@/app"

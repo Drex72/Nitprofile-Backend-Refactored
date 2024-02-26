@@ -3,7 +3,7 @@ import { HttpStatus, logger, type Context, currentOrigin, generateRandStr, compu
 import { forgotPasswordMail } from "@/mails"
 import { AppMessages } from "@/core/common"
 import { Users } from "@/auth/model/user.model"
-import type { ForgotPasswordPayload } from "@/auth/payload_interfaces"
+import type { ForgotPasswordPayload } from "@/auth/interfaces"
 
 class ForgotPassword {
     constructor(private readonly dbUser: typeof Users) {}

@@ -1,5 +1,5 @@
 import { HttpStatus, logger, type Context, ForbiddenError, hashData, isDateExpired } from "@/core"
-import type { ResetPasswordPayload } from "@/auth/payload_interfaces"
+import type { ResetPasswordPayload } from "@/auth/interfaces"
 import { AppMessages } from "@/core/common"
 import { Users } from "@/auth/model/user.model"
 

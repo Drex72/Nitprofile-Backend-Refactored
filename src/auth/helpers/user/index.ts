@@ -1,6 +1,6 @@
 import { AppMessages } from "@/core/common"
 import { BadRequestError, hashData, logger, sequelize } from "@/core"
-import type { ICreateUser } from "@/auth/payload_interfaces"
+import type { ICreateUser } from "@/auth/interfaces"
 import { Users } from "@/auth/model/user.model"
 
 class CreateUser {

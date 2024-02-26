@@ -4,7 +4,7 @@ import { AppMessages } from "@/core/common"
 import { create_user } from "@/auth/helpers/user"
 
 import { cache } from "@/app/app-cache"
-import type { AcceptAdminInvitationPayload } from "@/auth/payload_interfaces"
+import type { AcceptAdminInvitationPayload } from "@/auth/interfaces"
 
 class AcceptInvitation {
     constructor() {}
