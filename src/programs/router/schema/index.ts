@@ -29,7 +29,11 @@ export const updateProgramSchema: ValidationSchema = {
 
 export const createProgramUserSchema: ValidationSchema = {
     inputSchema: Joi.object({
-        programId: Joi.string().trim().optional(),
+        user: Joi.object({
+            email: Joi.string().email().required().trim(),
+            firstName: Joi.string().trim().required(),
+            lastName: Joi.string().trim().required(),
+        }).optional(),
     }),
 
     querySchema: Joi.object({
@@ -37,18 +41,70 @@ export const createProgramUserSchema: ValidationSchema = {
     }),
 }
 
-const schema = Joi.object({
-    name: Joi.string().required(),
-    month: Joi.string().required(),
-    sex: Joi.allow(),
-    salary: Joi.string().required(),
-    registration_no: Joi.string().required(),
-    designation: Joi.allow(),
-})
-
 export const assignAdminToProgramSchema: ValidationSchema = {
     inputSchema: Joi.object({
         programId: Joi.string().length(36).trim().required(),
         adminId: Joi.string().length(36).trim().required(),
+    }),
+}
+
+export const addProgramProfileFrameSchema: ValidationSchema = {
+    inputSchema: Joi.object({
+        profileFrameHeight: Joi.number().required(),
+        profileFrameWidth: Joi.number().required(),
+    }),
+
+    querySchema: Joi.object({
+        programId: Joi.string().length(36).trim().required(),
+    }),
+}
+
+const baseNodeSchema = Joi.object({
+    type: Joi.string().required(),
+    x: Joi.number().required(),
+    y: Joi.number().required(),
+})
+
+const imageNodeSchema = baseNodeSchema.keys({
+    type: Joi.string().valid("image").required(),
+    overlay: Joi.string().optional(),
+    width: Joi.number().min(50).required(),
+    height: Joi.number().min(50).required(),
+    gravity: Joi.string().required(),
+    radius: Joi.number().required(),
+    crop: Joi.string().required(),
+})
+
+const textNodeSchema = baseNodeSchema.keys({
+    type: Joi.string().valid("text").required(),
+    font_family: Joi.string().required(),
+    font_size: Joi.number().required(),
+    font_weight: Joi.string().required(),
+    color: Joi.string().required(),
+    placeholder: Joi.boolean().optional(),
+    text: Joi.alternatives().conditional("placeholder", {
+        is: false,
+        then: Joi.string().required(),
+        otherwise: Joi.optional(),
+    }),
+    entity: Joi.alternatives().conditional("placeholder", {
+        is: true,
+        then: Joi.string().valid("program", "date", "user").required(),
+        otherwise: Joi.optional(),
+    }),
+    entity_key: Joi.alternatives().conditional("placeholder", {
+        is: true,
+        then: Joi.string().required(),
+        otherwise: Joi.optional(),
+    }),
+})
+
+export const createProgramNodeSchema: ValidationSchema = {
+    inputSchema: Joi.object({
+        nodes: Joi.array().required().min(1).items(Joi.alternatives().try(imageNodeSchema, textNodeSchema)),
+    }),
+
+    querySchema: Joi.object({
+        programId: Joi.string().length(36).trim().required(),
     }),
 }

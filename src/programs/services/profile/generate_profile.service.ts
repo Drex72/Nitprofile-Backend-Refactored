@@ -14,29 +14,29 @@ class GenerateProfile {
         private readonly dbUser: typeof Users,
     ) {}
 
-    handle = async ({ params, user }: Context<GenerateProgramProfilePayload>) => {
+    handle = async ({ query, user }: Context<GenerateProgramProfilePayload>) => {
         if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
-        const { program_id } = params
+        const { programId } = query
 
         const existingUser = await this.dbUser.findOne({ where: { id: user.id } })
 
         if (!existingUser || !existingUser.profilePicPublicId) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
 
         const program = await this.dbPrograms.findOne({
-            where: { id: program_id },
+            where: { id: programId },
         })
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
         const userProgram = await this.dbUserPrograms.findOne({
-            where: { userId: user.id, programId: program_id },
+            where: { userId: user.id, programId },
         })
 
         if (!userProgram) throw new BadRequestError("You are not registered for this program")
 
         const programNodes = await this.dbProgramNodes.findAll({
-            where: { programId: program_id },
+            where: { programId },
         })
 
         if (!program.profileGenerationAvailable) {

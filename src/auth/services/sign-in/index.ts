@@ -1,6 +1,6 @@
 import { HttpStatus, compareHashedData, logger, type Context, UnAuthorizedError } from "@/core"
-import type { SignInPayload } from "../payload_interfaces"
 import { AppMessages } from "@/core/common"
+import type { SignInPayload } from "@/auth/payload_interfaces"
 import { tokenService, type TokenService } from "@/auth/helpers/token"
 import { Users } from "@/auth/model/user.model"
 

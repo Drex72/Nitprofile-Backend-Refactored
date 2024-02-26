@@ -30,13 +30,15 @@ export const AppMessages = {
         PROGRAM_UPDATED: "Program updated successfully",
         PROGRAM_DELETED: "Program deleted successfully",
 
-        PROGRAM_NODE_CREATED: "Program Node created successfully",
+        PROGRAM_NODE_CREATED: "Program Nodes created successfully",
         PROGRAM_NODE_UPDATED: "Program Node updated successfully",
         PROGRAM_NODE_DELETED: "Program Node deleted successfully",
 
         USERS_REGISTERED_SUCCESSFULLY: "Users registered for program successfully",
+        USER_REGISTERED_SUCCESSFULLY: "User registered for program successfully",
 
-        PROFILE_GENERATION_AVAILABLE:"Profile Generation is not available"
+
+        PROFILE_GENERATION_AVAILABLE:"Profile Generation Enabled"
     },
     INFO: {
         INVALID_OPERATION: "Invalid operation.",

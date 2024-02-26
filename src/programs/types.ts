@@ -11,17 +11,17 @@ interface INode {
 
 export interface IImageNode extends INode {
     type: "image"
+    overlay: string
     width: number
     height: number
-    gravity: number
+    gravity: string
     radius: number
-    crop: number
+    crop: string
 }
 
 export interface ITextNode extends INode {
     type: "text"
     text: string
-    gravity?: number
     font_family: string
     font_size?: number
     font_weight?: string
@@ -30,6 +30,7 @@ export interface ITextNode extends INode {
 }
 
 export interface IPlaceholderTextNode extends ITextNode {
+    type: "text"
     entity?: IPlaceholderTextNodeEntity
     entity_key?: string
 }

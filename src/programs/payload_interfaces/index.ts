@@ -31,7 +31,7 @@ export interface UpdateProgramPayload extends ContextTypes {
         programId: string
     }
     files: {
-        csv: any
+        csv: RequestFileContents
     }
 }
 
@@ -43,11 +43,14 @@ export interface FindSingleProgram extends ContextTypes {
 
 export interface AddProgramProfileFramePayload extends ContextTypes {
     input: {
-        profileFrameHeight: number
-        profileFrameWidth: number
+        profileFrameHeight: string
+        profileFrameWidth: string
     }
     query: {
-        id: string
+        programId: string
+    }
+    files: {
+        frame: RequestFileContents
     }
 }
 
@@ -56,7 +59,7 @@ export interface CreateProgramNodesPayload extends ContextTypes {
         nodes: Node[]
     }
     query: {
-        id: string
+        programId: string
     }
 }
 
@@ -70,16 +73,18 @@ export interface UpdateProgramNodePayload extends ContextTypes {
 }
 
 export interface GenerateProgramProfilePayload extends ContextTypes {
-    params: {
-        program_id: string
+    query: {
+        programId: string
     }
 }
 
 export interface RegisterProgramUser extends ContextTypes {
     input: {
-        email: string
-        firstName: string
-        lastName: string
+        user: {
+            email: string
+            firstName: string
+            lastName: string
+        }
     }
 
     query: {

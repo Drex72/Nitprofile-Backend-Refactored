@@ -1,9 +1,9 @@
 import { type Context, convertArrayToObject, UnAuthorizedError, config, HttpStatus } from "@/core"
-import type { RefreshTokenPayload } from "../payload_interfaces"
+import type { RefreshTokenPayload } from "@/auth/payload_interfaces"
 import { AppMessages } from "@/core/common"
 import { Users } from "@/auth/model/user.model"
-import { type TokenService, tokenService } from "../helpers/token"
-import { encryptor } from "../helpers/encryptor"
+import { type TokenService, tokenService } from "@/auth/helpers/token"
+import { encryptor } from "@/auth/helpers/encryptor"
 
 class RefreshToken {
     constructor(private readonly dbUser: typeof Users, private readonly tokenService: TokenService) {}

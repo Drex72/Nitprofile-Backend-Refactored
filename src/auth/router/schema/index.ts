@@ -4,7 +4,7 @@ import type { ValidationSchema } from "@/core"
 export const signInSchema: ValidationSchema = {
     inputSchema: Joi.object({
         password: Joi.string().trim().required(),
-        email: Joi.string().required().trim(),
+        email: Joi.string().email().required().trim(),
     }),
 }
 
@@ -23,7 +23,7 @@ export const resetPasswordSchema: ValidationSchema = {
 
 export const inviteAdminSchema: ValidationSchema = {
     inputSchema: Joi.object({
-        email: Joi.string().required().trim(),
+        email: Joi.string().email().required().trim(),
     }),
 }
 

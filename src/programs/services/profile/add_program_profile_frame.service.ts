@@ -1,31 +1,45 @@
 import { type Context, HttpStatus, BadRequestError, logger, imageUploadService, ForbiddenError, config } from "@/core"
 import { AppMessages } from "@/core/common"
+import { resizeImage } from "@/image-manipulator"
 import { Program } from "@/programs/models"
 import { type AddProgramProfileFramePayload } from "@/programs/payload_interfaces"
+import fs from "fs"
 
 class AddProgramProfileFrame {
     constructor(private readonly dbPrograms: typeof Program) {}
 
-    handle = async ({ input, user, query, files }: Context<AddProgramProfileFramePayload>) => {
+    handle = async ({ input, query, files }: Context<AddProgramProfileFramePayload>) => {
+        if (!files || !files.frame || Array.isArray(files.frame)) throw new ForbiddenError("Profile Frame is required")
+
         const { profileFrameHeight, profileFrameWidth } = input
 
+        const width = parseInt(profileFrameWidth)
+
+        const height = parseInt(profileFrameHeight)
+
         const program = await this.dbPrograms.findOne({
-            where: { id: query.id },
+            where: { id: query.programId },
         })
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        if (!files || !files.frame || Array.isArray(files.frame)) throw new ForbiddenError("Profile Frame is required")
+        const imageBuffer = fs.readFileSync(files.frame.tempFilePath)
 
-        const profileFrame = files.frame
+        const resizedBuffer = await resizeImage({
+            height,
+            width,
+            imageBuffer: imageBuffer,
+        })
+
+        const profileFrame = { ...files.frame, data: resizedBuffer }
 
         const uploadedImage = await imageUploadService.imageUpload(config.cloudinary.profileFrameFolder, profileFrame)
 
         if (!uploadedImage) throw new BadRequestError("Error while uploading Frame. Please Try again later")
 
-        program.profileFrameHeight = profileFrameHeight
+        program.profileFrameHeight = height
 
-        program.profileFrameWidth = profileFrameWidth
+        program.profileFrameWidth = width
 
         program.profileFramePublicId = uploadedImage.public_id
 

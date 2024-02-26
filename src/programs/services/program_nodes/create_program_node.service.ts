@@ -1,42 +1,40 @@
-import { dispatch } from "@/app"
-import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError, sequelize } from "@/core"
+import type { Users } from "@/auth/model"
+import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError, sequelize, ForbiddenError } from "@/core"
 import { AppMessages } from "@/core/common"
-import { AdminsAssignedPrograms, Program, ProgramNodes } from "@/programs/models"
+import { Program, ProgramNodes } from "@/programs/models"
 import { type CreateProgramNodesPayload } from "@/programs/payload_interfaces"
 import { isProgramProfileValid } from "@/programs/utils"
 
 class CreateProgramNodes {
-    constructor(private readonly dbAdminPrograms: typeof AdminsAssignedPrograms, private readonly dbProgramNodes: typeof ProgramNodes) {}
+    constructor(private readonly dbPrograms: typeof Program, private readonly dbProgramNodes: typeof ProgramNodes) {}
 
     handle = async ({ input, user, query }: Context<CreateProgramNodesPayload>) => {
         if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
         const { nodes } = input
 
-        const { id } = query
+        const { programId } = query
 
-        const adminProgram = await this.dbAdminPrograms.findOne({
-            where: {
-                userId: user.id,
-                programId: id,
-            },
-
-            include: [
-                {
-                    model: Program,
-                    attributes: ["id", "createdBy", "name", "startDate", "endDate", "isCompleted"],
-                },
-            ],
+        const program = await this.dbPrograms.findOne({
+            where: { id: programId },
         })
 
-        if (!adminProgram) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
+        if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        const selectedProgram: any = adminProgram.get("Program")
+        const assignedAdmins = await program?.getAssignedAdmins({
+            attributes: {
+                exclude: ["refreshToken", "refreshTokenExp", "password"],
+            },
+        })
 
-        console.log(selectedProgram, "this is the selected program")
+        const isAdminAssigned = assignedAdmins?.find((admin: Users) => admin?.id === user.id) || program.createdBy === user.id
 
-        if (isProgramProfileValid(selectedProgram.program as Program)) {
-            throw new BadRequestError("Profile generation is currently unavailable. Please reach out to the administrator for further details.")
+        if (!isAdminAssigned) throw new ForbiddenError("You are not assigned to this program")
+
+        if (!isProgramProfileValid(program)) {
+            throw new BadRequestError(
+                "Node creation for this program is restricted until a profile or certificate frame is created within the program.",
+            )
         }
 
         const dbTransaction = await sequelize.transaction()
@@ -46,21 +44,13 @@ class CreateProgramNodes {
         try {
             await Promise.all(
                 nodes.map(async (node) => {
-                    const createdNode = await this.dbProgramNodes.create({ ...node, programId: id }, { transaction: dbTransaction })
+                    const createdNode = await this.dbProgramNodes.create({ ...node, programId }, { transaction: dbTransaction })
 
                     logger.info(`Program Node with ID ${createdNode.id} created successfully`)
 
                     createdNodes.push(createdNode)
                 }),
             )
-
-            dispatch("event:newNotification", {
-                actor: { id: user.id },
-                entity_type: "PROFILE_AVAILABLE",
-                item_id: adminProgram.programId,
-                message: `Profile Generation for Program ${selectedProgram?.program.name} is now Available.`,
-                notifier: [user.id],
-            })
 
             dbTransaction.commit()
         } catch (error: any) {
@@ -79,4 +69,4 @@ class CreateProgramNodes {
     }
 }
 
-export const createProgramNodes = new CreateProgramNodes(AdminsAssignedPrograms, ProgramNodes)
+export const createProgramNodes = new CreateProgramNodes(Program, ProgramNodes)

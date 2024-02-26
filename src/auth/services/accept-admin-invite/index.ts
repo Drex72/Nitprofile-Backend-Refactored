@@ -1,7 +1,7 @@
 import { HttpStatus, logger, type Context, UnAuthorizedError } from "@/core"
 import { AppMessages } from "@/core/common"
 
-import { create_user } from "../helpers/user"
+import { create_user } from "@/auth/helpers/user"
 
 import { cache } from "@/app/app-cache"
 import type { AcceptAdminInvitationPayload } from "@/auth/payload_interfaces"

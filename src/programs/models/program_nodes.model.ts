@@ -14,15 +14,16 @@ export class ProgramNodes extends Model<InferAttributes<ProgramNodes>, InferCrea
     declare overlay: CreationOptional<string>
     declare width: CreationOptional<number>
     declare height: CreationOptional<number>
-    declare gravity: CreationOptional<number>
+    declare gravity: CreationOptional<string>
     declare radius: CreationOptional<number>
-    declare crop: CreationOptional<number>
+    declare crop: CreationOptional<string>
 
     // Text Node Attributes
     declare text: CreationOptional<string>
     declare font_family: CreationOptional<string>
     declare font_size: CreationOptional<number>
     declare font_weight: CreationOptional<string>
+    declare color: CreationOptional<string>
     declare placeholder: CreationOptional<boolean>
 
     // Placeholder Text Node Attributes
@@ -67,13 +68,13 @@ ProgramNodes.init(
             type: DataTypes.INTEGER,
         },
         gravity: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         radius: {
             type: DataTypes.INTEGER,
         },
         crop: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
         },
         text: {
             type: DataTypes.STRING,
@@ -87,13 +88,15 @@ ProgramNodes.init(
         font_weight: {
             type: DataTypes.STRING,
         },
+        color: {
+            type: DataTypes.STRING,
+        },
         placeholder: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
         entity: {
             type: DataTypes.ENUM(...placeholderTextNodeEntity),
-            allowNull: false,
         },
         entity_key: {
             type: DataTypes.STRING,

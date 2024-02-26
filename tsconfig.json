@@ -8,7 +8,7 @@
     "allowJs": true,
     "outDir": "./build",
     "noImplicitAny": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
     "resolveJsonModule": true,
 
     /* Bundler mode */

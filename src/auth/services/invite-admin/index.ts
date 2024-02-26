@@ -1,15 +1,13 @@
 import { HttpStatus, logger, type Context, UnAuthorizedError, currentOrigin, generateRandStr } from "@/core"
-import type { InviteAdminPayload } from "../payload_interfaces"
+import type { InviteAdminPayload } from "@/auth/payload_interfaces"
 import { AppMessages } from "@/core/common"
-import { tokenService, type TokenService } from "../helpers/token"
-import type { Users as IUsers } from "../model"
 import { Users } from "@/auth/model/user.model"
 import { dispatch } from "@/app"
 import { adminInvitationMail } from "@/mails"
 import { cache } from "@/app/app-cache"
 
 class InviteAdmin {
-    constructor(private readonly dbUser: typeof IUsers) {}
+    constructor(private readonly dbUser: typeof Users) {}
 
     handle = async ({ input }: Context<InviteAdminPayload>) => {
         const { email } = input

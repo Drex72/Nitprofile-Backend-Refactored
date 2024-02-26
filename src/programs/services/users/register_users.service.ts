@@ -2,7 +2,7 @@ import { dispatch } from "@/app"
 import { Users } from "@/auth/model"
 import { AppMessages } from "@/core/common"
 import { create_user } from "@/auth/helpers/user"
-import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, sequelize, config } from "@/core"
+import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, sequelize, config, Joi } from "@/core"
 import { customCsvToJsonConverter } from "@/programs/helpers/csvToJson"
 import { Program, UserPrograms } from "@/programs/models"
 import { type RegisterProgramUser } from "@/programs/payload_interfaces"
@@ -14,6 +14,12 @@ interface IBaseUser {
     lastName: string
     programId: string
 }
+
+const csvSchema = Joi.object({
+    email: Joi.string().required().trim(),
+    firstName: Joi.string().trim().required(),
+    lastName: Joi.string().trim().required(),
+})
 
 class RegisterProgramUsers {
     constructor(
@@ -29,18 +35,20 @@ class RegisterProgramUsers {
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        if (input) {
+        if (Object.keys(input).length > 0) {
             const user = await this._create_single_program_user({
-                email: input.email,
-                firstName: input.firstName,
-                lastName: input.lastName,
+                email: input.user.email,
+                firstName: input.user.firstName,
+                lastName: input.user.lastName,
                 programId: query.programId,
             })
 
+            const { password: dbPassword, refreshToken, refreshTokenExp, ...responsePayload } = user.dataValues
+
             return {
                 code: HttpStatus.CREATED,
-                message: AppMessages.SUCCESS.USERS_REGISTERED_SUCCESSFULLY,
-                data: user,
+                message: AppMessages.SUCCESS.USER_REGISTERED_SUCCESSFULLY,
+                data: responsePayload,
             }
         }
 
@@ -57,6 +65,10 @@ class RegisterProgramUsers {
 
             await Promise.all(
                 convertedJson.map(async (user) => {
+                    let value = csvSchema.validate(user)
+
+                    if (value.error) throw new BadRequestError("Invalid CSV")
+
                     let existingUser = await this.dbUsers.findOne({
                         where: { email: user.email },
                     })
