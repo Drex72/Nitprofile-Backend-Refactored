@@ -41,6 +41,16 @@ export const createProgramUserSchema: ValidationSchema = {
     }),
 }
 
+export const resendProgramUserMailSchema: ValidationSchema = {
+    inputSchema: Joi.object({
+        email: Joi.string().trim().required(),
+    }),
+
+    querySchema: Joi.object({
+        programId: Joi.string().length(36).trim().required(),
+    }),
+}
+
 export const assignAdminToProgramSchema: ValidationSchema = {
     inputSchema: Joi.object({
         programId: Joi.string().length(36).trim().required(),

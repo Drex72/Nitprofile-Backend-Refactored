@@ -8,6 +8,13 @@ export const signInSchema: ValidationSchema = {
     }),
 }
 
+export const verifyAccount: ValidationSchema = {
+    inputSchema: Joi.object({
+        password: Joi.string().trim().required(),
+        token: Joi.string().length(64).required().trim(),
+    }),
+}
+
 export const forgotPasswordSchema: ValidationSchema = {
     inputSchema: Joi.object({
         email: Joi.string().required().trim(),

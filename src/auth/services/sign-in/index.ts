@@ -1,4 +1,4 @@
-import { HttpStatus, compareHashedData, logger, type Context, UnAuthorizedError } from "@/core"
+import { HttpStatus, compareHashedData, logger, type Context, UnAuthorizedError, ForbiddenError } from "@/core"
 import { AppMessages } from "@/core/common"
 import type { SignInPayload } from "@/auth/interfaces"
 import { tokenService, type TokenService } from "@/auth/helpers/token"
@@ -27,6 +27,8 @@ class SignIn {
         const isPasswordValid = await compareHashedData(password, user.password)
 
         if (!isPasswordValid) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_CREDENTIALS)
+
+        if (user.role === "USER" && !user.isVerified) throw new ForbiddenError(AppMessages.FAILURE.VERIFY_ACCOUNT)
 
         const [generatedAccessToken, generatedRefreshToken] = await this.tokenService.getTokens({
             id: user.id,

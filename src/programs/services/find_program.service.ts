@@ -84,21 +84,26 @@ class FindPrograms {
             where: {
                 userId,
             },
-
-            include: [
-                {
-                    model: Program,
-                    attributes: ["id", "createdBy", "name", "startDate", "endDate", "isCompleted"],
-                },
-            ],
         })
 
-        const formattedUserPrograms = userPrograms.map((userProgram) => userProgram.get("Program"))
+        const programs: Program[] = []
+
+        await Promise.all(
+            userPrograms.map(async (adminProgram) => {
+                const program = await this.dbPrograms.findOne({
+                    where: { id: adminProgram.programId },
+                })
+
+                if (program) {
+                    programs.push(program)
+                }
+            }),
+        )
 
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.DATA_FETCHED,
-            data: formattedUserPrograms,
+            data: programs,
         }
     }
 
@@ -107,21 +112,26 @@ class FindPrograms {
             where: {
                 userId,
             },
-
-            include: [
-                {
-                    model: Program,
-                    attributes: ["id", "createdBy", "name", "startDate", "endDate", "isCompleted"],
-                },
-            ],
         })
 
-        const formattedAdminPrograms = adminPrograms.map((adminAssignedProgram) => adminAssignedProgram.get("Program"))
+        const programs: Program[] = []
+
+        await Promise.all(
+            adminPrograms.map(async (adminProgram) => {
+                const program = await this.dbPrograms.findOne({
+                    where: { id: adminProgram.programId },
+                })
+
+                if (program) {
+                    programs.push(program)
+                }
+            }),
+        )
 
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.DATA_FETCHED,
-            data: formattedAdminPrograms,
+            data: programs,
         }
     }
 }

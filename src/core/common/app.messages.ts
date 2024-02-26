@@ -15,6 +15,7 @@ export const AppMessages = {
         INVALID_PROFILE_PICTURE: "You must have a profile picture before you can generate your profile. kindly update your profile picture.",
         PROFILE_GENERATION_NOT_AVAILABLE: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
         ADMIN_ALREADY_ASSIGNED: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
+        VERIFY_ACCOUNT:"For your account's ongoing security, we require you to establish a new password.  Logging in with the default password is no longer possible due to enhanced security measures."
 
     },
     SUCCESS: {

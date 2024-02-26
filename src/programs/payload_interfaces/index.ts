@@ -94,3 +94,12 @@ export interface RegisterProgramUser extends ContextTypes {
         csv: RequestFileContents
     }
 }
+
+export interface ResendUserMailPayload extends ContextTypes {
+    input: {
+        email: string
+    }
+    query: {
+        programId: string
+    }
+}

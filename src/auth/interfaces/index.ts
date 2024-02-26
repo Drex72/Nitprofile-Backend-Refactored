@@ -54,3 +54,10 @@ export interface AcceptAdminInvitationPayload extends ContextTypes {
         token: string
     }
 }
+
+export interface VerifyAccountPayload extends ContextTypes {
+    input: {
+        token: string
+        password: string
+    }
+}

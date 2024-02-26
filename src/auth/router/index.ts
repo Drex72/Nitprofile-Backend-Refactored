@@ -1,9 +1,17 @@
 import { Router } from "express"
 import { ControlBuilder } from "@/core/middlewares/controlBuilder"
-import { signInSchema, acceptInvitationSchema, forgotPasswordSchema, inviteAdminSchema, resetPasswordSchema } from "./schema"
-import { signIn, forgotPassword, resetPassword, refreshToken, acceptInvitation, inviteAdmin, signOut } from "../services"
+import { signInSchema, acceptInvitationSchema, forgotPasswordSchema, inviteAdminSchema, resetPasswordSchema, verifyAccount } from "./schema"
+import { signIn, forgotPassword, resetPassword, refreshToken, acceptInvitation, inviteAdmin, signOut, verifyUserAccount } from "../services"
 
 export const authRouter = Router()
+
+authRouter.post(
+    "/verify-account", 
+    ControlBuilder.builder()
+    .setValidator(verifyAccount)
+    .setHandler(verifyUserAccount.handle)    
+    .handle()
+)
 
 authRouter.post(
     "/sign-in", 

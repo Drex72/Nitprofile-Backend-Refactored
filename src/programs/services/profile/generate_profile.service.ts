@@ -19,9 +19,11 @@ class GenerateProfile {
 
         const { programId } = query
 
-        const existingUser = await this.dbUser.findOne({ where: { id: user.id } })
+        const userProgram = await this.dbUserPrograms.findOne({
+            where: { userId: user.id, programId },
+        })
 
-        if (!existingUser || !existingUser.profilePicPublicId) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
+        if (!userProgram) throw new BadRequestError("You are not registered for this program")
 
         const program = await this.dbPrograms.findOne({
             where: { id: programId },
@@ -29,13 +31,11 @@ class GenerateProfile {
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        const userProgram = await this.dbUserPrograms.findOne({
-            where: { userId: user.id, programId },
-        })
+        const existingUser = await this.dbUser.findOne({ where: { id: user.id } })
 
-        if (!userProgram) throw new BadRequestError("You are not registered for this program")
+        if (!existingUser) throw new BadRequestError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
-        const programNodes = await this.dbProgramNodes.findAll({
+        const programNodes = await this.dbProgramNodes.scope("").findAll({
             where: { programId },
         })
 
@@ -43,11 +43,17 @@ class GenerateProfile {
             throw new BadRequestError(AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE)
         }
 
+        const profilePictureNode = programNodes.find((node) => node.type === "image" && node.overlay)
+
+        if (profilePictureNode && !existingUser.profilePicPublicId) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
+
         let profile_url
 
-        if (userProgram.profileImageUrl) profile_url = userProgram.profileImageUrl
+        console.log(userProgram.profileImageUrl, "initla url")
 
-        if (!userProgram.profileImageUrl || existingUser.changed("profilePicSecureUrl")) {
+        // if (userProgram.profileImageUrl) profile_url = userProgram.profileImageUrl
+
+        if (true) {
             const refactoredNodes: Node[] = []
 
             await Promise.all(
@@ -79,6 +85,8 @@ class GenerateProfile {
                 width: program.profileFrameWidth,
             })
 
+            console.log(profileImageUrl, "added")
+
             userProgram.profileImageUrl = profileImageUrl
             userProgram.profileGenerationDate = new Date(Date.now())
 
@@ -89,7 +97,7 @@ class GenerateProfile {
 
         return {
             code: HttpStatus.OK,
-            message: 'Profile for User Generated successfully',
+            message: "Profile for User Generated successfully",
             data: profile_url,
         }
     }

@@ -2,11 +2,12 @@ import { dispatch } from "@/app"
 import { Users } from "@/auth/model"
 import { AppMessages } from "@/core/common"
 import { create_user } from "@/auth/helpers/user"
-import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, sequelize, config, Joi } from "@/core"
+import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, sequelize, config, Joi, generateRandStr } from "@/core"
 import { customCsvToJsonConverter } from "@/programs/helpers/csvToJson"
 import { Program, UserPrograms } from "@/programs/models"
-import { type RegisterProgramUser } from "@/programs/payload_interfaces"
+import { type IProgramUser, type RegisterProgramUser } from "@/programs/payload_interfaces"
 import type { ISendUsersEmail } from "@/programs/listeners"
+import { cache } from "@/app/app-cache"
 
 interface IBaseUser {
     email: string
@@ -35,39 +36,30 @@ class RegisterProgramUsers {
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        if (Object.keys(input).length > 0) {
-            const user = await this._create_single_program_user({
-                email: input.user.email,
-                firstName: input.user.firstName,
-                lastName: input.user.lastName,
-                programId: query.programId,
-            })
-
-            const { password: dbPassword, refreshToken, refreshTokenExp, ...responsePayload } = user.dataValues
-
-            return {
-                code: HttpStatus.CREATED,
-                message: AppMessages.SUCCESS.USER_REGISTERED_SUCCESSFULLY,
-                data: responsePayload,
-            }
-        }
-
-        if (!files || !files.csv || Array.isArray(files.csv)) throw new ForbiddenError("csv is required")
-
-        const csvFile = files.csv
+        const usersToCreate: IProgramUser[] = []
 
         const dbTransaction = await sequelize.transaction()
 
         try {
-            const convertedJson = await customCsvToJsonConverter.convert(csvFile.tempFilePath)
+            if (Object.keys(input).length > 0) {
+                usersToCreate.push(input.user)
+            } else {
+                if (!files || !files.csv || Array.isArray(files.csv)) throw new ForbiddenError("csv is required")
+
+                const csvFile = files.csv
+
+                const convertedJson = await customCsvToJsonConverter.convert(csvFile.tempFilePath)
+
+                usersToCreate.push(...convertedJson)
+            }
 
             const sendMailPayload: ISendUsersEmail[] = []
 
             await Promise.all(
-                convertedJson.map(async (user) => {
+                usersToCreate.map(async (user) => {
                     let value = csvSchema.validate(user)
 
-                    if (value.error) throw new BadRequestError("Invalid CSV")
+                    if (value.error) throw new BadRequestError(`Invalid User ${JSON.stringify(user)}`)
 
                     let existingUser = await this.dbUsers.findOne({
                         where: { email: user.email },
@@ -101,17 +93,21 @@ class RegisterProgramUsers {
                         { transaction: dbTransaction },
                     )
 
+                    const inviteToken = generateRandStr(64)
+
+                    await cache.set(inviteToken, user.email, "EX", 6000)
+
                     sendMailPayload.push({
                         programName: program.name,
                         firstName: user.firstName,
                         lastName: user.lastName,
-                        token: "",
+                        token: inviteToken,
                         email: user.email,
                         userId: existingUser.id,
                         programId: program.id,
                     })
 
-                    logger.info(`User with Name ${user.firstName} Assigned to program ${program.name} successfully`)
+                    logger.info(`User with Name ${user.firstName} Registered for program ${program.name} successfully`)
                 }),
             )
 
@@ -135,22 +131,36 @@ class RegisterProgramUsers {
     private _create_single_program_user = async (input: IBaseUser) => {
         const { email, firstName, lastName, programId } = input
 
-        const user = await create_user._create_single_user({
-            email,
-            firstName,
-            lastName,
-            password: config.userDefaultPassword,
-            role: "USER",
+        let existingUser = await this.dbUsers.findOne({
+            where: { email },
         })
 
-        logger.info(`User with ID ${user.id} created successfully`)
+        if (existingUser) {
+            const userProgramExists = await this.dbUserPrograms.findOne({
+                where: { userId: existingUser.id, programId },
+            })
+
+            if (userProgramExists) throw new BadRequestError(AppMessages.FAILURE.USER_ALREADY_ASSIGNED_TO_PROGRAM)
+        }
+
+        if (!existingUser) {
+            existingUser = await create_user._create_single_user({
+                email,
+                firstName,
+                lastName,
+                password: config.userDefaultPassword,
+                role: "USER",
+            })
+
+            logger.info(`User with ID ${existingUser.id} created successfully`)
+        }
 
         await this.dbUserPrograms.create({
-            userId: user.id,
+            userId: existingUser.id,
             programId: programId,
         })
 
-        return user
+        return existingUser
     }
 }
 

@@ -1,8 +1,8 @@
 import { Router } from "express"
 import { ControlBuilder } from "@/core/middlewares/controlBuilder"
-import { addProgramProfileFrameSchema, assignAdminToProgramSchema, createProgramNodeSchema, createProgramSchema, createProgramUserSchema, findProgramSchema, updateProgramSchema } from "./schema"
+import { addProgramProfileFrameSchema, assignAdminToProgramSchema, createProgramNodeSchema, createProgramSchema, createProgramUserSchema, findProgramSchema, resendProgramUserMailSchema, updateProgramSchema } from "./schema"
 import { createProgram ,deleteProgram,findPrograms,updateProgram,assignAdminToProgram, findProgramAssignedAdmins} from "../services"
-import { findProgramUsers, registerProgramUsers } from "../services/users"
+import { findProgramUsers, registerProgramUsers, resendUserMail } from "../services/users"
 import { addProgramProfileFrame, generateProfile } from "../services/profile"
 import { createProgramNodes } from "../services/program_nodes"
 import { enableProfileGeneration } from "../services/profile/enable_profile_generation.service"
@@ -61,7 +61,16 @@ programRouter
         .isPrivate()
         .handle()
     )
+    .put(
+        ControlBuilder.builder()
+        .setValidator(resendProgramUserMailSchema)
+        .setHandler(resendUserMail.handle)
+        .only("ADMIN","SUPER ADMIN")
+        .isPrivate()
+        .handle()
+    )
 
+    
 
 programRouter
     .route("/assign-admin")

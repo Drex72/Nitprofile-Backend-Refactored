@@ -116,6 +116,9 @@ export const programAcceptanceMail = (data: IProgramAcceptance) => `
                                            <p>Congratulations once again for being selected for the ${data.programName} Program. </p>
                                           <p>Kindly login to your dashboard by clicking the button below. </p>
         <br>          
+        <p>
+        <a href=${data.link}><button style="background-color: #27a810;">Accept</button></a>
+      </p>
                                           <span style="margin-top:1px;">Your password is<strong> password</strong></span>
                                            
                                           </div>
