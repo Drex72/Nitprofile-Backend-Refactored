@@ -1,11 +1,21 @@
 import { Router } from "express"
 import { ControlBuilder } from "@/core/middlewares/controlBuilder"
-import { addProgramProfileFrameSchema, assignAdminToProgramSchema, createProgramNodeSchema, createProgramSchema, createProgramUserSchema, findProgramSchema, resendProgramUserMailSchema, updateProgramSchema } from "./schema"
-import { createProgram ,deleteProgram,findPrograms,updateProgram,assignAdminToProgram, findProgramAssignedAdmins} from "../services"
-import { findProgramUsers, registerProgramUsers, resendUserMail } from "../services/users"
-import { addProgramProfileFrame, generateProfile } from "../services/profile"
-import { createProgramNodes } from "../services/program_nodes"
-import { enableProfileGeneration } from "../services/profile/enable_profile_generation.service"
+import {
+    addProgramProfileFrameSchema,
+    assignAdminToProgramSchema,
+    createProgramNodeSchema,
+    createProgramSchema,
+    createProgramUserSchema,
+    findProgramSchema,
+    resendProgramUserMailSchema,
+    updateProgramSchema,
+} from "./schema"
+import { createProgram, findPrograms, updateProgram } from "@/programs/services/core"
+import { assignAdminToProgram, findProgramAssignedAdmins } from "@/programs/services/admins"
+import { addProgramProfileFrame, enableProfileGeneration, generateProfile } from "@/programs/services/profile"
+import { createProgramNodes } from "@/programs/services/program_nodes"
+import { findProgramUsers, registerProgramUsers, resendUserMail } from "@/programs/services/users"
+
 
 export const programRouter = Router()
 
@@ -129,8 +139,3 @@ programRouter
         .isPrivate()
         .handle()
     )
-
-// create program profile
-// Update program profile
-// create program certificate
-// update program certificate

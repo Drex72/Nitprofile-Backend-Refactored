@@ -1,3 +1,3 @@
-export * from "./find_program_users.service"
-export * from "./register_users.service"
-export * from "./resend_user_mail.service"
+export * from "./find-program-users"
+export * from "./register-program-users"
+export * from "./resend-user-mail"

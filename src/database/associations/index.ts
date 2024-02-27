@@ -23,8 +23,4 @@ export const handleSetAssociations = () => {
         otherKey: "userId",
         as: "assignedAdmins",
     })
-
-    const ass = Program.associations
-
-    console.log({ ass })
 }
