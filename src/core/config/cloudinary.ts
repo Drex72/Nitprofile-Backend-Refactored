@@ -3,7 +3,7 @@ import cloud from "cloudinary"
 const cloudinary = cloud.v2
 
 import { config as configObj } from "./config"
-import type { Node } from "@/programs/types"
+import type { NodePayload } from "@/programs/types"
 
 cloudinary.config({
     cloud_name: configObj.cloudinary.cloudName,
@@ -15,7 +15,7 @@ interface ITransformImageProps {
     framePublicId: string
     width: number
     height: number
-    nodes: Node[]
+    nodes: NodePayload[]
 }
 
 export const generateCloudinaryTransformationImage = (props: ITransformImageProps) => {

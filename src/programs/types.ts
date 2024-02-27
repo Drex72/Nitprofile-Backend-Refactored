@@ -36,3 +36,18 @@ export interface IPlaceholderTextNode extends ITextNode {
 }
 
 export type Node = IImageNode | ITextNode | IPlaceholderTextNode
+
+export type NodePayload =
+    | IImageNode
+    | {
+          overlay: {
+              text: string
+              font_family: string
+              font_size?: number
+              font_weight?: string
+          }
+
+          color?: string
+          x: number
+          y: number
+      }

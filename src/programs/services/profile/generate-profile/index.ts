@@ -1,10 +1,11 @@
 import { Users } from "@/auth/model"
 import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError, generateCloudinaryTransformationImage } from "@/core"
 import { AppMessages } from "@/core/common"
+import { formatNode } from "@/programs/helpers/formatNode"
 import { placeHolderTextConverter } from "@/programs/helpers/placeholderText"
 import { Program, ProgramNodes, UserPrograms } from "@/programs/models"
 import { type GenerateProgramProfilePayload } from "@/programs/payload_interfaces"
-import type { Node } from "@/programs/types"
+import type { Node, NodePayload } from "@/programs/types"
 
 class GenerateProfile {
     constructor(
@@ -49,32 +50,23 @@ class GenerateProfile {
 
         let profile_url
 
-        console.log(userProgram.profileImageUrl, "initla url")
+        if (userProgram.profileImageUrl && userProgram.profileImageUrl.length > 20) profile_url = userProgram.profileImageUrl
 
-        // if (userProgram.profileImageUrl) profile_url = userProgram.profileImageUrl
-
-        if (true) {
-            const refactoredNodes: Node[] = []
+        if (!userProgram.profileImageUrl || existingUser.changed("profilePicSecureUrl")) {
+            const refactoredNodes: NodePayload[] = []
 
             await Promise.all(
                 programNodes.map(async (node) => {
                     if (node.type === "image" && !node.overlay) {
                         node.overlay = existingUser.profilePicPublicId!.replace(/\//g, ":")
-
-                        refactoredNodes.push(node)
                     }
 
-                    if (node.type === "text" && node.placeholder) {
-                        const refactoredNode = await placeHolderTextConverter.convert_entity_placeholder(
-                            {
-                                ...node,
-                                type: "text",
-                            },
-                            { programId: program.id, userId: existingUser.id },
-                        )
+                    const formattedNode = await formatNode.format_node(node, {
+                        programId: program.id,
+                        userId: existingUser.id,
+                    })
 
-                        refactoredNode && refactoredNodes.push(refactoredNode)
-                    }
+                    refactoredNodes.push(formattedNode as NodePayload)
                 }),
             )
 
@@ -85,9 +77,8 @@ class GenerateProfile {
                 width: program.profileFrameWidth,
             })
 
-            console.log(profileImageUrl, "added")
-
             userProgram.profileImageUrl = profileImageUrl
+
             userProgram.profileGenerationDate = new Date(Date.now())
 
             await userProgram.save()

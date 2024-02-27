@@ -1,4 +1,4 @@
-import { type Context, HttpStatus, BadRequestError, logger, imageUploadService, ForbiddenError, config, imageManipulator } from "@/core"
+import { type Context, HttpStatus, BadRequestError, logger, imageUploadService, ForbiddenError, config } from "@/core"
 import { AppMessages } from "@/core/common"
 import { Program } from "@/programs/models"
 import { type AddProgramProfileFramePayload } from "@/programs/payload_interfaces"
@@ -24,13 +24,7 @@ class AddProgramProfileFrame {
 
         const imageBuffer = fs.readFileSync(files.frame.tempFilePath)
 
-        const resizedBuffer = await imageManipulator.resizeImage({
-            height,
-            width,
-            imageBuffer: imageBuffer,
-        })
-
-        const profileFrame = { ...files.frame, data: resizedBuffer }
+        const profileFrame = { ...files.frame, data: imageBuffer }
 
         const uploadedImage = await imageUploadService.imageUpload(config.cloudinary.profileFrameFolder, profileFrame)
 
