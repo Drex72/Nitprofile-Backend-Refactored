@@ -8,8 +8,6 @@ export class ErrorHandler {
         let statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR
         let message = error?.message ?? "internal server error"
 
-        console.log({ error }, 'error')
-
         if (error instanceof ApiError) {
             logger.error("Error in middleware", error)
             statusCode = error.statusCode
