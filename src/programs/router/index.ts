@@ -10,9 +10,9 @@ import {
     resendProgramUserMailSchema,
     updateProgramSchema,
 } from "./schema"
-import { createProgram, findPrograms, updateProgram } from "@/programs/services/core"
+import { createProgram, findPrograms, getProgramMetrics, updateProgram } from "@/programs/services/core"
 import { assignAdminToProgram, findProgramAssignedAdmins } from "@/programs/services/admins"
-import { addProgramProfileFrame, enableProfileGeneration, generateProfile } from "@/programs/services/profile"
+import { addProgramProfileFrame, enableProfileGeneration, generateProfile, previewProfile } from "@/programs/services/profile"
 import { createProgramNodes } from "@/programs/services/program_nodes"
 import { findProgramUsers, registerProgramUsers, resendUserMail } from "@/programs/services/users"
 
@@ -54,6 +54,15 @@ programRouter
         .handle()
     )
 
+programRouter.get(
+    "/metrics",  
+    ControlBuilder.builder()
+    .setValidator(findProgramSchema)
+    .setHandler(getProgramMetrics.handle)
+    .only("ADMIN","SUPER ADMIN")
+    .isPrivate()
+    .handle()
+)
 programRouter
     .route("/users")
     .get(
@@ -127,6 +136,18 @@ programRouter
         .isPrivate()
         .handle()
     )
+
+programRouter
+    .route("/profile/preview")
+    .get(
+        ControlBuilder.builder()
+        .setValidator(findProgramSchema)
+        .setHandler(previewProfile.handle)
+        .only("SUPER ADMIN", "ADMIN")
+        .isPrivate()
+        .handle()
+    )
+
 
 
 programRouter

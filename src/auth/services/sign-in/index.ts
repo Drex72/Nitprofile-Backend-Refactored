@@ -47,7 +47,10 @@ class SignIn {
             message: AppMessages.SUCCESS.LOGIN,
             data: responsePayload,
             headers: {
-                "Set-Cookie": [`accessToken=${generatedAccessToken}; Path=/; HttpOnly`, `refreshToken=${generatedRefreshToken}; Path=/; HttpOnly`],
+                "Set-Cookie": [
+                    `accessToken=${generatedAccessToken}; Path=/; HttpOnly; maxAge=900000; SameSite=strict`,
+                    `refreshToken=${generatedRefreshToken}; Path=/; HttpOnly; SameSite=strict`,
+                ],
             },
         }
     }

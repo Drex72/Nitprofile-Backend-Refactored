@@ -14,7 +14,6 @@ interface IValidateRequestOptions {
 export class ControllerHandler {
     handle = (controllerFn: AnyFunction, schema: ValidationSchema | undefined = {}, options?: ControllerHandlerOptions): ExpressCallbackFunction => {
         return async (req: Request, res: Response, next: NextFunction) => {
-            const start = performance.now()
             try {
                 if (options?.isPrivate) {
                     await this.validateRequest({
