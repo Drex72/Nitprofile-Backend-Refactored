@@ -112,9 +112,17 @@ const textNodeSchema = baseNodeSchema.keys({
 export const createProgramNodeSchema: ValidationSchema = {
     inputSchema: Joi.object({
         nodes: Joi.array().required().min(1).items(Joi.alternatives().try(imageNodeSchema, textNodeSchema)),
+        category: Joi.valid("profile", "certificate"),
     }),
 
     querySchema: Joi.object({
         programId: Joi.string().length(36).trim().required(),
+    }),
+}
+
+export const getProgramNodesSchems: ValidationSchema = {
+    querySchema: Joi.object({
+        programId: Joi.string().length(36).trim().required(),
+        category: Joi.valid("profile", "certificate"),
     }),
 }

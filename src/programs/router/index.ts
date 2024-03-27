@@ -7,13 +7,14 @@ import {
     createProgramSchema,
     createProgramUserSchema,
     findProgramSchema,
+    getProgramNodesSchems,
     resendProgramUserMailSchema,
     updateProgramSchema,
 } from "./schema"
 import { createProgram, findPrograms, getProgramMetrics, updateProgram } from "@/programs/services/core"
 import { assignAdminToProgram, findProgramAssignedAdmins } from "@/programs/services/admins"
 import { addProgramProfileFrame, enableProfileGeneration, generateProfile, previewProfile } from "@/programs/services/profile"
-import { createProgramNodes } from "@/programs/services/program_nodes"
+import { createProgramNodes, getProgramNodes } from "@/programs/services/program_nodes"
 import { findProgramUsers, registerProgramUsers, resendUserMail } from "@/programs/services/users"
 
 
@@ -160,3 +161,16 @@ programRouter
         .isPrivate()
         .handle()
     )
+    .get(
+        ControlBuilder.builder()
+        .setValidator(getProgramNodesSchems)
+        .setHandler(getProgramNodes.handle)
+        .only("SUPER ADMIN", "ADMIN")
+        .isPrivate()
+        .handle()
+    )
+
+
+
+
+    

@@ -57,9 +57,17 @@ export interface AddProgramProfileFramePayload extends ContextTypes {
 export interface CreateProgramNodesPayload extends ContextTypes {
     input: {
         nodes: Node[]
+        category: "profile" | "certificate"
     }
     query: {
         programId: string
+    }
+}
+
+export interface GetProgramNodesPayload extends ContextTypes {
+    query: {
+        programId: string
+        category: "profile" | "certificate"
     }
 }
 

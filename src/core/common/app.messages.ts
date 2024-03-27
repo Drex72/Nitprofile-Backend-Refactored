@@ -15,8 +15,8 @@ export const AppMessages = {
         INVALID_PROFILE_PICTURE: "You must have a profile picture before you can generate your profile. kindly update your profile picture.",
         PROFILE_GENERATION_NOT_AVAILABLE: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
         ADMIN_ALREADY_ASSIGNED: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
-        VERIFY_ACCOUNT:"For your account's ongoing security, we require you to establish a new password.  Logging in with the default password is no longer possible due to enhanced security measures."
-
+        VERIFY_ACCOUNT:
+            "For your account's ongoing security, we require you to establish a new password.  Logging in with the default password is no longer possible due to enhanced security measures.",
     },
     SUCCESS: {
         LOGIN: "Login successful.",
@@ -32,14 +32,14 @@ export const AppMessages = {
         PROGRAM_DELETED: "Program deleted successfully",
 
         PROGRAM_NODE_CREATED: "Program Nodes created successfully",
+        PROGRAM_NODE_FOUND: "Program Node Retrieved successfully",
         PROGRAM_NODE_UPDATED: "Program Node updated successfully",
         PROGRAM_NODE_DELETED: "Program Node deleted successfully",
 
         USERS_REGISTERED_SUCCESSFULLY: "Users registered for program successfully",
         USER_REGISTERED_SUCCESSFULLY: "User registered for program successfully",
 
-
-        PROFILE_GENERATION_AVAILABLE:"Profile Generation Enabled"
+        PROFILE_GENERATION_AVAILABLE: "Profile Generation Enabled",
     },
     INFO: {
         INVALID_OPERATION: "Invalid operation.",

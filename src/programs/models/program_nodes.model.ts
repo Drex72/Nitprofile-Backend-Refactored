@@ -6,6 +6,7 @@ import { Program } from "@/programs/models/program.model"
 export class ProgramNodes extends Model<InferAttributes<ProgramNodes>, InferCreationAttributes<ProgramNodes>> {
     declare id: CreationOptional<string>
     declare programId: ForeignKey<Program["id"]>
+    declare category: "profile" | "certificate"
     declare type: INodeType
     declare x: number
     declare y: number
@@ -45,6 +46,10 @@ ProgramNodes.init(
                 model: Program,
                 key: "id",
             },
+        },
+        category: {
+            type: DataTypes.ENUM("profile", "certificate"),
+            defaultValue: "profile",
         },
         type: {
             type: DataTypes.ENUM("image", "text"),

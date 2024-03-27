@@ -11,7 +11,7 @@ class CreateProgramNodes {
     handle = async ({ input, user, query }: Context<CreateProgramNodesPayload>) => {
         if (!user) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
-        const { nodes } = input
+        const { nodes, category } = input
 
         const { programId } = query
 
@@ -44,7 +44,7 @@ class CreateProgramNodes {
         try {
             await Promise.all(
                 nodes.map(async (node) => {
-                    const createdNode = await this.dbProgramNodes.create({ ...node, programId }, { transaction: dbTransaction })
+                    const createdNode = await this.dbProgramNodes.create({ ...node, programId, category }, { transaction: dbTransaction })
 
                     logger.info(`Program Node with ID ${createdNode.id} created successfully`)
 
