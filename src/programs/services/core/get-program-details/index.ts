@@ -17,7 +17,7 @@ class GetProgramMetrics {
 
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        const noOfProfilesGenerated = this.dbUserPrograms.count({
+        const noOfProfilesGenerated = await this.dbUserPrograms.count({
             where: {
                 profileGenerationDate: {
                     $ne: null,
@@ -25,7 +25,7 @@ class GetProgramMetrics {
             },
         })
 
-        const noOfCertificatesGenerated = this.dbUserPrograms.count({
+        const noOfCertificatesGenerated = await this.dbUserPrograms.count({
             where: {
                 certificateGenerationDate: {
                     $ne: null,
@@ -40,6 +40,8 @@ class GetProgramMetrics {
         })
 
         const noOfVerifiedUsers = programUsers.filter((item) => item.isVerified).length
+
+        console.log(noOfCertificatesGenerated, noOfProfilesGenerated, noOfVerifiedUsers)
 
         return {
             code: HttpStatus.OK,

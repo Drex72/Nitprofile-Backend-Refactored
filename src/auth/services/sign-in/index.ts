@@ -41,7 +41,7 @@ class SignIn {
         logger.info("Logged In Successfully")
 
         const { password: dbPassword, refreshToken, refreshTokenExp, ...responsePayload } = user.dataValues
-
+        
         return {
             code: HttpStatus.OK,
             message: AppMessages.SUCCESS.LOGIN,

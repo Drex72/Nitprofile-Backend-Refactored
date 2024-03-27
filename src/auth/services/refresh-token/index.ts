@@ -17,18 +17,20 @@ class RefreshToken {
 
         const cookies = convertArrayToObject(cookiesArr)
 
-        if (cookies?.accessToken) {
-            const decryptedAccessToken = encryptor.decrypt(cookies?.accessToken)
+        try {
+            if (cookies?.accessToken) {
+                const decryptedAccessToken = encryptor.decrypt(cookies?.accessToken)
 
-            const isAccessTokenValid = this.tokenService._verifyToken(decryptedAccessToken, config.auth.accessTokenSecret)
+                const isAccessTokenValid = this.tokenService._verifyToken(decryptedAccessToken, config.auth.accessTokenSecret)
 
-            if (isAccessTokenValid) {
-                return {
-                    code: HttpStatus.OK,
-                    message: AppMessages.SUCCESS.TOKEN_REFRESHED,
+                if (isAccessTokenValid) {
+                    return {
+                        code: HttpStatus.OK,
+                        message: AppMessages.SUCCESS.TOKEN_REFRESHED,
+                    }
                 }
             }
-        }
+        } catch (error) {}
 
         const refreshToken = cookies?.refreshToken
 
