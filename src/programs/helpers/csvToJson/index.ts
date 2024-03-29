@@ -11,7 +11,8 @@ interface CSVToJSONConverter<T> {
 class CSVTOJSON<T> implements CSVToJSONConverter<T> {
     constructor(private converter: Converter = csvToJson()) {}
 
-    convert = async (csvFilePath: string): Promise<T[]> => {
+    async convert(csvFilePath: string): Promise<T[]> {
+
         return await this.converter.fromFile(csvFilePath)
     }
 
@@ -21,6 +22,5 @@ class CSVTOJSON<T> implements CSVToJSONConverter<T> {
         stream.subscribe(onData)
     }
 }
-
 
 export const customCsvToJsonConverter = new CSVTOJSON<IProgramUser>()

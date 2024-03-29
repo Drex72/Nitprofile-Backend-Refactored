@@ -44,7 +44,7 @@
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
     "compression": "^1.7.4",
-    "convert-csv-to-json": "^2.2.0",
+    "convert-csv-to-json": "^2.37.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",

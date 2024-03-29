@@ -8,6 +8,8 @@ import { Program, UserPrograms } from "@/programs/models"
 import { type IProgramUser, type RegisterProgramUser } from "@/programs/payload_interfaces"
 import type { ISendUsersEmail } from "@/programs/listeners"
 import { cache } from "@/app/app-cache"
+import fs from "fs"
+import csvToJson from "convert-csv-to-json"
 
 interface IBaseUser {
     email: string
@@ -40,15 +42,17 @@ class RegisterProgramUsers {
 
         const dbTransaction = await sequelize.transaction()
 
+        const createdUsers: Users[] = []
+
+        const singleUser = Object.keys(input).length > 0
+
         try {
-            if (Object.keys(input).length > 0) {
+            if (singleUser) {
                 usersToCreate.push(input.user)
             } else {
                 if (!files || !files.csv || Array.isArray(files.csv)) throw new ForbiddenError("csv is required")
 
-                const csvFile = files.csv
-
-                const convertedJson = await customCsvToJsonConverter.convert(csvFile.tempFilePath)
+                const convertedJson = (await csvToJson.fieldDelimiter(",").getJsonFromCsv(files.csv.tempFilePath)) as IProgramUser[]
 
                 usersToCreate.push(...convertedJson)
             }
@@ -70,7 +74,7 @@ class RegisterProgramUsers {
                             where: { userId: existingUser.id, programId: program.id },
                         })
 
-                        if (userProgramExists) throw new BadRequestError(AppMessages.FAILURE.USER_ALREADY_ASSIGNED_TO_PROGRAM)
+                        if (userProgramExists) throw new BadRequestError(`User with Email ${existingUser.email} already exists in this program`)
                     }
 
                     if (!existingUser) {
@@ -84,6 +88,8 @@ class RegisterProgramUsers {
 
                         logger.info(`User with ID ${existingUser.id} created successfully`)
                     }
+
+                    createdUsers.push(existingUser)
 
                     await this.dbUserPrograms.create(
                         {
@@ -119,12 +125,13 @@ class RegisterProgramUsers {
 
             logger.error(error?.message)
 
-            throw new Error("Internal Server Error")
+            throw new Error(error?.message ?? "Internal Server Error")
         }
 
         return {
             code: HttpStatus.CREATED,
             message: AppMessages.SUCCESS.USERS_REGISTERED_SUCCESSFULLY,
+            data: singleUser ? createdUsers[0] : createdUsers,
         }
     }
 
@@ -140,7 +147,7 @@ class RegisterProgramUsers {
                 where: { userId: existingUser.id, programId },
             })
 
-            if (userProgramExists) throw new BadRequestError(AppMessages.FAILURE.USER_ALREADY_ASSIGNED_TO_PROGRAM)
+            if (userProgramExists) throw new BadRequestError(`User with Email ${existingUser.email} already exists in this program`)
         }
 
         if (!existingUser) {
