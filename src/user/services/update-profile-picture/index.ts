@@ -1,6 +1,6 @@
 import { Users } from "@/auth/model"
+import { BadRequestError, ForbiddenError, HttpStatus, UnAuthorizedError, config, imageUploadService, logger, type Context } from "@/core"
 import { AppMessages } from "@/core/common"
-import { type Context, HttpStatus, BadRequestError, logger, ForbiddenError, config, imageUploadService, UnAuthorizedError } from "@/core"
 import type { UpdateProfilePicturePayload } from "@/user/interfaces"
 import fs from "fs"
 
@@ -34,10 +34,10 @@ class UpdateProfilePicture {
         return {
             code: HttpStatus.OK,
             message: "Profile Pic Updated Successfully",
-            data:{
+            data: {
                 publicId: uploadedImage.public_id,
-                secureUrl: uploadedImage.secure_url
-            }
+                secureUrl: uploadedImage.secure_url,
+            },
         }
     }
 }

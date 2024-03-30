@@ -5,3 +5,12 @@ export interface UpdateProfilePicturePayload extends ContextTypes {
         pfp: RequestFileContents
     }
 }
+
+export interface UpdateProfilePayload extends ContextTypes {
+    input: {
+        firstName?: string
+        lastName?: string
+        otherName?: string
+        password?: string
+    }
+}

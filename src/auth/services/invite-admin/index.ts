@@ -26,7 +26,7 @@ class InviteAdmin {
             to: email,
             subject: "NITProfile Admin Invitation",
             body: adminInvitationMail({
-                link: `${currentOrigin}/?token=${inviteToken}`,
+                link: `${currentOrigin}/auth/accept-admin-invitation?token=${inviteToken}`,
             }),
         })
 

@@ -48,7 +48,7 @@ export interface InviteAdminPayload extends ContextTypes {
 }
 
 export interface AcceptAdminInvitationPayload extends ContextTypes {
-    input: Omit<ICreateUser, "role">
+    input: Omit<ICreateUser, "role" | "email">
 
     query: {
         token: string

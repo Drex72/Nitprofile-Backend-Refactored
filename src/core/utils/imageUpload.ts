@@ -55,7 +55,7 @@ class ImageUploadService {
             if (err instanceof ApiError) {
                 throw err
             }
-            throw new Error(err.error.message)
+            throw new Error(err?.message)
         }
     }
 

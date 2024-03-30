@@ -1,16 +1,28 @@
-import { Router } from "express"
 import { ControlBuilder } from "@/core/middlewares/controlBuilder"
-import { updateProfilePicture } from "@/user/services"
+import { updateProfile, updateProfilePicture } from "@/user/services"
+import { Router } from "express"
+import { updateprofileSchema } from "./schema"
 
-export const userRouter = Router()
+export const profileRouter = Router()
 
-userRouter.put(
+profileRouter.put(
     "/update-pfp", 
     ControlBuilder.builder()
     .setHandler(updateProfilePicture.handle)
-    .only("SUPER ADMIN", "USER")
     .isPrivate()
     .handle()
 )
+
+
+profileRouter.put(
+    "/update-profile", 
+    ControlBuilder.builder()
+    .setValidator(updateprofileSchema)
+    .setHandler(updateProfile.handle)
+    .isPrivate()
+    .handle()
+)
+
+
 
 

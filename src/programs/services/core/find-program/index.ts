@@ -1,4 +1,4 @@
-import { type Context, HttpStatus, UnAuthorizedError, ForbiddenError, type IAuthRoles } from "@/core"
+import { ForbiddenError, HttpStatus, UnAuthorizedError, type Context, type IAuthRoles } from "@/core"
 import { AppMessages } from "@/core/common"
 import { AdminsAssignedPrograms, Program, UserPrograms } from "@/programs/models"
 import { type FindSingleProgram } from "@/programs/payload_interfaces"
@@ -108,6 +108,8 @@ class FindPrograms {
     }
 
     private _findForAdmins = async (userId: string) => {
+        console.log("finding for admin")
+
         const adminPrograms = await this.dbAdminPrograms.findAll({
             where: {
                 userId,
