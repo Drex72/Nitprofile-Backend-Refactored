@@ -1,1 +1,1 @@
-export * from './invalidProgram.ts'
+export * from "./invalidProgram"

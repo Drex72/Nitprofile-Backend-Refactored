@@ -42,6 +42,7 @@ class FormatNode {
             },
             x: node.x,
             y: node.y,
+            gravity: node.gravity ?? undefined,
             color: node.color ?? undefined,
         }
 

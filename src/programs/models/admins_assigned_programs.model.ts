@@ -1,6 +1,6 @@
 import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
 import { sequelize } from "@/core"
-import { Users } from "@/auth/model/user.model.ts"
+import { Users } from "@/auth/model/user.model"
 import { Program } from "@/programs/models/program.model"
 
 export class AdminsAssignedPrograms extends Model<InferAttributes<AdminsAssignedPrograms>, InferCreationAttributes<AdminsAssignedPrograms>> {

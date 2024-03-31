@@ -58,7 +58,7 @@ class CreateProgramNodes {
 
             logger.error(error?.message)
 
-            throw new Error("Internal Server Error")
+            throw new Error(error?.message ?? "Internal Server Error")
         }
 
         return {

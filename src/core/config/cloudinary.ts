@@ -29,6 +29,7 @@ export const generateCloudinaryTransformationImage = (props: ITransformImageProp
                 crop: "fill",
                 gravity: "center",
             },
+            
             ...nodes,
         ],
     })

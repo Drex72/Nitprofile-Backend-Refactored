@@ -1,5 +1,5 @@
-import * as Joi from "joi"
 import type { ValidationSchema } from "@/core"
+import * as Joi from "joi"
 
 export const createProgramSchema: ValidationSchema = {
     inputSchema: Joi.object({
@@ -73,6 +73,7 @@ const baseNodeSchema = Joi.object({
     type: Joi.string().required(),
     x: Joi.number().required(),
     y: Joi.number().required(),
+    gravity: Joi.string().required().valid("north_east", "north_west", "south_east", "south_west", "center"),
 })
 
 const imageNodeSchema = baseNodeSchema.keys({
@@ -80,7 +81,6 @@ const imageNodeSchema = baseNodeSchema.keys({
     overlay: Joi.string().optional(),
     width: Joi.number().min(50).required(),
     height: Joi.number().min(50).required(),
-    gravity: Joi.string().required(),
     radius: Joi.number().required(),
     crop: Joi.string().required(),
 })

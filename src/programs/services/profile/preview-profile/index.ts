@@ -1,5 +1,5 @@
 import { Users } from "@/auth/model"
-import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError, generateCloudinaryTransformationImage } from "@/core"
+import { BadRequestError, HttpStatus, UnAuthorizedError, generateCloudinaryTransformationImage, logger, type Context } from "@/core"
 import { AppMessages } from "@/core/common"
 import { formatNode } from "@/programs/helpers/formatNode"
 import { AdminsAssignedPrograms, Program, ProgramNodes } from "@/programs/models"
@@ -57,7 +57,7 @@ class PreviewProfile {
             await Promise.all(
                 programNodes.map(async (node) => {
                     if (node.type === "image" && !node.overlay) {
-                        node.overlay = existingUser.profilePicPublicId!.replace(/\//g, ":")
+                        node.overlay = `Nithub/NITPROFILE_ASSETS/DUMMYAVATAR-1960922999`.replace(/\//g, ":")
                     }
 
                     const formattedNode = await formatNode.format_node(node, {
@@ -78,6 +78,8 @@ class PreviewProfile {
         }
 
         logger.info(`Profile for Program ${program.id} Previewed successfully`)
+
+        console.log(profile_url)
 
         return {
             code: HttpStatus.OK,
