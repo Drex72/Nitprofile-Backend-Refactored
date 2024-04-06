@@ -9,8 +9,9 @@
     "db:migrate": "npx sequelize-cli db:migrate",
     "undo:db:migrate": "npx sequelize-cli db:migrate:undo --name",
     "db:seed": "npx sequelize-cli db:seed:all",
-    "start": "npm run build:prod && node ./build/main.js",
+    "start": "bun --hot run src/main.ts",
     "start:dev": "nodemon",
+  
     "build": "./node_modules/.bin/rimraf ./build && ./node_modules/.bin/tsc --skipLibCheck",
     "build:prod":"tsc && tsc-alias"
   },
