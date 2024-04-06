@@ -59,125 +59,126 @@ var RegisterProgramUsers = /** @class */ (function () {
         this.dbPrograms = dbPrograms;
         this.dbUsers = dbUsers;
         this.dbUserPrograms = dbUserPrograms;
-        this.handle = function (_a) {
-            var input = _a.input, query = _a.query, files = _a.files;
-            return __awaiter(_this, void 0, void 0, function () {
-                var program, usersToCreate, dbTransaction, createdUsers, singleUser, convertedJson, sendMailPayload_1, error_1;
-                var _this = this;
-                var _b;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0: return [4 /*yield*/, this.dbPrograms.findOne({
-                                where: { id: query.programId },
-                            })];
-                        case 1:
-                            program = _c.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            usersToCreate = [];
-                            return [4 /*yield*/, core_1.sequelize.transaction()];
-                        case 2:
-                            dbTransaction = _c.sent();
-                            createdUsers = [];
-                            singleUser = Object.keys(input).length > 0;
-                            _c.label = 3;
-                        case 3:
-                            _c.trys.push([3, 9, , 10]);
-                            if (!singleUser) return [3 /*break*/, 4];
-                            usersToCreate.push(input.user);
-                            return [3 /*break*/, 6];
-                        case 4:
-                            if (!files || !files.csv || Array.isArray(files.csv))
-                                throw new core_1.ForbiddenError("csv is required");
-                            return [4 /*yield*/, convert_csv_to_json_1.default.fieldDelimiter(",").getJsonFromCsv(files.csv.tempFilePath)];
-                        case 5:
-                            convertedJson = (_c.sent());
-                            usersToCreate.push.apply(usersToCreate, convertedJson);
-                            _c.label = 6;
-                        case 6:
-                            sendMailPayload_1 = [];
-                            return [4 /*yield*/, Promise.all(usersToCreate.map(function (user) { return __awaiter(_this, void 0, void 0, function () {
-                                    var value, existingUser, userProgramExists, inviteToken;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0:
-                                                value = csvSchema.validate(user);
-                                                if (value.error)
-                                                    throw new core_1.BadRequestError("Invalid User ".concat(JSON.stringify(user)));
-                                                return [4 /*yield*/, this.dbUsers.findOne({
-                                                        where: { email: user.email },
-                                                    })];
-                                            case 1:
-                                                existingUser = _a.sent();
-                                                if (!existingUser) return [3 /*break*/, 3];
-                                                return [4 /*yield*/, this.dbUserPrograms.findOne({
-                                                        where: { userId: existingUser.id, programId: program.id },
-                                                    })];
-                                            case 2:
-                                                userProgramExists = _a.sent();
-                                                if (userProgramExists)
-                                                    throw new core_1.BadRequestError("User with Email ".concat(existingUser.email, " already exists in this program"));
-                                                _a.label = 3;
-                                            case 3:
-                                                if (!!existingUser) return [3 /*break*/, 5];
-                                                return [4 /*yield*/, user_1.create_user._create_single_user({
-                                                        email: user.email,
-                                                        firstName: user.firstName,
-                                                        lastName: user.lastName,
-                                                        password: core_1.config.userDefaultPassword,
-                                                        role: "USER",
-                                                    })];
-                                            case 4:
-                                                existingUser = _a.sent();
-                                                core_1.logger.info("User with ID ".concat(existingUser.id, " created successfully"));
-                                                _a.label = 5;
-                                            case 5:
-                                                createdUsers.push(existingUser);
-                                                return [4 /*yield*/, this.dbUserPrograms.create({
-                                                        userId: existingUser.id,
-                                                        programId: program.id,
-                                                    }, { transaction: dbTransaction })];
-                                            case 6:
-                                                _a.sent();
-                                                inviteToken = (0, core_1.generateRandStr)(64);
-                                                return [4 /*yield*/, app_cache_1.cache.set(inviteToken, user.email, "EX", 6000)];
-                                            case 7:
-                                                _a.sent();
-                                                sendMailPayload_1.push({
-                                                    programName: program.name,
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var program, usersToCreate, dbTransaction, createdUsers, singleUser, convertedJson, sendMailPayload_1, error_1;
+            var _this = this;
+            var _c;
+            var input = _b.input, query = _b.query, files = _b.files;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0: return [4 /*yield*/, this.dbPrograms.findOne({
+                            where: { id: query.programId },
+                        })];
+                    case 1:
+                        program = _d.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        usersToCreate = [];
+                        return [4 /*yield*/, core_1.sequelize.transaction()];
+                    case 2:
+                        dbTransaction = _d.sent();
+                        createdUsers = [];
+                        singleUser = Object.keys(input).length > 0;
+                        _d.label = 3;
+                    case 3:
+                        _d.trys.push([3, 9, , 10]);
+                        if (!singleUser) return [3 /*break*/, 4];
+                        usersToCreate.push(input.user);
+                        return [3 /*break*/, 6];
+                    case 4:
+                        if (!files || !files.csv || Array.isArray(files.csv))
+                            throw new core_1.ForbiddenError("csv is required");
+                        return [4 /*yield*/, convert_csv_to_json_1.default.fieldDelimiter(",").getJsonFromCsv(files.csv.tempFilePath)];
+                    case 5:
+                        convertedJson = (_d.sent());
+                        usersToCreate.push.apply(usersToCreate, convertedJson);
+                        _d.label = 6;
+                    case 6:
+                        sendMailPayload_1 = [];
+                        return [4 /*yield*/, Promise.all(usersToCreate.map(function (user) { return __awaiter(_this, void 0, void 0, function () {
+                                var value, existingUser, userProgramExists, inviteToken;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            value = csvSchema.validate(user);
+                                            if (value.error)
+                                                throw new core_1.BadRequestError("Invalid User ".concat(JSON.stringify(user)));
+                                            return [4 /*yield*/, this.dbUsers.findOne({
+                                                    where: { email: user.email },
+                                                })];
+                                        case 1:
+                                            existingUser = _a.sent();
+                                            if (existingUser && existingUser.role !== "USER") {
+                                                throw new core_1.BadRequestError("User with Email ".concat(existingUser.email, " already exists and is not a user"));
+                                            }
+                                            if (!(existingUser && existingUser.role === "USER")) return [3 /*break*/, 3];
+                                            return [4 /*yield*/, this.dbUserPrograms.findOne({
+                                                    where: { userId: existingUser.id, programId: program.id },
+                                                })];
+                                        case 2:
+                                            userProgramExists = _a.sent();
+                                            if (userProgramExists)
+                                                throw new core_1.BadRequestError("User with Email ".concat(existingUser.email, " already exists in this program"));
+                                            _a.label = 3;
+                                        case 3:
+                                            if (!!existingUser) return [3 /*break*/, 5];
+                                            return [4 /*yield*/, user_1.create_user._create_single_user({
+                                                    email: user.email,
                                                     firstName: user.firstName,
                                                     lastName: user.lastName,
-                                                    token: inviteToken,
-                                                    email: user.email,
+                                                    password: core_1.config.userDefaultPassword,
+                                                    role: "USER",
+                                                })];
+                                        case 4:
+                                            existingUser = _a.sent();
+                                            core_1.logger.info("User with ID ".concat(existingUser.id, " created successfully"));
+                                            _a.label = 5;
+                                        case 5:
+                                            createdUsers.push(existingUser);
+                                            return [4 /*yield*/, this.dbUserPrograms.create({
                                                     userId: existingUser.id,
                                                     programId: program.id,
-                                                });
-                                                core_1.logger.info("User with Name ".concat(user.firstName, " Registered for program ").concat(program.name, " successfully"));
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); }))];
-                        case 7:
-                            _c.sent();
-                            (0, app_1.dispatch)("event:sendNewUserMail", sendMailPayload_1);
-                            return [4 /*yield*/, dbTransaction.commit()];
-                        case 8:
-                            _c.sent();
-                            return [3 /*break*/, 10];
-                        case 9:
-                            error_1 = _c.sent();
-                            dbTransaction.rollback();
-                            core_1.logger.error(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
-                            throw new Error((_b = error_1 === null || error_1 === void 0 ? void 0 : error_1.message) !== null && _b !== void 0 ? _b : "Internal Server Error");
-                        case 10: return [2 /*return*/, {
-                                code: core_1.HttpStatus.CREATED,
-                                message: common_1.AppMessages.SUCCESS.USERS_REGISTERED_SUCCESSFULLY,
-                                data: singleUser ? createdUsers[0] : createdUsers,
-                            }];
-                    }
-                });
+                                                }, { transaction: dbTransaction })];
+                                        case 6:
+                                            _a.sent();
+                                            inviteToken = (0, core_1.generateRandStr)(64);
+                                            return [4 /*yield*/, app_cache_1.cache.set(inviteToken, user.email, "EX", 6000)];
+                                        case 7:
+                                            _a.sent();
+                                            sendMailPayload_1.push({
+                                                programName: program.name,
+                                                firstName: user.firstName,
+                                                lastName: user.lastName,
+                                                token: inviteToken,
+                                                email: user.email,
+                                                userId: existingUser.id,
+                                                programId: program.id,
+                                            });
+                                            core_1.logger.info("User with Name ".concat(user.firstName, " Registered for program ").concat(program.name, " successfully"));
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }))];
+                    case 7:
+                        _d.sent();
+                        (0, app_1.dispatch)("event:sendNewUserMail", sendMailPayload_1);
+                        return [4 /*yield*/, dbTransaction.commit()];
+                    case 8:
+                        _d.sent();
+                        return [3 /*break*/, 10];
+                    case 9:
+                        error_1 = _d.sent();
+                        dbTransaction.rollback();
+                        core_1.logger.error(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
+                        throw new Error((_c = error_1 === null || error_1 === void 0 ? void 0 : error_1.message) !== null && _c !== void 0 ? _c : "Internal Server Error");
+                    case 10: return [2 /*return*/, {
+                            code: core_1.HttpStatus.CREATED,
+                            message: common_1.AppMessages.SUCCESS.USERS_REGISTERED_SUCCESSFULLY,
+                            data: singleUser ? createdUsers[0] : createdUsers,
+                        }];
+                }
             });
-        };
+        }); };
         this._create_single_program_user = function (input) { return __awaiter(_this, void 0, void 0, function () {
             var email, firstName, lastName, programId, existingUser, userProgramExists;
             return __generator(this, function (_a) {

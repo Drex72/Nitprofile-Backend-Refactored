@@ -86,13 +86,13 @@ var baseNodeSchema = Joi.object({
     type: Joi.string().required(),
     x: Joi.number().required(),
     y: Joi.number().required(),
+    gravity: Joi.string().required().valid("north_east", "north_west", "south_east", "south_west", "center"),
 });
 var imageNodeSchema = baseNodeSchema.keys({
     type: Joi.string().valid("image").required(),
     overlay: Joi.string().optional(),
     width: Joi.number().min(50).required(),
     height: Joi.number().min(50).required(),
-    gravity: Joi.string().required(),
     radius: Joi.number().required(),
     crop: Joi.string().required(),
 });

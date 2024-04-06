@@ -67,7 +67,7 @@ var FormatNode = /** @class */ (function () {
             return refactoredNode;
         };
         this._format_text_node = function (node) {
-            var _a, _b, _c, _d, _e;
+            var _a, _b, _c, _d, _e, _f;
             var refactoredNode = {
                 overlay: {
                     text: (_a = node.text) !== null && _a !== void 0 ? _a : undefined,
@@ -77,19 +77,38 @@ var FormatNode = /** @class */ (function () {
                 },
                 x: node.x,
                 y: node.y,
-                color: (_e = node.color) !== null && _e !== void 0 ? _e : undefined,
+                gravity: (_e = node.gravity) !== null && _e !== void 0 ? _e : undefined,
+                color: (_f = node.color) !== null && _f !== void 0 ? _f : undefined,
             };
             return refactoredNode;
         };
         this._format_placeholder_node = function (node, options) { return __awaiter(_this, void 0, void 0, function () {
-            var programId, userId, refactoredNode;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var programId, userId, value, refactoredNode;
+            var _a, _b, _c, _d, _e;
+            return __generator(this, function (_f) {
+                switch (_f.label) {
                     case 0:
                         programId = options.programId, userId = options.userId;
-                        return [4 /*yield*/, placeholderText_1.placeHolderTextConverter.convert_entity_placeholder(node, { programId: programId, userId: userId })];
+                        return [4 /*yield*/, placeholderText_1.placeHolderTextConverter.convert_entity_placeholder({
+                                programId: programId,
+                                userId: userId,
+                                entity: node.entity,
+                                entity_key: node.entity_key,
+                            })];
                     case 1:
-                        refactoredNode = _a.sent();
+                        value = _f.sent();
+                        refactoredNode = {
+                            overlay: {
+                                text: value !== null && value !== void 0 ? value : undefined,
+                                font_family: (_a = node.font_family) !== null && _a !== void 0 ? _a : undefined,
+                                font_size: (_b = node.font_size) !== null && _b !== void 0 ? _b : undefined,
+                                font_weight: (_c = node.font_weight) !== null && _c !== void 0 ? _c : undefined,
+                            },
+                            x: node.x,
+                            y: node.y,
+                            gravity: (_d = node.gravity) !== null && _d !== void 0 ? _d : undefined,
+                            color: (_e = node.color) !== null && _e !== void 0 ? _e : undefined,
+                        };
                         return [2 /*return*/, refactoredNode];
                 }
             });

@@ -31,7 +31,7 @@ class SendUserEmail {
                             lastName,
                             firstName,
                             programName,
-                            link: currentOrigin + token,
+                            link: `${currentOrigin}/auth/verify-account?token=${token}`,
                         }),
                     })
 

@@ -9,18 +9,16 @@
     "db:migrate": "npx sequelize-cli db:migrate",
     "undo:db:migrate": "npx sequelize-cli db:migrate:undo --name",
     "db:seed": "npx sequelize-cli db:seed:all",
-
-
-    "start": "npm run build && node ./build/main.js",
+    "start": "npm run build:prod && node ./build/main.js",
     "start:dev": "nodemon",
-    "build": "./node_modules/.bin/rimraf ./build && ./node_modules/.bin/tsc --skipLibCheck"
+    "build": "./node_modules/.bin/rimraf ./build && ./node_modules/.bin/tsc --skipLibCheck",
+    "build:prod":"tsc && tsc-alias"
   },
   "jest": {
     "test environment": "node"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "@types/bun": "latest",
     "@types/cookie-parser": "^1.4.4",
     "@types/cors": "^2.8.13",
     "@types/crypto-js": "^4.1.2",
@@ -72,6 +70,7 @@
     "sharp": "^0.33.2",
     "socket.io": "^4.7.4",
     "supertest": "^6.3.4",
+    "tsc-alias": "^1.8.8",
     "winston": "^3.10.0"
   }
 }

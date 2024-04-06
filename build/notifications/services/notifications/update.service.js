@@ -44,30 +44,28 @@ var UpdateNotifications = /** @class */ (function () {
     function UpdateNotifications(dbNotifications) {
         var _this = this;
         this.dbNotifications = dbNotifications;
-        this.handle = function (_a) {
-            var query = _a.query, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
-                            if (query === null || query === void 0 ? void 0 : query.notification_id)
-                                return [2 /*return*/, this.markSingleAsRead(query === null || query === void 0 ? void 0 : query.notification_id, user.id)];
-                            return [4 /*yield*/, this.dbNotifications.update({ read: true }, {
-                                    where: { notifier: user.id },
-                                })];
-                        case 1:
-                            _b.sent();
-                            core_1.logger.info("Notifications for ".concat(user.id, " Marked as Read"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: "Notifications marked as read for User successfully",
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var query = _b.query, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
+                        if (query === null || query === void 0 ? void 0 : query.notification_id)
+                            return [2 /*return*/, this.markSingleAsRead(query === null || query === void 0 ? void 0 : query.notification_id, user.id)];
+                        return [4 /*yield*/, this.dbNotifications.update({ read: true }, {
+                                where: { notifier: user.id },
+                            })];
+                    case 1:
+                        _c.sent();
+                        core_1.logger.info("Notifications for ".concat(user.id, " Marked as Read"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: "Notifications marked as read for User successfully",
+                            }];
+                }
             });
-        };
+        }); };
         this.markSingleAsRead = function (notification_id, user_id) { return __awaiter(_this, void 0, void 0, function () {
             var singleNotification;
             return __generator(this, function (_a) {

@@ -49,74 +49,72 @@ var EnableProfileGeneration = /** @class */ (function () {
         this.dbPrograms = dbPrograms;
         this.dbProgramNodes = dbProgramNodes;
         this.dbUserPrograms = dbUserPrograms;
-        this.handle = function (_a) {
-            var user = _a.user, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var programId, program, assignedAdmins, isAdminAssigned, programNodes, programUsers, users;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            programId = query.programId;
-                            return [4 /*yield*/, this.dbPrograms.findOne({ where: { id: programId } })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            if (program.profileGenerationAvailable) {
-                                return [2 /*return*/, {
-                                        code: core_1.HttpStatus.OK,
-                                        message: common_1.AppMessages.SUCCESS.PROFILE_GENERATION_AVAILABLE,
-                                        data: program,
-                                    }];
-                            }
-                            if (!(0, utils_1.isProgramProfileValid)(program)) {
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE);
-                            }
-                            return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getAssignedAdmins({
-                                    attributes: {
-                                        exclude: ["refreshToken", "refreshTokenExp", "password"],
-                                    },
-                                }))];
-                        case 2:
-                            assignedAdmins = _b.sent();
-                            isAdminAssigned = (assignedAdmins === null || assignedAdmins === void 0 ? void 0 : assignedAdmins.find(function (admin) { return (admin === null || admin === void 0 ? void 0 : admin.id) === user.id; })) || program.createdBy === user.id;
-                            if (!isAdminAssigned)
-                                throw new core_1.ForbiddenError(common_1.AppMessages.FAILURE.FORBIDDEN_PROGRAM);
-                            return [4 /*yield*/, this.dbProgramNodes.findAll({ where: { programId: programId } })];
-                        case 3:
-                            programNodes = _b.sent();
-                            if (!programNodes || programNodes.length === 0)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE);
-                            program.profileGenerationAvailable = true;
-                            return [4 /*yield*/, program.save()];
-                        case 4:
-                            _b.sent();
-                            return [4 /*yield*/, this.dbUserPrograms.findAll({
-                                    where: {
-                                        programId: query.programId,
-                                    },
-                                })];
-                        case 5:
-                            programUsers = _b.sent();
-                            users = programUsers.map(function (user) { return user.id; });
-                            (0, app_1.dispatch)("event:newNotification", {
-                                actor: { id: user.id },
-                                entity_type: "PROFILE_AVAILABLE",
-                                item_id: programId,
-                                message: "Profile Generation for Program ".concat(program.name, " is now Available."),
-                                notifier: users,
-                            });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var programId, program, assignedAdmins, isAdminAssigned, programNodes, programUsers, users;
+            var user = _b.user, query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        programId = query.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({ where: { id: programId } })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        if (program.profileGenerationAvailable) {
                             return [2 /*return*/, {
                                     code: core_1.HttpStatus.OK,
                                     message: common_1.AppMessages.SUCCESS.PROFILE_GENERATION_AVAILABLE,
                                     data: program,
                                 }];
-                    }
-                });
+                        }
+                        if (!(0, utils_1.isProgramProfileValid)(program)) {
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE);
+                        }
+                        return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getAssignedAdmins({
+                                attributes: {
+                                    exclude: ["refreshToken", "refreshTokenExp", "password"],
+                                },
+                            }))];
+                    case 2:
+                        assignedAdmins = _c.sent();
+                        isAdminAssigned = (assignedAdmins === null || assignedAdmins === void 0 ? void 0 : assignedAdmins.find(function (admin) { return (admin === null || admin === void 0 ? void 0 : admin.id) === user.id; })) || program.createdBy === user.id;
+                        if (!isAdminAssigned)
+                            throw new core_1.ForbiddenError(common_1.AppMessages.FAILURE.FORBIDDEN_PROGRAM);
+                        return [4 /*yield*/, this.dbProgramNodes.findAll({ where: { programId: programId } })];
+                    case 3:
+                        programNodes = _c.sent();
+                        if (!programNodes || programNodes.length === 0)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE);
+                        program.profileGenerationAvailable = true;
+                        return [4 /*yield*/, program.save()];
+                    case 4:
+                        _c.sent();
+                        return [4 /*yield*/, this.dbUserPrograms.findAll({
+                                where: {
+                                    programId: query.programId,
+                                },
+                            })];
+                    case 5:
+                        programUsers = _c.sent();
+                        users = programUsers.map(function (user) { return user.id; });
+                        (0, app_1.dispatch)("event:newNotification", {
+                            actor: { id: user.id },
+                            entity_type: "PROFILE_AVAILABLE",
+                            item_id: programId,
+                            message: "Profile Generation for Program ".concat(program.name, " is now Available."),
+                            notifier: users,
+                        });
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.PROFILE_GENERATION_AVAILABLE,
+                                data: program,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return EnableProfileGeneration;
 }());

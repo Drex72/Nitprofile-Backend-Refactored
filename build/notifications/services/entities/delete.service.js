@@ -44,34 +44,32 @@ var DeleteNotificationEntity = /** @class */ (function () {
     function DeleteNotificationEntity(dbNotificationEntity) {
         var _this = this;
         this.dbNotificationEntity = dbNotificationEntity;
-        this.handle = function (_a) {
-            var query = _a.query, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var currentNotificationEntity;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.dbNotificationEntity.findOne({
-                                    where: { id: query.entity_id },
-                                })];
-                        case 1:
-                            currentNotificationEntity = _b.sent();
-                            if (!currentNotificationEntity)
-                                throw new core_1.BadRequestError("Invalid Notification Entity");
-                            return [4 /*yield*/, this.dbNotificationEntity.destroy({ where: { id: query.entity_id } })];
-                        case 2:
-                            _b.sent();
-                            core_1.logger.info("Notification Entity: ".concat(query === null || query === void 0 ? void 0 : query.entity_id, " deleted by ").concat(user.id));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.NO_CONTENT,
-                                    message: "Notification Entity Deleted successfully",
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var currentNotificationEntity;
+            var query = _b.query, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbNotificationEntity.findOne({
+                                where: { id: query.entity_id },
+                            })];
+                    case 1:
+                        currentNotificationEntity = _c.sent();
+                        if (!currentNotificationEntity)
+                            throw new core_1.BadRequestError("Invalid Notification Entity");
+                        return [4 /*yield*/, this.dbNotificationEntity.destroy({ where: { id: query.entity_id } })];
+                    case 2:
+                        _c.sent();
+                        core_1.logger.info("Notification Entity: ".concat(query === null || query === void 0 ? void 0 : query.entity_id, " deleted by ").concat(user.id));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.NO_CONTENT,
+                                message: "Notification Entity Deleted successfully",
+                            }];
+                }
             });
-        };
+        }); };
     }
     return DeleteNotificationEntity;
 }());

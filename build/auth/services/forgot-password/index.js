@@ -38,56 +38,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.forgotPassword = void 0;
 var app_1 = require("@/app");
-var core_1 = require("@/core");
-var mails_1 = require("@/mails");
-var common_1 = require("@/core/common");
 var user_model_1 = require("@/auth/model/user.model");
+var core_1 = require("@/core");
+var common_1 = require("@/core/common");
+var mails_1 = require("@/mails");
 var ForgotPassword = /** @class */ (function () {
     function ForgotPassword(dbUser) {
         var _this = this;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var input = _a.input;
-            return __awaiter(_this, void 0, void 0, function () {
-                var email, user, token, expDate;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            email = input.email;
-                            return [4 /*yield*/, this.dbUser.findOne({ where: { email: email } })];
-                        case 1:
-                            user = _b.sent();
-                            if (!user) {
-                                return [2 /*return*/, {
-                                        code: core_1.HttpStatus.OK,
-                                        message: "".concat(common_1.AppMessages.SUCCESS.EMAIL_SENT, " ").concat(email),
-                                    }];
-                            }
-                            token = (0, core_1.generateRandStr)(64);
-                            user.resetToken = token;
-                            expDate = (0, core_1.computeExpiryDate)(1800);
-                            user.resetTokenExpiresIn = expDate;
-                            return [4 /*yield*/, user.save()];
-                        case 2:
-                            _b.sent();
-                            (0, app_1.dispatch)("event:sendMail", {
-                                to: email,
-                                subject: "Forgot Password",
-                                body: (0, mails_1.forgotPasswordMail)({
-                                    lastName: user.lastName,
-                                    firstName: user.firstName,
-                                    link: "".concat(core_1.currentOrigin, "/?token=").concat(token),
-                                }),
-                            });
-                            core_1.logger.info("Successfully Sent Mail");
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var email, user, token, expDate;
+            var input = _b.input;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        email = input.email;
+                        return [4 /*yield*/, this.dbUser.findOne({ where: { email: email } })];
+                    case 1:
+                        user = _c.sent();
+                        if (!user) {
                             return [2 /*return*/, {
                                     code: core_1.HttpStatus.OK,
                                     message: "".concat(common_1.AppMessages.SUCCESS.EMAIL_SENT, " ").concat(email),
                                 }];
-                    }
-                });
+                        }
+                        token = (0, core_1.generateRandStr)(64);
+                        user.resetToken = token;
+                        expDate = (0, core_1.computeExpiryDate)(1800);
+                        user.resetTokenExpiresIn = expDate;
+                        return [4 /*yield*/, user.save()];
+                    case 2:
+                        _c.sent();
+                        (0, app_1.dispatch)("event:sendMail", {
+                            to: email,
+                            subject: "Forgot Password",
+                            body: (0, mails_1.forgotPasswordMail)({
+                                lastName: user.lastName,
+                                firstName: user.firstName,
+                                link: "".concat(core_1.currentOrigin, "/auth/reset-password?resetToken=").concat(token),
+                            }),
+                        });
+                        core_1.logger.info("Successfully Sent Mail");
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: "".concat(common_1.AppMessages.SUCCESS.EMAIL_SENT, " ").concat(email),
+                            }];
+                }
             });
-        };
+        }); };
     }
     return ForgotPassword;
 }());

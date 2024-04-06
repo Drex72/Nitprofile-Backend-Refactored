@@ -56,45 +56,43 @@ var CreateProgram = /** @class */ (function () {
     function CreateProgram(dbPrograms) {
         var _this = this;
         this.dbPrograms = dbPrograms;
-        this.handle = function (_a) {
-            var input = _a.input, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var endDate, name, startDate, programExists, existingUser, createdProgram;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            endDate = input.endDate, name = input.name, startDate = input.startDate;
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { name: name },
-                                })];
-                        case 1:
-                            programExists = _b.sent();
-                            if (programExists)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.PROGRAM_EXISTS);
-                            return [4 /*yield*/, model_1.Users.findOne({
-                                    where: { id: user === null || user === void 0 ? void 0 : user.id },
-                                })];
-                        case 2:
-                            existingUser = _b.sent();
-                            if (!existingUser)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
-                            if (startDate < new Date(Date.now()))
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.START_DATE_ERROR);
-                            if (endDate < startDate)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.DATE_DURATION_ERROR);
-                            return [4 /*yield*/, this.dbPrograms.create(__assign(__assign({}, input), { createdBy: existingUser === null || existingUser === void 0 ? void 0 : existingUser.id }))];
-                        case 3:
-                            createdProgram = _b.sent();
-                            core_1.logger.info("Program with ID ".concat(createdProgram.id, " created successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.CREATED,
-                                    message: common_1.AppMessages.SUCCESS.PROGRAM_CREATED,
-                                    data: createdProgram,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var endDate, name, startDate, programExists, existingUser, createdProgram;
+            var input = _b.input, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        endDate = input.endDate, name = input.name, startDate = input.startDate;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { name: name },
+                            })];
+                    case 1:
+                        programExists = _c.sent();
+                        if (programExists)
+                            throw new core_1.BadRequestError("Program with Name Already Exists!");
+                        return [4 /*yield*/, model_1.Users.findOne({
+                                where: { id: user === null || user === void 0 ? void 0 : user.id },
+                            })];
+                    case 2:
+                        existingUser = _c.sent();
+                        if (!existingUser)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
+                        if (startDate < new Date(Date.now()))
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.START_DATE_ERROR);
+                        if (endDate < startDate)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.DATE_DURATION_ERROR);
+                        return [4 /*yield*/, this.dbPrograms.create(__assign(__assign({}, input), { createdBy: existingUser === null || existingUser === void 0 ? void 0 : existingUser.id }))];
+                    case 3:
+                        createdProgram = _c.sent();
+                        core_1.logger.info("Program with ID ".concat(createdProgram.id, " created successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.CREATED,
+                                message: common_1.AppMessages.SUCCESS.PROGRAM_CREATED,
+                                data: createdProgram,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return CreateProgram;
 }());

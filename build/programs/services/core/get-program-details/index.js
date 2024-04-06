@@ -45,60 +45,58 @@ var GetProgramMetrics = /** @class */ (function () {
         var _this = this;
         this.dbPrograms = dbPrograms;
         this.dbUserPrograms = dbUserPrograms;
-        this.handle = function (_a) {
-            var query = _a.query, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var program, noOfProfilesGenerated, noOfCertificatesGenerated, programUsers, noOfVerifiedUsers;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: {
-                                        id: query.programId,
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var program, noOfProfilesGenerated, noOfCertificatesGenerated, programUsers, noOfVerifiedUsers;
+            var query = _b.query, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: {
+                                    id: query.programId,
+                                },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, this.dbUserPrograms.count({
+                                where: {
+                                    profileGenerationDate: {
+                                        $ne: null,
                                     },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, this.dbUserPrograms.count({
-                                    where: {
-                                        profileGenerationDate: {
-                                            $ne: null,
-                                        },
+                                },
+                            })];
+                    case 2:
+                        noOfProfilesGenerated = _c.sent();
+                        return [4 /*yield*/, this.dbUserPrograms.count({
+                                where: {
+                                    certificateGenerationDate: {
+                                        $ne: null,
                                     },
-                                })];
-                        case 2:
-                            noOfProfilesGenerated = _b.sent();
-                            return [4 /*yield*/, this.dbUserPrograms.count({
-                                    where: {
-                                        certificateGenerationDate: {
-                                            $ne: null,
-                                        },
-                                    },
-                                })];
-                        case 3:
-                            noOfCertificatesGenerated = _b.sent();
-                            return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getRegisteredUsers({
-                                    attributes: {
-                                        exclude: ["refreshToken", "refreshTokenExp", "password"],
-                                    },
-                                }))];
-                        case 4:
-                            programUsers = _b.sent();
-                            noOfVerifiedUsers = programUsers.filter(function (item) { return item.isVerified; }).length;
-                            console.log(noOfCertificatesGenerated, noOfProfilesGenerated, noOfVerifiedUsers);
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
-                                    data: { noOfProfilesGenerated: noOfProfilesGenerated, noOfVerifiedUsers: noOfVerifiedUsers, noOfCertificatesGenerated: noOfCertificatesGenerated },
-                                }];
-                    }
-                });
+                                },
+                            })];
+                    case 3:
+                        noOfCertificatesGenerated = _c.sent();
+                        return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getRegisteredUsers({
+                                attributes: {
+                                    exclude: ["refreshToken", "refreshTokenExp", "password"],
+                                },
+                            }))];
+                    case 4:
+                        programUsers = _c.sent();
+                        noOfVerifiedUsers = programUsers.filter(function (item) { return item.isVerified; }).length;
+                        console.log(noOfCertificatesGenerated, noOfProfilesGenerated, noOfVerifiedUsers);
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
+                                data: { noOfProfilesGenerated: noOfProfilesGenerated, noOfVerifiedUsers: noOfVerifiedUsers, noOfCertificatesGenerated: noOfCertificatesGenerated },
+                            }];
+                }
             });
-        };
+        }); };
     }
     return GetProgramMetrics;
 }());

@@ -65,7 +65,7 @@ var SendUserEmail = /** @class */ (function () {
                                             lastName: lastName,
                                             firstName: firstName,
                                             programName: programName,
-                                            link: core_1.currentOrigin + token,
+                                            link: "".concat(core_1.currentOrigin, "/auth/verify-account?token=").concat(token),
                                         }),
                                     });
                                     sentMails.push(sentMail);

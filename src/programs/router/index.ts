@@ -1,6 +1,12 @@
-import { Router } from "express"
 import { ControlBuilder } from "@/core/middlewares/controlBuilder"
+import { assignAdminToProgram, findProgramAssignedAdmins } from "@/programs/services/admins"
+import { createProgram, deleteProgram, findPrograms, getProgramMetrics, updateProgram } from "@/programs/services/core"
+import { addProgramProfileFrame, enableProfileGeneration, generateProfile, previewProfile } from "@/programs/services/profile"
+import { createProgramNodes, getProgramNodes } from "@/programs/services/program_nodes"
+import { findProgramUsers, registerProgramUsers, resendUserMail } from "@/programs/services/users"
+import { Router } from "express"
 import {
+    addProgramCertificateFrameSchema,
     addProgramProfileFrameSchema,
     assignAdminToProgramSchema,
     createProgramNodeSchema,
@@ -11,11 +17,7 @@ import {
     resendProgramUserMailSchema,
     updateProgramSchema,
 } from "./schema"
-import { createProgram, findPrograms, getProgramMetrics, updateProgram } from "@/programs/services/core"
-import { assignAdminToProgram, findProgramAssignedAdmins } from "@/programs/services/admins"
-import { addProgramProfileFrame, enableProfileGeneration, generateProfile, previewProfile } from "@/programs/services/profile"
-import { createProgramNodes, getProgramNodes } from "@/programs/services/program_nodes"
-import { findProgramUsers, registerProgramUsers, resendUserMail } from "@/programs/services/users"
+import { addProgramCertificateFrame, enableCertificateGeneration, generateCertificate, previewcertificate } from "../services/certificate"
 
 
 export const programRouter = Router()
@@ -48,8 +50,8 @@ programRouter
     )
     .delete(
         ControlBuilder.builder()
-        .setValidator(createProgramSchema)
-        .setHandler(createProgram.handle)
+        .setValidator(findProgramSchema)
+        .setHandler(deleteProgram.handle)
         .only("ADMIN","SUPER ADMIN")
         .isPrivate()
         .handle()
@@ -89,7 +91,15 @@ programRouter
         .isPrivate()
         .handle()
     )
-
+programRouter
+    .route("/user")
+    .get(
+        ControlBuilder.builder()
+        .setHandler(findProgramUsers.findUser)
+        .isPrivate()
+        .handle()
+    )
+    
     
 
 programRouter
@@ -148,6 +158,45 @@ programRouter
         .isPrivate()
         .handle()
     )
+
+programRouter
+    .route("/certificate")
+    .post(
+        ControlBuilder.builder()
+        .setValidator(addProgramCertificateFrameSchema)
+        .setHandler(addProgramCertificateFrame.handle)
+        .only("SUPER ADMIN", "ADMIN")
+        .isPrivate()
+        .handle()
+    )
+    .get(
+        ControlBuilder.builder()
+        .setValidator(findProgramSchema)
+        .setHandler(generateCertificate.handle)
+        .only("SUPER ADMIN", "USER")
+        .isPrivate()
+        .handle()
+    )
+    .put(
+        ControlBuilder.builder()
+        .setValidator(findProgramSchema)
+        .setHandler(enableCertificateGeneration.handle)
+        .only("SUPER ADMIN", "ADMIN")
+        .isPrivate()
+        .handle()
+    )
+
+programRouter
+    .route("/certificate/preview")
+    .get(
+        ControlBuilder.builder()
+        .setValidator(findProgramSchema)
+        .setHandler(previewcertificate.handle)
+        .only("SUPER ADMIN", "ADMIN")
+        .isPrivate()
+        .handle()
+    )
+
 
 
 

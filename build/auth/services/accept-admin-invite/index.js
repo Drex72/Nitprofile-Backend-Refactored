@@ -66,36 +66,34 @@ var app_cache_1 = require("@/app/app-cache");
 var AcceptInvitation = /** @class */ (function () {
     function AcceptInvitation() {
         var _this = this;
-        this.handle = function (_a) {
-            var input = _a.input, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var token, email, created_user, _b, password, refreshToken, refreshTokenExp, responsePayload;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
-                        case 0:
-                            token = query.token;
-                            return [4 /*yield*/, app_cache_1.cache.get(token)];
-                        case 1:
-                            email = _c.sent();
-                            if (!email)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, user_1.create_user._create_single_user(__assign(__assign({}, input), { email: email, role: "ADMIN" }))];
-                        case 2:
-                            created_user = _c.sent();
-                            return [4 /*yield*/, app_cache_1.cache.del(token)];
-                        case 3:
-                            _c.sent();
-                            core_1.logger.info("User with email ".concat(email, " invited successfully"));
-                            _b = created_user.dataValues, password = _b.password, refreshToken = _b.refreshToken, refreshTokenExp = _b.refreshTokenExp, responsePayload = __rest(_b, ["password", "refreshToken", "refreshTokenExp"]);
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.CREATED,
-                                    message: "User with email ".concat(email, " invited successfully"),
-                                    data: responsePayload,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var token, email, created_user, _c, password, refreshToken, refreshTokenExp, responsePayload;
+            var input = _b.input, query = _b.query;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        token = query.token;
+                        return [4 /*yield*/, app_cache_1.cache.get(token)];
+                    case 1:
+                        email = _d.sent();
+                        if (!email)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, user_1.create_user._create_single_user(__assign(__assign({}, input), { email: email, role: "ADMIN", isVerified: true }))];
+                    case 2:
+                        created_user = _d.sent();
+                        return [4 /*yield*/, app_cache_1.cache.del(token)];
+                    case 3:
+                        _d.sent();
+                        core_1.logger.info("User with email ".concat(email, " invited successfully"));
+                        _c = created_user.dataValues, password = _c.password, refreshToken = _c.refreshToken, refreshTokenExp = _c.refreshTokenExp, responsePayload = __rest(_c, ["password", "refreshToken", "refreshTokenExp"]);
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.CREATED,
+                                message: "User with email ".concat(email, " invited successfully"),
+                                data: responsePayload,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return AcceptInvitation;
 }());

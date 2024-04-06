@@ -45,42 +45,40 @@ var GetProgramNodes = /** @class */ (function () {
         var _this = this;
         this.dbPrograms = dbPrograms;
         this.dbProgramNodes = dbProgramNodes;
-        this.handle = function (_a) {
-            var input = _a.input, user = _a.user, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var programId, category, program, programNodes;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            programId = query.programId, category = query.category;
-                            if (!programId || !category)
-                                throw new core_1.BadRequestError("Invalid Params");
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, this.dbProgramNodes.findAll({
-                                    where: {
-                                        programId: programId,
-                                        category: category,
-                                    },
-                                })];
-                        case 2:
-                            programNodes = _b.sent();
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.CREATED,
-                                    message: common_1.AppMessages.SUCCESS.PROGRAM_NODE_FOUND,
-                                    data: programNodes,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var programId, category, program, programNodes;
+            var input = _b.input, user = _b.user, query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        programId = query.programId, category = query.category;
+                        if (!programId || !category)
+                            throw new core_1.BadRequestError("Invalid Params");
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, this.dbProgramNodes.findAll({
+                                where: {
+                                    programId: programId,
+                                    category: category,
+                                },
+                            })];
+                    case 2:
+                        programNodes = _c.sent();
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.CREATED,
+                                message: common_1.AppMessages.SUCCESS.PROGRAM_NODE_FOUND,
+                                data: programNodes,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return GetProgramNodes;
 }());

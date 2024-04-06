@@ -55,38 +55,36 @@ var UpdateProgramNodes = /** @class */ (function () {
     function UpdateProgramNodes(dbProgramNodes) {
         var _this = this;
         this.dbProgramNodes = dbProgramNodes;
-        this.handle = function (_a) {
-            var input = _a.input, user = _a.user, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var node, id, programNode;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            node = input.node;
-                            id = query.id;
-                            return [4 /*yield*/, this.dbProgramNodes.findOne({
-                                    where: {
-                                        id: id,
-                                    },
-                                })];
-                        case 1:
-                            programNode = _b.sent();
-                            if (!programNode)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM_NODE);
-                            return [4 /*yield*/, this.dbProgramNodes.update(__assign({}, node), { where: { id: id } })];
-                        case 2:
-                            _b.sent();
-                            core_1.logger.info("Program Node with ID ".concat(id, " updated successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.PROGRAM_NODE_UPDATED,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var node, id, programNode;
+            var input = _b.input, user = _b.user, query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        node = input.node;
+                        id = query.id;
+                        return [4 /*yield*/, this.dbProgramNodes.findOne({
+                                where: {
+                                    id: id,
+                                },
+                            })];
+                    case 1:
+                        programNode = _c.sent();
+                        if (!programNode)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM_NODE);
+                        return [4 /*yield*/, this.dbProgramNodes.update(__assign({}, node), { where: { id: id } })];
+                    case 2:
+                        _c.sent();
+                        core_1.logger.info("Program Node with ID ".concat(id, " updated successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.PROGRAM_NODE_UPDATED,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return UpdateProgramNodes;
 }());

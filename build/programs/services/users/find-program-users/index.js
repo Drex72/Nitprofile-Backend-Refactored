@@ -41,44 +41,70 @@ var core_1 = require("@/core");
 var common_1 = require("@/core/common");
 var models_1 = require("@/programs/models");
 var FindProgramUsers = /** @class */ (function () {
-    function FindProgramUsers(dbPrograms) {
+    function FindProgramUsers(dbPrograms, dbUserPrograms) {
         var _this = this;
         this.dbPrograms = dbPrograms;
-        this.handle = function (_a) {
-            var user = _a.user, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var program, programUsers;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: {
-                                        id: query.programId,
-                                    },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getRegisteredUsers({
-                                    attributes: {
-                                        exclude: ["refreshToken", "refreshTokenExp", "password"],
-                                    },
-                                }))];
-                        case 2:
-                            programUsers = _b.sent();
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
-                                    data: programUsers !== null && programUsers !== void 0 ? programUsers : [],
-                                }];
-                    }
-                });
+        this.dbUserPrograms = dbUserPrograms;
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var program, programUsers;
+            var user = _b.user, query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: {
+                                    id: query.programId,
+                                },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getRegisteredUsers({
+                                where: {
+                                    role: "USER",
+                                },
+                                attributes: {
+                                    exclude: ["refreshToken", "refreshTokenExp", "password"],
+                                },
+                            }))];
+                    case 2:
+                        programUsers = _c.sent();
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
+                                data: programUsers !== null && programUsers !== void 0 ? programUsers : [],
+                            }];
+                }
             });
-        };
+        }); };
+        this.findUser = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var userPrograms;
+            var user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbUserPrograms.findAll({
+                                where: {
+                                    userId: user === null || user === void 0 ? void 0 : user.id,
+                                },
+                            })];
+                    case 1:
+                        userPrograms = _c.sent();
+                        console.log(userPrograms);
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
+                                data: userPrograms !== null && userPrograms !== void 0 ? userPrograms : [],
+                            }];
+                }
+            });
+        }); };
     }
     return FindProgramUsers;
 }());
-exports.findProgramUsers = new FindProgramUsers(models_1.Program);
+exports.findProgramUsers = new FindProgramUsers(models_1.Program, models_1.UserPrograms);

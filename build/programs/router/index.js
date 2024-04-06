@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.programRouter = void 0;
-var express_1 = require("express");
 var controlBuilder_1 = require("@/core/middlewares/controlBuilder");
-var schema_1 = require("./schema");
-var core_1 = require("@/programs/services/core");
 var admins_1 = require("@/programs/services/admins");
+var core_1 = require("@/programs/services/core");
 var profile_1 = require("@/programs/services/profile");
 var program_nodes_1 = require("@/programs/services/program_nodes");
 var users_1 = require("@/programs/services/users");
+var express_1 = require("express");
+var schema_1 = require("./schema");
 exports.programRouter = (0, express_1.Router)();
 // Create a program
 exports.programRouter
@@ -31,8 +31,8 @@ exports.programRouter
     .isPrivate()
     .handle())
     .delete(controlBuilder_1.ControlBuilder.builder()
-    .setValidator(schema_1.createProgramSchema)
-    .setHandler(core_1.createProgram.handle)
+    .setValidator(schema_1.findProgramSchema)
+    .setHandler(core_1.deleteProgram.handle)
     .only("ADMIN", "SUPER ADMIN")
     .isPrivate()
     .handle());
@@ -59,6 +59,12 @@ exports.programRouter
     .setValidator(schema_1.resendProgramUserMailSchema)
     .setHandler(users_1.resendUserMail.handle)
     .only("ADMIN", "SUPER ADMIN")
+    .isPrivate()
+    .handle());
+exports.programRouter
+    .route("/user")
+    .get(controlBuilder_1.ControlBuilder.builder()
+    .setHandler(users_1.findProgramUsers.findUser)
     .isPrivate()
     .handle());
 exports.programRouter

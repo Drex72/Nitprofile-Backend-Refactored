@@ -46,81 +46,68 @@ var PlaceholderText = /** @class */ (function () {
         var _this = this;
         this.dbPrograms = dbPrograms;
         this.dbUser = dbUser;
-        this.convert_entity_placeholder = function (node, options) { return __awaiter(_this, void 0, void 0, function () {
+        this.convert_entity_placeholder = function (options) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (node.entity === "program") {
-                    return [2 /*return*/, this._convert_program_entity_placeholder(node, options.programId)];
+                if (options.entity === "program") {
+                    return [2 /*return*/, this._convert_program_entity_placeholder(options)];
                 }
-                if (node.entity === "user") {
-                    return [2 /*return*/, this._convert_user_entity_placeholder(node, options.userId)];
+                if (options.entity === "user") {
+                    return [2 /*return*/, this._convert_user_entity_placeholder(options)];
                 }
-                if (node.entity === "date") {
-                    return [2 /*return*/, this._convert_date_entity_placeholder(node)];
+                if (options.entity === "date") {
+                    return [2 /*return*/, this._convert_date_entity_placeholder()];
                 }
                 return [2 /*return*/];
             });
         }); };
-        this._convert_date_entity_placeholder = function (node) {
-            node.text = new Date().toLocaleDateString();
-            return _this._format_node(node);
+        this._convert_date_entity_placeholder = function () {
+            return new Date().toLocaleDateString();
         };
-        this._convert_user_entity_placeholder = function (node, userId) { return __awaiter(_this, void 0, void 0, function () {
-            var selectedUser, key, value;
+        this._convert_user_entity_placeholder = function (options) { return __awaiter(_this, void 0, void 0, function () {
+            var userId, selectedUser, key, value;
             var _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
-                    case 0: return [4 /*yield*/, this.dbUser.findOne({
-                            where: {
-                                id: userId,
-                            },
-                        })];
+                    case 0:
+                        userId = options.userId;
+                        return [4 /*yield*/, this.dbUser.findOne({
+                                where: {
+                                    id: userId,
+                                },
+                            })];
                     case 1:
                         selectedUser = _c.sent();
                         if (!selectedUser)
                             throw new core_1.BadRequestError("Invalid User");
-                        key = (_a = node.entity_key) !== null && _a !== void 0 ? _a : "name";
+                        key = (_a = options === null || options === void 0 ? void 0 : options.entity_key) !== null && _a !== void 0 ? _a : "firstName";
                         value = (_b = selectedUser[key]) !== null && _b !== void 0 ? _b : "Invalid Property";
-                        node.text = value.toString();
-                        return [2 /*return*/, this._format_node(node)];
+                        console.log(value, value.toString());
+                        return [2 /*return*/, value.toString()];
                 }
             });
         }); };
-        this._convert_program_entity_placeholder = function (node, programId) { return __awaiter(_this, void 0, void 0, function () {
-            var selectedProgram, key, value;
+        this._convert_program_entity_placeholder = function (options) { return __awaiter(_this, void 0, void 0, function () {
+            var programId, selectedProgram, key, value;
             var _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
-                    case 0: return [4 /*yield*/, this.dbPrograms.findOne({
-                            where: {
-                                id: programId,
-                            },
-                        })];
+                    case 0:
+                        programId = options.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: {
+                                    id: programId,
+                                },
+                            })];
                     case 1:
                         selectedProgram = _c.sent();
                         if (!selectedProgram)
                             throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                        key = (_a = node.entity_key) !== null && _a !== void 0 ? _a : "name";
+                        key = (_a = options === null || options === void 0 ? void 0 : options.entity_key) !== null && _a !== void 0 ? _a : "name";
                         value = (_b = selectedProgram[key]) !== null && _b !== void 0 ? _b : "Invalid Property";
-                        node.text = value.toString();
-                        return [2 /*return*/, this._format_node(node)];
+                        return [2 /*return*/, value.toString()];
                 }
             });
         }); };
-        this._format_node = function (node) {
-            var _a, _b, _c, _d, _e;
-            var refactoredNode = {
-                overlay: {
-                    text: (_a = node.text) !== null && _a !== void 0 ? _a : undefined,
-                    font_family: (_b = node.font_family) !== null && _b !== void 0 ? _b : undefined,
-                    font_size: (_c = node.font_size) !== null && _c !== void 0 ? _c : undefined,
-                    font_weight: (_d = node.font_weight) !== null && _d !== void 0 ? _d : undefined,
-                },
-                x: node.x,
-                y: node.y,
-                color: (_e = node.color) !== null && _e !== void 0 ? _e : undefined,
-            };
-            return refactoredNode;
-        };
     }
     return PlaceholderText;
 }());

@@ -49,25 +49,23 @@ var SignOut = /** @class */ (function () {
          * @param {Context<SignOutPayload>} payload
          * @returns { code: string, message: string } response
          */
-        this.handle = function (_a) {
-            var user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0: return [4 /*yield*/, this.dbUsers.update({ refreshToken: "", refreshTokenExp: undefined }, { where: { id: user.id } })];
-                        case 1:
-                            _b.sent();
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.NO_CONTENT,
-                                    message: common_1.AppMessages.SUCCESS.LOGOUT,
-                                    headers: {
-                                        "Set-Cookie": ["accessToken=; Path=/; HttpOnly", "refreshToken=; Path=/; HttpOnly"],
-                                    },
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, this.dbUsers.update({ refreshToken: "", refreshTokenExp: undefined }, { where: { id: user.id } })];
+                    case 1:
+                        _c.sent();
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.NO_CONTENT,
+                                message: common_1.AppMessages.SUCCESS.LOGOUT,
+                                headers: {
+                                    "Set-Cookie": ["accessToken=; Path=/; HttpOnly", "refreshToken=; Path=/; HttpOnly"],
+                                },
+                            }];
+                }
             });
-        };
+        }); };
     }
     return SignOut;
 }());

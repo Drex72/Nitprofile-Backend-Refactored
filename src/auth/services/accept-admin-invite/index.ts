@@ -1,4 +1,4 @@
-import { HttpStatus, logger, type Context, UnAuthorizedError } from "@/core"
+import { HttpStatus, UnAuthorizedError, logger, type Context } from "@/core"
 import { AppMessages } from "@/core/common"
 
 import { create_user } from "@/auth/helpers/user"
@@ -16,7 +16,7 @@ class AcceptInvitation {
 
         if (!email) throw new UnAuthorizedError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
-        const created_user = await create_user._create_single_user({ ...input, email, role: "ADMIN" })
+        const created_user = await create_user._create_single_user({ ...input, email, role: "ADMIN", isVerified: true })
 
         await cache.del(token)
 

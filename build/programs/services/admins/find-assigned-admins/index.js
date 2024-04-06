@@ -44,37 +44,35 @@ var FindAssignedAdmins = /** @class */ (function () {
     function FindAssignedAdmins(dbPrograms) {
         var _this = this;
         this.dbPrograms = dbPrograms;
-        this.handle = function (_a) {
-            var query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var programId, program, assignedAdmins;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            programId = query.programId;
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getAssignedAdmins({
-                                    attributes: {
-                                        exclude: ["refreshToken", "refreshTokenExp", "password"],
-                                    },
-                                }))];
-                        case 2:
-                            assignedAdmins = _b.sent();
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
-                                    data: assignedAdmins !== null && assignedAdmins !== void 0 ? assignedAdmins : [],
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var programId, program, assignedAdmins;
+            var query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        programId = query.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getAssignedAdmins({
+                                attributes: {
+                                    exclude: ["refreshToken", "refreshTokenExp", "password"],
+                                },
+                            }))];
+                    case 2:
+                        assignedAdmins = _c.sent();
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
+                                data: assignedAdmins !== null && assignedAdmins !== void 0 ? assignedAdmins : [],
+                            }];
+                }
             });
-        };
+        }); };
     }
     return FindAssignedAdmins;
 }());

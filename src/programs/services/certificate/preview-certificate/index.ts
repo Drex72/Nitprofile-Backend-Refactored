@@ -6,7 +6,7 @@ import { AdminsAssignedPrograms, Program, ProgramNodes } from "@/programs/models
 import { type GenerateProgramProfilePayload } from "@/programs/payload_interfaces"
 import type { NodePayload } from "@/programs/types"
 
-class PreviewProfile {
+class PreviewCertificate {
     constructor(
         private readonly dbPrograms: typeof Program,
         private readonly dbAdminPrograms: typeof AdminsAssignedPrograms,
@@ -32,19 +32,19 @@ class PreviewProfile {
         if (!program) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
         const programNodes = await this.dbProgramNodes.scope("").findAll({
-            where: { programId, category:"profile" },
+            where: { programId, category:"certificate" },
         })
 
         const existingUser = await this.dbUser.findOne({ where: { id: user.id } })
 
         if (!existingUser) throw new BadRequestError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
-        if (!program.profileFrameSecureUrl) throw new BadRequestError("No Profile Frame Uploaded!")
+        if (!program.certificateFrameSecureUrl) throw new BadRequestError("No Certificate Frame Uploaded!")
 
-        let profile_url
+        let certificate_url
 
         if (!programNodes.length) {
-            profile_url = program.profileFrameSecureUrl
+            certificate_url = program.certificateFrameSecureUrl
         }
 
         if (programNodes.length) {
@@ -65,22 +65,22 @@ class PreviewProfile {
                 }),
             )
 
-            profile_url = generateCloudinaryTransformationImage({
-                framePublicId: program.profileFramePublicId,
-                height: program.profileFrameHeight,
+            certificate_url = generateCloudinaryTransformationImage({
+                framePublicId: program.certificateFramePublicId,
+                height: program.certificateFrameHeight,
                 nodes: refactoredNodes,
-                width: program.profileFrameWidth,
+                width: program.certificateFrameWidth,
             })
         }
 
-        logger.info(`Profile for Program ${program.id} Previewed successfully`)
+        logger.info(`Certificate for Program ${program.id} Previewed successfully`)
 
         return {
             code: HttpStatus.OK,
-            message: "Profile for User Previewed successfully",
-            data: profile_url,
+            message: "Certificate for User Previewed successfully",
+            data: certificate_url,
         }
     }
 }
 
-export const previewProfile = new PreviewProfile(Program, AdminsAssignedPrograms, ProgramNodes, Users)
+export const previewcertificate = new PreviewCertificate(Program, AdminsAssignedPrograms, ProgramNodes, Users)

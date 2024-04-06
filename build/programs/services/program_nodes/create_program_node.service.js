@@ -57,76 +57,75 @@ var CreateProgramNodes = /** @class */ (function () {
         var _this = this;
         this.dbPrograms = dbPrograms;
         this.dbProgramNodes = dbProgramNodes;
-        this.handle = function (_a) {
-            var input = _a.input, user = _a.user, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var nodes, category, programId, program, assignedAdmins, isAdminAssigned, dbTransaction, createdNodes, error_1;
-                var _this = this;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            nodes = input.nodes, category = input.category;
-                            programId = query.programId;
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getAssignedAdmins({
-                                    attributes: {
-                                        exclude: ["refreshToken", "refreshTokenExp", "password"],
-                                    },
-                                }))];
-                        case 2:
-                            assignedAdmins = _b.sent();
-                            isAdminAssigned = (assignedAdmins === null || assignedAdmins === void 0 ? void 0 : assignedAdmins.find(function (admin) { return (admin === null || admin === void 0 ? void 0 : admin.id) === user.id; })) || program.createdBy === user.id;
-                            if (!isAdminAssigned)
-                                throw new core_1.ForbiddenError("You are not assigned to this program");
-                            if (!(0, utils_1.isProgramProfileValid)(program)) {
-                                throw new core_1.BadRequestError("Node creation for this program is restricted until a profile or certificate frame is created within the program.");
-                            }
-                            return [4 /*yield*/, core_1.sequelize.transaction()];
-                        case 3:
-                            dbTransaction = _b.sent();
-                            createdNodes = [];
-                            _b.label = 4;
-                        case 4:
-                            _b.trys.push([4, 6, , 7]);
-                            return [4 /*yield*/, Promise.all(nodes.map(function (node) { return __awaiter(_this, void 0, void 0, function () {
-                                    var createdNode;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, this.dbProgramNodes.create(__assign(__assign({}, node), { programId: programId, category: category }), { transaction: dbTransaction })];
-                                            case 1:
-                                                createdNode = _a.sent();
-                                                core_1.logger.info("Program Node with ID ".concat(createdNode.id, " created successfully"));
-                                                createdNodes.push(createdNode);
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); }))];
-                        case 5:
-                            _b.sent();
-                            dbTransaction.commit();
-                            return [3 /*break*/, 7];
-                        case 6:
-                            error_1 = _b.sent();
-                            dbTransaction.rollback();
-                            core_1.logger.error(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
-                            throw new Error("Internal Server Error");
-                        case 7: return [2 /*return*/, {
-                                code: core_1.HttpStatus.CREATED,
-                                message: common_1.AppMessages.SUCCESS.PROGRAM_NODE_CREATED,
-                                data: createdNodes,
-                            }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var nodes, category, programId, program, assignedAdmins, isAdminAssigned, dbTransaction, createdNodes, error_1;
+            var _this = this;
+            var _c;
+            var input = _b.input, user = _b.user, query = _b.query;
+            return __generator(this, function (_d) {
+                switch (_d.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        nodes = input.nodes, category = input.category;
+                        programId = query.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 1:
+                        program = _d.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, (program === null || program === void 0 ? void 0 : program.getAssignedAdmins({
+                                attributes: {
+                                    exclude: ["refreshToken", "refreshTokenExp", "password"],
+                                },
+                            }))];
+                    case 2:
+                        assignedAdmins = _d.sent();
+                        isAdminAssigned = (assignedAdmins === null || assignedAdmins === void 0 ? void 0 : assignedAdmins.find(function (admin) { return (admin === null || admin === void 0 ? void 0 : admin.id) === user.id; })) || program.createdBy === user.id;
+                        if (!isAdminAssigned)
+                            throw new core_1.ForbiddenError("You are not assigned to this program");
+                        if (!(0, utils_1.isProgramProfileValid)(program)) {
+                            throw new core_1.BadRequestError("Node creation for this program is restricted until a profile or certificate frame is created within the program.");
+                        }
+                        return [4 /*yield*/, core_1.sequelize.transaction()];
+                    case 3:
+                        dbTransaction = _d.sent();
+                        createdNodes = [];
+                        _d.label = 4;
+                    case 4:
+                        _d.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, Promise.all(nodes.map(function (node) { return __awaiter(_this, void 0, void 0, function () {
+                                var createdNode;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0: return [4 /*yield*/, this.dbProgramNodes.create(__assign(__assign({}, node), { programId: programId, category: category }), { transaction: dbTransaction })];
+                                        case 1:
+                                            createdNode = _a.sent();
+                                            core_1.logger.info("Program Node with ID ".concat(createdNode.id, " created successfully"));
+                                            createdNodes.push(createdNode);
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }))];
+                    case 5:
+                        _d.sent();
+                        dbTransaction.commit();
+                        return [3 /*break*/, 7];
+                    case 6:
+                        error_1 = _d.sent();
+                        dbTransaction.rollback();
+                        core_1.logger.error(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
+                        throw new Error((_c = error_1 === null || error_1 === void 0 ? void 0 : error_1.message) !== null && _c !== void 0 ? _c : "Internal Server Error");
+                    case 7: return [2 /*return*/, {
+                            code: core_1.HttpStatus.CREATED,
+                            message: common_1.AppMessages.SUCCESS.PROGRAM_NODE_CREATED,
+                            data: createdNodes,
+                        }];
+                }
             });
-        };
+        }); };
     }
     return CreateProgramNodes;
 }());

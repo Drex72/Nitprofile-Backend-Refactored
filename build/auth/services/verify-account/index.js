@@ -37,52 +37,50 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyUserAccount = void 0;
+var app_cache_1 = require("@/app/app-cache");
+var user_model_1 = require("@/auth/model/user.model");
 var core_1 = require("@/core");
 var common_1 = require("@/core/common");
-var user_model_1 = require("@/auth/model/user.model");
-var app_cache_1 = require("@/app/app-cache");
 var VerifyAccount = /** @class */ (function () {
     function VerifyAccount(dbUser) {
         var _this = this;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var input = _a.input;
-            return __awaiter(_this, void 0, void 0, function () {
-                var token, password, email, user, hashPassword;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            token = input.token, password = input.password;
-                            return [4 /*yield*/, app_cache_1.cache.get(token)];
-                        case 1:
-                            email = _b.sent();
-                            if (!email)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, app_cache_1.cache.del(token)];
-                        case 2:
-                            _b.sent();
-                            return [4 /*yield*/, this.dbUser.findOne({
-                                    where: { email: email, role: "USER" },
-                                })];
-                        case 3:
-                            user = _b.sent();
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
-                            return [4 /*yield*/, (0, core_1.hashData)(password)];
-                        case 4:
-                            hashPassword = _b.sent();
-                            return [4 /*yield*/, this.dbUser.update({ isVerified: true, password: hashPassword }, { where: { id: user.id } })];
-                        case 5:
-                            _b.sent();
-                            core_1.logger.info("Verified User Successfully");
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: "User Verified Successfully",
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var token, password, email, user, hashPassword;
+            var input = _b.input;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        token = input.token, password = input.password;
+                        return [4 /*yield*/, app_cache_1.cache.get(token)];
+                    case 1:
+                        email = _c.sent();
+                        if (!email)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, app_cache_1.cache.del(token)];
+                    case 2:
+                        _c.sent();
+                        return [4 /*yield*/, this.dbUser.findOne({
+                                where: { email: email, role: "USER" },
+                            })];
+                    case 3:
+                        user = _c.sent();
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
+                        return [4 /*yield*/, (0, core_1.hashData)(password)];
+                    case 4:
+                        hashPassword = _c.sent();
+                        return [4 /*yield*/, this.dbUser.update({ isVerified: true, password: hashPassword }, { where: { id: user.id } })];
+                    case 5:
+                        _c.sent();
+                        core_1.logger.info("Verified User Successfully");
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: "User Verified Successfully",
+                            }];
+                }
             });
-        };
+        }); };
     }
     return VerifyAccount;
 }());

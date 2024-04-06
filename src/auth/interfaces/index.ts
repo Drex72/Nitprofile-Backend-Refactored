@@ -7,6 +7,7 @@ export interface ICreateUser {
     email: string
     password: string
     role: IAuthRoles
+    isVerified?:boolean
 }
 
 export interface SignInPayload extends ContextTypes {

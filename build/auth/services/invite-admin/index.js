@@ -47,41 +47,39 @@ var InviteAdmin = /** @class */ (function () {
     function InviteAdmin(dbUser) {
         var _this = this;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var input = _a.input;
-            return __awaiter(_this, void 0, void 0, function () {
-                var email, user, inviteToken;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            email = input.email;
-                            return [4 /*yield*/, this.dbUser.findOne({
-                                    where: { email: email },
-                                })];
-                        case 1:
-                            user = _b.sent();
-                            if (user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.EMAIL_EXISTS);
-                            inviteToken = (0, core_1.generateRandStr)(64);
-                            return [4 /*yield*/, app_cache_1.cache.set(inviteToken, email, "EX", 1200)];
-                        case 2:
-                            _b.sent();
-                            (0, app_1.dispatch)("event:sendMail", {
-                                to: email,
-                                subject: "NITProfile Admin Invitation",
-                                body: (0, mails_1.adminInvitationMail)({
-                                    link: "".concat(core_1.currentOrigin, "/auth/accept-admin-invitation?token=").concat(inviteToken),
-                                }),
-                            });
-                            core_1.logger.info("Admin with email ".concat(email, " invited successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.ADMIN_INVITED,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var email, user, inviteToken;
+            var input = _b.input;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        email = input.email;
+                        return [4 /*yield*/, this.dbUser.findOne({
+                                where: { email: email },
+                            })];
+                    case 1:
+                        user = _c.sent();
+                        if (user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.EMAIL_EXISTS);
+                        inviteToken = (0, core_1.generateRandStr)(64);
+                        return [4 /*yield*/, app_cache_1.cache.set(inviteToken, email, "EX", 1200)];
+                    case 2:
+                        _c.sent();
+                        (0, app_1.dispatch)("event:sendMail", {
+                            to: email,
+                            subject: "NITProfile Admin Invitation",
+                            body: (0, mails_1.adminInvitationMail)({
+                                link: "".concat(core_1.currentOrigin, "/auth/accept-admin-invitation?token=").concat(inviteToken),
+                            }),
+                        });
+                        core_1.logger.info("Admin with email ".concat(email, " invited successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.ADMIN_INVITED,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return InviteAdmin;
 }());

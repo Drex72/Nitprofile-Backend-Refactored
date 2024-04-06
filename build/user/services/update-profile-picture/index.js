@@ -59,47 +59,45 @@ var UpdateProfilePicture = /** @class */ (function () {
     function UpdateProfilePicture(dbUser) {
         var _this = this;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var files = _a.files, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var existingUser, imageBuffer, profilePicture, uploadedImage;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!files || !files.pfp || Array.isArray(files.pfp))
-                                throw new core_1.ForbiddenError("Profile Image is required");
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.dbUser.findOne({ where: { id: user.id } })];
-                        case 1:
-                            existingUser = _b.sent();
-                            if (!existingUser)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            imageBuffer = fs_1.default.readFileSync(files.pfp.tempFilePath);
-                            profilePicture = __assign(__assign({}, files.pfp), { data: imageBuffer });
-                            return [4 /*yield*/, core_1.imageUploadService.imageUpload(core_1.config.cloudinary.assetsFolder, profilePicture)];
-                        case 2:
-                            uploadedImage = _b.sent();
-                            if (!uploadedImage)
-                                throw new core_1.BadRequestError("Error while updating Profile Picture. Please Try again later");
-                            existingUser.profilePicPublicId = uploadedImage.public_id;
-                            existingUser.profilePicSecureUrl = uploadedImage.secure_url;
-                            return [4 /*yield*/, existingUser.save()];
-                        case 3:
-                            _b.sent();
-                            core_1.logger.info("User with ID ".concat(existingUser.id, " updated successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: "Profile Pic Updated Successfully",
-                                    data: {
-                                        publicId: uploadedImage.public_id,
-                                        secureUrl: uploadedImage.secure_url,
-                                    },
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var existingUser, imageBuffer, profilePicture, uploadedImage;
+            var files = _b.files, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!files || !files.pfp || Array.isArray(files.pfp))
+                            throw new core_1.ForbiddenError("Profile Image is required");
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbUser.findOne({ where: { id: user.id } })];
+                    case 1:
+                        existingUser = _c.sent();
+                        if (!existingUser)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        imageBuffer = fs_1.default.readFileSync(files.pfp.tempFilePath);
+                        profilePicture = __assign(__assign({}, files.pfp), { data: imageBuffer });
+                        return [4 /*yield*/, core_1.imageUploadService.imageUpload(core_1.config.cloudinary.assetsFolder, profilePicture)];
+                    case 2:
+                        uploadedImage = _c.sent();
+                        if (!uploadedImage)
+                            throw new core_1.BadRequestError("Error while updating Profile Picture. Please Try again later");
+                        existingUser.profilePicPublicId = uploadedImage.public_id;
+                        existingUser.profilePicSecureUrl = uploadedImage.secure_url;
+                        return [4 /*yield*/, existingUser.save()];
+                    case 3:
+                        _c.sent();
+                        core_1.logger.info("User with ID ".concat(existingUser.id, " updated successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: "Profile Pic Updated Successfully",
+                                data: {
+                                    publicId: uploadedImage.public_id,
+                                    secureUrl: uploadedImage.secure_url,
+                                },
+                            }];
+                }
             });
-        };
+        }); };
     }
     return UpdateProfilePicture;
 }());

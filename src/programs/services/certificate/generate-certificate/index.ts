@@ -6,7 +6,7 @@ import { Program, ProgramNodes, UserPrograms } from "@/programs/models"
 import { type GenerateProgramProfilePayload } from "@/programs/payload_interfaces"
 import type { NodePayload } from "@/programs/types"
 
-class GenerateProfile {
+class GenerateCertificate {
     constructor(
         private readonly dbPrograms: typeof Program,
         private readonly dbUserPrograms: typeof UserPrograms,
@@ -36,23 +36,22 @@ class GenerateProfile {
         if (!existingUser) throw new BadRequestError(AppMessages.FAILURE.INVALID_TOKEN_PROVIDED)
 
         const programNodes = await this.dbProgramNodes.scope("").findAll({
-            where: { programId, category:"profile" },
-
+            where: { programId, category:"certificate" },
         })
 
-        if (!program.profileGenerationAvailable) {
-            throw new BadRequestError(AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE)
+        if (!program.certificateGenerationAvailable) {
+            throw new BadRequestError(AppMessages.FAILURE.CERTIFICATE_GENERATION_NOT_AVAILABLE)
         }
 
         const profilePictureNode = programNodes.find((node) => node.type === "image" && node.overlay)
 
         if (profilePictureNode && !existingUser.profilePicPublicId) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
 
-        let profile_url
+        let certificate_url
 
-        if (userProgram.profileImageUrl && userProgram.profileImageUrl.length > 20) profile_url = userProgram.profileImageUrl
+        if (userProgram.certificateImageUrl && userProgram.certificateImageUrl.length > 20) certificate_url = userProgram.certificateImageUrl
 
-        if (!userProgram.profileImageUrl || userProgram.profileImageUrl.length < 20 || existingUser.changed("profilePicSecureUrl")) {
+        if (!userProgram.certificateImageUrl || userProgram.certificateImageUrl.length < 20 || existingUser.changed("profilePicSecureUrl")) {
             const refactoredNodes: NodePayload[] = []
 
             await Promise.all(
@@ -69,33 +68,32 @@ class GenerateProfile {
                     refactoredNodes.push(formattedNode as NodePayload)
                 }),
             )
-
-            console.log({ refactoredNodes })
-
-            profile_url = generateCloudinaryTransformationImage({
-                framePublicId: program.profileFramePublicId,
-                height: program.profileFrameHeight,
+            
+            certificate_url = generateCloudinaryTransformationImage({
+                framePublicId: program.certificateFramePublicId,
+                height: program.certificateFrameHeight,
                 nodes: refactoredNodes,
-                width: program.profileFrameWidth,
+                width: program.certificateFrameWidth,
             })
 
-            userProgram.profileImageUrl = profile_url
+            userProgram.certificateImageUrl = certificate_url
 
-            userProgram.profileGenerationDate = new Date()
+            userProgram.certificateGenerationDate = new Date()
 
             await userProgram.save()
         }
 
-        if (!profile_url) throw new BadRequestError("Could not Generate Profile, Please try again")
 
-        logger.info(`Profile for User ${existingUser.id} Generated successfully`)
+        if (!certificate_url) throw new BadRequestError("Could not Generate Certificate, Please try again")
+
+        logger.info(`Certificate for User ${existingUser.id} Generated successfully`)
 
         return {
             code: HttpStatus.OK,
-            message: "Profile for User Generated successfully",
-            data: profile_url,
+            message: "Certificate for User Generated successfully",
+            data: certificate_url,
         }
     }
 }
 
-export const generateProfile = new GenerateProfile(Program, UserPrograms, ProgramNodes, Users)
+export const generateCertificate = new GenerateCertificate(Program, UserPrograms, ProgramNodes, Users)

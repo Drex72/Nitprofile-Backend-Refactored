@@ -49,63 +49,62 @@ var ResendUserMail = /** @class */ (function () {
         this.dbPrograms = dbPrograms;
         this.dbUsers = dbUsers;
         this.dbUserPrograms = dbUserPrograms;
-        this.handle = function (_a) {
-            var input = _a.input, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var email, programId, program, existingUser, userProgramExists, inviteToken, sentMail;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            email = input.email;
-                            programId = query.programId;
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, this.dbUsers.findOne({
-                                    where: { email: email },
-                                })];
-                        case 2:
-                            existingUser = _b.sent();
-                            if (!existingUser)
-                                throw new core_1.BadRequestError("Invalid User -  ".concat(email));
-                            return [4 /*yield*/, this.dbUserPrograms.findOne({
-                                    where: { userId: existingUser.id, programId: program.id },
-                                })];
-                        case 3:
-                            userProgramExists = _b.sent();
-                            if (!userProgramExists)
-                                throw new core_1.BadRequestError("User is not registered for this program");
-                            inviteToken = (0, core_1.generateRandStr)(64);
-                            return [4 /*yield*/, app_cache_1.cache.set(inviteToken, email, "EX", 6000)];
-                        case 4:
-                            _b.sent();
-                            return [4 /*yield*/, (0, mails_1.sendEmail)({
-                                    to: email,
-                                    subject: "Confirmation Email",
-                                    body: (0, mails_1.programAcceptanceMail)({
-                                        lastName: existingUser.lastName,
-                                        firstName: existingUser.firstName,
-                                        programName: program.name,
-                                        link: "".concat(core_1.currentOrigin, "/?token=").concat(inviteToken),
-                                    }),
-                                })];
-                        case 5:
-                            sentMail = _b.sent();
-                            if (!sentMail)
-                                throw new core_1.BadRequestError("Error Sending Mail");
-                            this.dbUserPrograms.update({ acceptanceMailSent: true }, { where: { userId: existingUser.id, programId: programId } });
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.CREATED,
-                                    message: "Mail Resent to ".concat(email, " Successfully")
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var email, programId, program, existingUser, userProgramExists, inviteToken, sentMail;
+            var input = _b.input, query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        email = input.email;
+                        programId = query.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, this.dbUsers.findOne({
+                                where: { email: email },
+                            })];
+                    case 2:
+                        existingUser = _c.sent();
+                        if (!existingUser)
+                            throw new core_1.BadRequestError("Invalid User -  ".concat(email));
+                        return [4 /*yield*/, this.dbUserPrograms.findOne({
+                                where: { userId: existingUser.id, programId: program.id },
+                            })];
+                    case 3:
+                        userProgramExists = _c.sent();
+                        if (!userProgramExists)
+                            throw new core_1.BadRequestError("User is not registered for this program");
+                        inviteToken = (0, core_1.generateRandStr)(64);
+                        return [4 /*yield*/, app_cache_1.cache.set(inviteToken, email, "EX", 6000)];
+                    case 4:
+                        _c.sent();
+                        console.log(inviteToken, 'sent Token');
+                        return [4 /*yield*/, (0, mails_1.sendEmail)({
+                                to: email,
+                                subject: "Confirmation Email",
+                                body: (0, mails_1.programAcceptanceMail)({
+                                    lastName: existingUser.lastName,
+                                    firstName: existingUser.firstName,
+                                    programName: program.name,
+                                    link: "".concat(core_1.currentOrigin, "/auth/verify-account?token=").concat(inviteToken),
+                                }),
+                            })];
+                    case 5:
+                        sentMail = _c.sent();
+                        if (!sentMail)
+                            throw new core_1.BadRequestError("Error Sending Mail");
+                        this.dbUserPrograms.update({ acceptanceMailSent: true }, { where: { userId: existingUser.id, programId: programId } });
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.CREATED,
+                                message: "Mail Resent to ".concat(email, " Successfully")
+                            }];
+                }
             });
-        };
+        }); };
     }
     return ResendUserMail;
 }());

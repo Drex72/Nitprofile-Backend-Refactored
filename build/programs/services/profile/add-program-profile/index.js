@@ -59,49 +59,47 @@ var AddProgramProfileFrame = /** @class */ (function () {
     function AddProgramProfileFrame(dbPrograms) {
         var _this = this;
         this.dbPrograms = dbPrograms;
-        this.handle = function (_a) {
-            var input = _a.input, query = _a.query, files = _a.files;
-            return __awaiter(_this, void 0, void 0, function () {
-                var profileFrameHeight, profileFrameWidth, width, height, program, imageBuffer, profileFrame, uploadedImage;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!files || !files.frame || Array.isArray(files.frame))
-                                throw new core_1.ForbiddenError("Profile Frame is required");
-                            profileFrameHeight = input.profileFrameHeight, profileFrameWidth = input.profileFrameWidth;
-                            width = parseInt(profileFrameWidth);
-                            height = parseInt(profileFrameHeight);
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: query.programId },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            imageBuffer = fs_1.default.readFileSync(files.frame.tempFilePath);
-                            profileFrame = __assign(__assign({}, files.frame), { data: imageBuffer });
-                            return [4 /*yield*/, core_1.imageUploadService.imageUpload(core_1.config.cloudinary.profileFrameFolder, profileFrame)];
-                        case 2:
-                            uploadedImage = _b.sent();
-                            if (!uploadedImage)
-                                throw new core_1.BadRequestError("Error while uploading Frame. Please Try again later");
-                            program.profileFrameHeight = height;
-                            program.profileFrameWidth = width;
-                            program.profileFramePublicId = uploadedImage.public_id;
-                            program.profileFrameSecureUrl = uploadedImage.secure_url;
-                            return [4 /*yield*/, program.save()];
-                        case 3:
-                            _b.sent();
-                            core_1.logger.info("Program with ID ".concat(program.id, " updated successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.PROGRAM_UPDATED,
-                                    data: program,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var profileFrameHeight, profileFrameWidth, width, height, program, imageBuffer, profileFrame, uploadedImage;
+            var input = _b.input, query = _b.query, files = _b.files;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!files || !files.frame || Array.isArray(files.frame))
+                            throw new core_1.ForbiddenError("Profile Frame is required");
+                        profileFrameHeight = input.profileFrameHeight, profileFrameWidth = input.profileFrameWidth;
+                        width = parseInt(profileFrameWidth);
+                        height = parseInt(profileFrameHeight);
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: query.programId },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        imageBuffer = fs_1.default.readFileSync(files.frame.tempFilePath);
+                        profileFrame = __assign(__assign({}, files.frame), { data: imageBuffer });
+                        return [4 /*yield*/, core_1.imageUploadService.imageUpload(core_1.config.cloudinary.profileFrameFolder, profileFrame)];
+                    case 2:
+                        uploadedImage = _c.sent();
+                        if (!uploadedImage)
+                            throw new core_1.BadRequestError("Error while uploading Frame. Please Try again later");
+                        program.profileFrameHeight = height;
+                        program.profileFrameWidth = width;
+                        program.profileFramePublicId = uploadedImage.public_id;
+                        program.profileFrameSecureUrl = uploadedImage.secure_url;
+                        return [4 /*yield*/, program.save()];
+                    case 3:
+                        _c.sent();
+                        core_1.logger.info("Program with ID ".concat(program.id, " updated successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.PROGRAM_UPDATED,
+                                data: program,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return AddProgramProfileFrame;
 }());

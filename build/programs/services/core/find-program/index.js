@@ -46,39 +46,37 @@ var FindPrograms = /** @class */ (function () {
         this.dbPrograms = dbPrograms;
         this.dbAdminPrograms = dbAdminPrograms;
         this.dbUserPrograms = dbUserPrograms;
-        this.findAll = function (_a) {
-            var query = _a.query, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var programId, userRole, allPrograms;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            programId = query.programId;
-                            userRole = user === null || user === void 0 ? void 0 : user.role;
-                            if (programId)
-                                return [2 /*return*/, this._findOne({
-                                        programId: programId,
-                                        userId: user.id,
-                                        userRole: userRole,
-                                    })];
-                            if (userRole === "ADMIN")
-                                return [2 /*return*/, this._findForAdmins(user.id)];
-                            if (userRole === "USER")
-                                return [2 /*return*/, this._findForUsers(user.id)];
-                            return [4 /*yield*/, this.dbPrograms.findAll()];
-                        case 1:
-                            allPrograms = _b.sent();
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
-                                    data: allPrograms,
-                                }];
-                    }
-                });
+        this.findAll = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var programId, userRole, allPrograms;
+            var query = _b.query, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        programId = query.programId;
+                        userRole = user === null || user === void 0 ? void 0 : user.role;
+                        if (programId)
+                            return [2 /*return*/, this._findOne({
+                                    programId: programId,
+                                    userId: user.id,
+                                    userRole: userRole,
+                                })];
+                        if (userRole === "ADMIN")
+                            return [2 /*return*/, this._findForAdmins(user.id)];
+                        if (userRole === "USER")
+                            return [2 /*return*/, this._findForUsers(user.id)];
+                        return [4 /*yield*/, this.dbPrograms.findAll()];
+                    case 1:
+                        allPrograms = _c.sent();
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.DATA_FETCHED,
+                                data: allPrograms,
+                            }];
+                }
             });
-        };
+        }); };
         this._findOne = function (data) { return __awaiter(_this, void 0, void 0, function () {
             var programId, userId, userRole, adminProgram, userProgram, program;
             return __generator(this, function (_a) {

@@ -45,39 +45,37 @@ var CreateNotificationEntity = /** @class */ (function () {
     function CreateNotificationEntity(dbNotificationEntity) {
         var _this = this;
         this.dbNotificationEntity = dbNotificationEntity;
-        this.handle = function (_a) {
-            var input = _a.input, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var name, notificationEntityExists, newNotificationEntity;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
-                            name = (0, utils_1.convertToUpperCaseWithUnderscore)(input === null || input === void 0 ? void 0 : input.name);
-                            return [4 /*yield*/, this.dbNotificationEntity.findOne({
-                                    where: { name: name },
-                                })];
-                        case 1:
-                            notificationEntityExists = _b.sent();
-                            if (notificationEntityExists)
-                                throw new core_1.BadRequestError("Notification Entity Exists");
-                            return [4 /*yield*/, this.dbNotificationEntity.create({
-                                    name: name,
-                                    description: input === null || input === void 0 ? void 0 : input.description,
-                                })];
-                        case 2:
-                            newNotificationEntity = _b.sent();
-                            core_1.logger.info("Notification Entity: ".concat(JSON.stringify(newNotificationEntity), " created by ").concat(user.id));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.CREATED,
-                                    data: newNotificationEntity,
-                                    message: "Notification Entity Created successfully",
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var name, notificationEntityExists, newNotificationEntity;
+            var input = _b.input, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
+                        name = (0, utils_1.convertToUpperCaseWithUnderscore)(input === null || input === void 0 ? void 0 : input.name);
+                        return [4 /*yield*/, this.dbNotificationEntity.findOne({
+                                where: { name: name },
+                            })];
+                    case 1:
+                        notificationEntityExists = _c.sent();
+                        if (notificationEntityExists)
+                            throw new core_1.BadRequestError("Notification Entity Exists");
+                        return [4 /*yield*/, this.dbNotificationEntity.create({
+                                name: name,
+                                description: input === null || input === void 0 ? void 0 : input.description,
+                            })];
+                    case 2:
+                        newNotificationEntity = _c.sent();
+                        core_1.logger.info("Notification Entity: ".concat(JSON.stringify(newNotificationEntity), " created by ").concat(user.id));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.CREATED,
+                                data: newNotificationEntity,
+                                message: "Notification Entity Created successfully",
+                            }];
+                }
             });
-        };
+        }); };
     }
     return CreateNotificationEntity;
 }());

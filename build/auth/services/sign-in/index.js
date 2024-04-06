@@ -64,55 +64,53 @@ var SignIn = /** @class */ (function () {
          * @returns {Promise<ApiResponse>} The API response containing authentication tokens and user data.
          * @throws {UnAuthorizedError} Thrown if login credentials are invalid or user email is not verified.
          */
-        this.handle = function (_a) {
-            var input = _a.input;
-            return __awaiter(_this, void 0, void 0, function () {
-                var email, password, user, isPasswordValid, _b, generatedAccessToken, generatedRefreshToken, _c, dbPassword, refreshToken, refreshTokenExp, responsePayload;
-                return __generator(this, function (_d) {
-                    switch (_d.label) {
-                        case 0:
-                            email = input.email, password = input.password;
-                            return [4 /*yield*/, this.dbUser.findOne({
-                                    where: { email: email },
-                                })];
-                        case 1:
-                            user = _d.sent();
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
-                            return [4 /*yield*/, (0, core_1.compareHashedData)(password, user.password)];
-                        case 2:
-                            isPasswordValid = _d.sent();
-                            if (!isPasswordValid)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
-                            if (user.role === "USER" && !user.isVerified)
-                                throw new core_1.ForbiddenError(common_1.AppMessages.FAILURE.VERIFY_ACCOUNT);
-                            return [4 /*yield*/, this.tokenService.getTokens({
-                                    id: user.id,
-                                    email: user.email,
-                                    role: user.role,
-                                })];
-                        case 3:
-                            _b = _d.sent(), generatedAccessToken = _b[0], generatedRefreshToken = _b[1];
-                            return [4 /*yield*/, this.dbUser.update({ refreshToken: generatedRefreshToken, refreshTokenExp: new Date() }, { where: { id: user.id } })];
-                        case 4:
-                            _d.sent();
-                            core_1.logger.info("Logged In Successfully");
-                            _c = user.dataValues, dbPassword = _c.password, refreshToken = _c.refreshToken, refreshTokenExp = _c.refreshTokenExp, responsePayload = __rest(_c, ["password", "refreshToken", "refreshTokenExp"]);
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.LOGIN,
-                                    data: responsePayload,
-                                    headers: {
-                                        "Set-Cookie": [
-                                            "accessToken=".concat(generatedAccessToken, "; Path=/; HttpOnly; maxAge=900000; SameSite=strict"),
-                                            "refreshToken=".concat(generatedRefreshToken, "; Path=/; HttpOnly; SameSite=strict"),
-                                        ],
-                                    },
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var email, password, user, isPasswordValid, _c, generatedAccessToken, generatedRefreshToken, _d, dbPassword, refreshToken, refreshTokenExp, responsePayload;
+            var input = _b.input;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0:
+                        email = input.email, password = input.password;
+                        return [4 /*yield*/, this.dbUser.findOne({
+                                where: { email: email },
+                            })];
+                    case 1:
+                        user = _e.sent();
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
+                        return [4 /*yield*/, (0, core_1.compareHashedData)(password, user.password)];
+                    case 2:
+                        isPasswordValid = _e.sent();
+                        if (!isPasswordValid)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_CREDENTIALS);
+                        if (user.role === "USER" && !user.isVerified)
+                            throw new core_1.ForbiddenError(common_1.AppMessages.FAILURE.VERIFY_ACCOUNT);
+                        return [4 /*yield*/, this.tokenService.getTokens({
+                                id: user.id,
+                                email: user.email,
+                                role: user.role,
+                            })];
+                    case 3:
+                        _c = _e.sent(), generatedAccessToken = _c[0], generatedRefreshToken = _c[1];
+                        return [4 /*yield*/, this.dbUser.update({ refreshToken: generatedRefreshToken, refreshTokenExp: new Date() }, { where: { id: user.id } })];
+                    case 4:
+                        _e.sent();
+                        core_1.logger.info("Logged In Successfully");
+                        _d = user.dataValues, dbPassword = _d.password, refreshToken = _d.refreshToken, refreshTokenExp = _d.refreshTokenExp, responsePayload = __rest(_d, ["password", "refreshToken", "refreshTokenExp"]);
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.LOGIN,
+                                data: responsePayload,
+                                headers: {
+                                    "Set-Cookie": [
+                                        "accessToken=".concat(generatedAccessToken, "; Path=/; HttpOnly; maxAge=900000; SameSite=strict"),
+                                        "refreshToken=".concat(generatedRefreshToken, "; Path=/; HttpOnly; SameSite=strict"),
+                                    ],
+                                },
+                            }];
+                }
             });
-        };
+        }); };
     }
     return SignIn;
 }());

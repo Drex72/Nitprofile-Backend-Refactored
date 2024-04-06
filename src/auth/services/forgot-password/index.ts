@@ -1,9 +1,9 @@
 import { dispatch } from "@/app"
-import { HttpStatus, logger, type Context, currentOrigin, generateRandStr, computeExpiryDate } from "@/core"
-import { forgotPasswordMail } from "@/mails"
-import { AppMessages } from "@/core/common"
-import { Users } from "@/auth/model/user.model"
 import type { ForgotPasswordPayload } from "@/auth/interfaces"
+import { Users } from "@/auth/model/user.model"
+import { HttpStatus, computeExpiryDate, currentOrigin, generateRandStr, logger, type Context } from "@/core"
+import { AppMessages } from "@/core/common"
+import { forgotPasswordMail } from "@/mails"
 
 class ForgotPassword {
     constructor(private readonly dbUser: typeof Users) {}
@@ -36,7 +36,7 @@ class ForgotPassword {
             body: forgotPasswordMail({
                 lastName: user.lastName,
                 firstName: user.firstName,
-                link: `${currentOrigin}/?token=${token}`,
+                link: `${currentOrigin}/auth/reset-password?resetToken=${token}`,
             }),
         })
 

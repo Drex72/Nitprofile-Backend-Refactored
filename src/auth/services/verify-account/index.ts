@@ -1,8 +1,8 @@
-import { HttpStatus, logger, type Context, UnAuthorizedError, hashData } from "@/core"
-import { AppMessages } from "@/core/common"
+import { cache } from "@/app/app-cache"
 import type { VerifyAccountPayload } from "@/auth/interfaces"
 import { Users } from "@/auth/model/user.model"
-import { cache } from "@/app/app-cache"
+import { HttpStatus, UnAuthorizedError, hashData, logger, type Context } from "@/core"
+import { AppMessages } from "@/core/common"
 
 class VerifyAccount {
     constructor(private readonly dbUser: typeof Users) {}

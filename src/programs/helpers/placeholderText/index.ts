@@ -1,37 +1,39 @@
 import { Users } from "@/auth/model"
 import { BadRequestError } from "@/core"
 import { AppMessages } from "@/core/common"
-import { Program, ProgramNodes } from "@/programs/models"
+import { Program } from "@/programs/models"
 
 interface IOptions {
     programId: string
     userId: string
+    entity: string
+    entity_key?: string
 }
 
 class PlaceholderText {
     constructor(private readonly dbPrograms: typeof Program, private readonly dbUser: typeof Users) {}
 
-    convert_entity_placeholder = async (node: ProgramNodes, options: IOptions) => {
-        if (node.entity === "program") {
-            return this._convert_program_entity_placeholder(node, options.programId)
+    convert_entity_placeholder = async (options: IOptions) => {
+        if (options.entity === "program") {
+            return this._convert_program_entity_placeholder(options)
         }
 
-        if (node.entity === "user") {
-            return this._convert_user_entity_placeholder(node, options.userId)
+        if (options.entity === "user") {
+            return this._convert_user_entity_placeholder(options)
         }
 
-        if (node.entity === "date") {
-            return this._convert_date_entity_placeholder(node)
+        if (options.entity === "date") {
+            return this._convert_date_entity_placeholder()
         }
     }
 
-    private _convert_date_entity_placeholder = (node: ProgramNodes) => {
-        node.text = new Date().toLocaleDateString()
-
-        return this._format_node(node)
+    private _convert_date_entity_placeholder = () => {
+        return new Date().toLocaleDateString()
     }
 
-    private _convert_user_entity_placeholder = async (node: ProgramNodes, userId: string) => {
+    private _convert_user_entity_placeholder = async (options: IOptions) => {
+        const { userId } = options
+
         const selectedUser = await this.dbUser.findOne({
             where: {
                 id: userId,
@@ -40,16 +42,18 @@ class PlaceholderText {
 
         if (!selectedUser) throw new BadRequestError("Invalid User")
 
-        const key = (node.entity_key as keyof Users) ?? "name"
+        const key = options?.entity_key ?? "firstName"
 
-        const value = selectedUser[key] ?? "Invalid Property"
+        const value = selectedUser[key as keyof Users] ?? "Invalid Property"
 
-        node.text = value.toString()
+        console.log(value, value.toString())
 
-        return this._format_node(node)
+        return value.toString()
     }
 
-    private _convert_program_entity_placeholder = async (node: ProgramNodes, programId: string) => {
+    private _convert_program_entity_placeholder = async (options: IOptions) => {
+        const { programId } = options
+
         const selectedProgram = await this.dbPrograms.findOne({
             where: {
                 id: programId,
@@ -58,30 +62,11 @@ class PlaceholderText {
 
         if (!selectedProgram) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROGRAM)
 
-        const key = (node.entity_key as keyof Program) ?? "name"
+        const key = options?.entity_key ?? "name"
 
-        const value = selectedProgram[key] ?? "Invalid Property"
+        const value = selectedProgram[key as keyof Program] ?? "Invalid Property"
 
-        node.text = value.toString()
-
-        return this._format_node(node)
-    }
-
-    private _format_node = (node: ProgramNodes) => {
-        const refactoredNode = {
-            overlay: {
-                text: node.text ?? undefined,
-                font_family: node.font_family ?? undefined,
-                font_size: node.font_size ?? undefined,
-                font_weight: node.font_weight ?? undefined,
-            },
-            x: node.x,
-            y: node.y,
-            color: node.color ?? undefined,
-
-        }
-
-        return refactoredNode
+        return value.toString()
     }
 }
 

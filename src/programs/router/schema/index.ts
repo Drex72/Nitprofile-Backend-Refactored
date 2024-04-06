@@ -69,6 +69,17 @@ export const addProgramProfileFrameSchema: ValidationSchema = {
     }),
 }
 
+export const addProgramCertificateFrameSchema: ValidationSchema = {
+    inputSchema: Joi.object({
+        certificateFrameHeight: Joi.number().required(),
+        certificateFrameWidth: Joi.number().required(),
+    }),
+
+    querySchema: Joi.object({
+        programId: Joi.string().length(36).trim().required(),
+    }),
+}
+
 const baseNodeSchema = Joi.object({
     type: Joi.string().required(),
     x: Joi.number().required(),

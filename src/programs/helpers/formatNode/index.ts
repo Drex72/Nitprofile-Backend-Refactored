@@ -52,7 +52,25 @@ class FormatNode {
     private _format_placeholder_node = async (node: ProgramNodes, options: IOptions) => {
         const { programId, userId } = options
 
-        const refactoredNode = await placeHolderTextConverter.convert_entity_placeholder(node, { programId, userId })
+        const value = await placeHolderTextConverter.convert_entity_placeholder({
+            programId,
+            userId,
+            entity: node.entity,
+            entity_key: node.entity_key,
+        })
+
+        const refactoredNode = {
+            overlay: {
+                text: value ?? undefined,
+                font_family: node.font_family ?? undefined,
+                font_size: node.font_size ?? undefined,
+                font_weight: node.font_weight ?? undefined,
+            },
+            x: node.x,
+            y: node.y,
+            gravity: node.gravity ?? undefined,
+            color: node.color ?? undefined,
+        }
 
         return refactoredNode
     }

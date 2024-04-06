@@ -49,90 +49,88 @@ var PreviewProfile = /** @class */ (function () {
         this.dbAdminPrograms = dbAdminPrograms;
         this.dbProgramNodes = dbProgramNodes;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var query = _a.query, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var programId, adminProgram, program, programNodes, existingUser, profilePictureNode, profile_url, refactoredNodes_1;
-                var _this = this;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            programId = query.programId;
-                            return [4 /*yield*/, this.dbAdminPrograms.findOne({
-                                    where: { userId: user.id, programId: programId },
-                                })];
-                        case 1:
-                            adminProgram = _b.sent();
-                            if (!adminProgram && user.role !== "SUPER ADMIN")
-                                throw new core_1.BadRequestError("You are not registered for this program");
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 2:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, this.dbProgramNodes.scope("").findAll({
-                                    where: { programId: programId },
-                                })];
-                        case 3:
-                            programNodes = _b.sent();
-                            return [4 /*yield*/, this.dbUser.findOne({ where: { id: user.id } })];
-                        case 4:
-                            existingUser = _b.sent();
-                            if (!existingUser)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            if (!program.profileFrameSecureUrl)
-                                throw new core_1.BadRequestError("No Profile Frame Uploaded!");
-                            profilePictureNode = programNodes.find(function (node) { return node.type === "image" && !node.overlay; });
-                            if (profilePictureNode && !existingUser.profilePicPublicId)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROFILE_PICTURE);
-                            if (!programNodes.length) {
-                                profile_url = program.profileFrameSecureUrl;
-                            }
-                            if (!programNodes.length) return [3 /*break*/, 6];
-                            refactoredNodes_1 = [];
-                            return [4 /*yield*/, Promise.all(programNodes.map(function (node) { return __awaiter(_this, void 0, void 0, function () {
-                                    var formattedNode;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0:
-                                                if (node.type === "image" && !node.overlay) {
-                                                    node.overlay = existingUser.profilePicPublicId.replace(/\//g, ":");
-                                                }
-                                                return [4 /*yield*/, formatNode_1.formatNode.format_node(node, {
-                                                        programId: program.id,
-                                                        userId: user.id,
-                                                    })];
-                                            case 1:
-                                                formattedNode = _a.sent();
-                                                refactoredNodes_1.push(formattedNode);
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); }))];
-                        case 5:
-                            _b.sent();
-                            profile_url = (0, core_1.generateCloudinaryTransformationImage)({
-                                framePublicId: program.profileFramePublicId,
-                                height: program.profileFrameHeight,
-                                nodes: refactoredNodes_1,
-                                width: program.profileFrameWidth,
-                            });
-                            _b.label = 6;
-                        case 6:
-                            core_1.logger.info("Profile for Program ".concat(program.id, " Previewed successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: "Profile for User Generated successfully",
-                                    data: profile_url,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var programId, adminProgram, program, programNodes, existingUser, profilePictureNode, profile_url, refactoredNodes_1;
+            var _this = this;
+            var query = _b.query, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        programId = query.programId;
+                        return [4 /*yield*/, this.dbAdminPrograms.findOne({
+                                where: { userId: user.id, programId: programId },
+                            })];
+                    case 1:
+                        adminProgram = _c.sent();
+                        if (!adminProgram && user.role !== "SUPER ADMIN")
+                            throw new core_1.BadRequestError("You are not registered for this program");
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 2:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, this.dbProgramNodes.scope("").findAll({
+                                where: { programId: programId },
+                            })];
+                    case 3:
+                        programNodes = _c.sent();
+                        return [4 /*yield*/, this.dbUser.findOne({ where: { id: user.id } })];
+                    case 4:
+                        existingUser = _c.sent();
+                        if (!existingUser)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        if (!program.profileFrameSecureUrl)
+                            throw new core_1.BadRequestError("No Profile Frame Uploaded!");
+                        profilePictureNode = programNodes.find(function (node) { return node.type === "image" && !node.overlay; });
+                        if (profilePictureNode && !existingUser.profilePicPublicId)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROFILE_PICTURE);
+                        if (!programNodes.length) {
+                            profile_url = program.profileFrameSecureUrl;
+                        }
+                        if (!programNodes.length) return [3 /*break*/, 6];
+                        refactoredNodes_1 = [];
+                        return [4 /*yield*/, Promise.all(programNodes.map(function (node) { return __awaiter(_this, void 0, void 0, function () {
+                                var formattedNode;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            if (node.type === "image" && !node.overlay) {
+                                                node.overlay = "Nithub/NITPROFILE_ASSETS/DUMMYAVATAR-1960922999".replace(/\//g, ":");
+                                            }
+                                            return [4 /*yield*/, formatNode_1.formatNode.format_node(node, {
+                                                    programId: program.id,
+                                                    userId: user.id,
+                                                })];
+                                        case 1:
+                                            formattedNode = _a.sent();
+                                            refactoredNodes_1.push(formattedNode);
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); }))];
+                    case 5:
+                        _c.sent();
+                        profile_url = (0, core_1.generateCloudinaryTransformationImage)({
+                            framePublicId: program.profileFramePublicId,
+                            height: program.profileFrameHeight,
+                            nodes: refactoredNodes_1,
+                            width: program.profileFrameWidth,
+                        });
+                        _c.label = 6;
+                    case 6:
+                        core_1.logger.info("Profile for Program ".concat(program.id, " Previewed successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: "Profile for User Previewed successfully",
+                                data: profile_url,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return PreviewProfile;
 }());

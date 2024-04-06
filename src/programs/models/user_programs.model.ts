@@ -1,7 +1,7 @@
-import { DataTypes, type CreationOptional, type InferAttributes, type InferCreationAttributes, Model, type ForeignKey } from "sequelize"
-import { sequelize } from "@/core"
 import { Users } from "@/auth/model/user.model"
+import { sequelize } from "@/core"
 import { Program } from "@/programs/models/program.model"
+import { DataTypes, Model, type CreationOptional, type ForeignKey, type InferAttributes, type InferCreationAttributes } from "sequelize"
 
 export class UserPrograms extends Model<InferAttributes<UserPrograms>, InferCreationAttributes<UserPrograms>> {
     declare id: CreationOptional<string>
@@ -43,13 +43,13 @@ UserPrograms.init(
             defaultValue: false,
         },
         profileImageUrl: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING(500),
         },
         profileGenerationDate: {
             type: DataTypes.DATE,
         },
         certificateImageUrl: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(500),
         },
         certificateGenerationDate: {
             type: DataTypes.DATE,

@@ -55,38 +55,36 @@ var UpdateProfile = /** @class */ (function () {
     function UpdateProfile(dbUser) {
         var _this = this;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var input = _a.input, user = _a.user;
-            return __awaiter(_this, void 0, void 0, function () {
-                var existingUser;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!input)
-                                throw new core_1.BadRequestError("No Input Passed");
-                            if (!user)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.dbUser.findOne({ where: { id: user.id } })];
-                        case 1:
-                            existingUser = _b.sent();
-                            if (!existingUser)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.dbUser.update(__assign({}, input), {
-                                    where: {
-                                        id: existingUser.id,
-                                    },
-                                })];
-                        case 2:
-                            _b.sent();
-                            core_1.logger.info("User with ID ".concat(existingUser.id, " updated successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: "Profile Updated Successfully",
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var existingUser;
+            var input = _b.input, user = _b.user;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        if (!input)
+                            throw new core_1.BadRequestError("No Input Passed");
+                        if (!user)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbUser.findOne({ where: { id: user.id } })];
+                    case 1:
+                        existingUser = _c.sent();
+                        if (!existingUser)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.dbUser.update(__assign({}, input), {
+                                where: {
+                                    id: existingUser.id,
+                                },
+                            })];
+                    case 2:
+                        _c.sent();
+                        core_1.logger.info("User with ID ".concat(existingUser.id, " updated successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: "Profile Updated Successfully",
+                            }];
+                }
             });
-        };
+        }); };
     }
     return UpdateProfile;
 }());

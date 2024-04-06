@@ -5,3 +5,6 @@ export const isProgramProfileValid = (program: Program): boolean => {
 
     return profileFramePublicId || certificateFramePublicId ? true : false
 }
+
+
+

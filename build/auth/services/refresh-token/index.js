@@ -48,58 +48,56 @@ var RefreshToken = /** @class */ (function () {
         this.dbUser = dbUser;
         this.tokenService = tokenService;
         // Need to work on handling empty types
-        this.handle = function (_a) {
-            var headers = _a.headers;
-            return __awaiter(_this, void 0, void 0, function () {
-                var cookiesArr, cookies, decryptedAccessToken, isAccessTokenValid, refreshToken, payload, _b, newAccessToken, newRefreshToken;
-                var _c;
-                return __generator(this, function (_d) {
-                    switch (_d.label) {
-                        case 0:
-                            cookiesArr = (_c = headers.cookie) === null || _c === void 0 ? void 0 : _c.split("; ");
-                            if (!cookiesArr || cookiesArr.length <= 0)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            cookies = (0, core_1.convertArrayToObject)(cookiesArr);
-                            try {
-                                if (cookies === null || cookies === void 0 ? void 0 : cookies.accessToken) {
-                                    decryptedAccessToken = encryptor_1.encryptor.decrypt(cookies === null || cookies === void 0 ? void 0 : cookies.accessToken);
-                                    isAccessTokenValid = this.tokenService._verifyToken(decryptedAccessToken, core_1.config.auth.accessTokenSecret);
-                                    if (isAccessTokenValid) {
-                                        return [2 /*return*/, {
-                                                code: core_1.HttpStatus.OK,
-                                                message: common_1.AppMessages.SUCCESS.TOKEN_REFRESHED,
-                                            }];
-                                    }
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var cookiesArr, cookies, decryptedAccessToken, isAccessTokenValid, refreshToken, payload, _c, newAccessToken, newRefreshToken;
+            var _d;
+            var headers = _b.headers;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0:
+                        cookiesArr = (_d = headers.cookie) === null || _d === void 0 ? void 0 : _d.split("; ");
+                        if (!cookiesArr || cookiesArr.length <= 0)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        cookies = (0, core_1.convertArrayToObject)(cookiesArr);
+                        try {
+                            if (cookies === null || cookies === void 0 ? void 0 : cookies.accessToken) {
+                                decryptedAccessToken = encryptor_1.encryptor.decrypt(cookies === null || cookies === void 0 ? void 0 : cookies.accessToken);
+                                isAccessTokenValid = this.tokenService._verifyToken(decryptedAccessToken, core_1.config.auth.accessTokenSecret);
+                                if (isAccessTokenValid) {
+                                    return [2 /*return*/, {
+                                            code: core_1.HttpStatus.OK,
+                                            message: common_1.AppMessages.SUCCESS.TOKEN_REFRESHED,
+                                        }];
                                 }
                             }
-                            catch (error) { }
-                            refreshToken = cookies === null || cookies === void 0 ? void 0 : cookies.refreshToken;
-                            if (!refreshToken)
-                                throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
-                            return [4 /*yield*/, this.tokenService.extractTokenDetails(refreshToken, core_1.config.auth.refreshTokenSecret)];
-                        case 1:
-                            payload = _d.sent();
-                            return [4 /*yield*/, this.tokenService.getTokens({
-                                    email: payload.email,
-                                    id: payload.id,
-                                    role: payload.role,
-                                })];
-                        case 2:
-                            _b = _d.sent(), newAccessToken = _b[0], newRefreshToken = _b[1];
-                            return [4 /*yield*/, this.dbUser.update({ refreshToken: refreshToken, refreshTokenExp: new Date() }, { where: { id: payload.id } })];
-                        case 3:
-                            _d.sent();
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.TOKEN_REFRESHED,
-                                    headers: {
-                                        "Set-Cookie": ["accessToken=".concat(newAccessToken, "; Path=/; HttpOnly"), "refreshToken=".concat(newRefreshToken, "; Path=/; HttpOnly")],
-                                    },
-                                }];
-                    }
-                });
+                        }
+                        catch (error) { }
+                        refreshToken = cookies === null || cookies === void 0 ? void 0 : cookies.refreshToken;
+                        if (!refreshToken)
+                            throw new core_1.UnAuthorizedError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
+                        return [4 /*yield*/, this.tokenService.extractTokenDetails(refreshToken, core_1.config.auth.refreshTokenSecret)];
+                    case 1:
+                        payload = _e.sent();
+                        return [4 /*yield*/, this.tokenService.getTokens({
+                                email: payload.email,
+                                id: payload.id,
+                                role: payload.role,
+                            })];
+                    case 2:
+                        _c = _e.sent(), newAccessToken = _c[0], newRefreshToken = _c[1];
+                        return [4 /*yield*/, this.dbUser.update({ refreshToken: refreshToken, refreshTokenExp: new Date() }, { where: { id: payload.id } })];
+                    case 3:
+                        _e.sent();
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.TOKEN_REFRESHED,
+                                headers: {
+                                    "Set-Cookie": ["accessToken=".concat(newAccessToken, "; Path=/; HttpOnly"), "refreshToken=".concat(newRefreshToken, "; Path=/; HttpOnly")],
+                                },
+                            }];
+                }
             });
-        };
+        }); };
     }
     return RefreshToken;
 }());

@@ -39,6 +39,8 @@ class ResendUserMail {
 
         await cache.set(inviteToken, email, "EX", 6000)
 
+        console.log(inviteToken, 'sent Token')
+
         const sentMail = await sendEmail({
             to: email,
             subject: "Confirmation Email",
@@ -46,7 +48,7 @@ class ResendUserMail {
                 lastName: existingUser.lastName,
                 firstName: existingUser.firstName,
                 programName: program.name,
-                link: `${currentOrigin}/?token=${inviteToken}`,
+                link: `${currentOrigin}/auth/verify-account?token=${inviteToken}`,
             }),
         })
 

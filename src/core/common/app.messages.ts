@@ -14,6 +14,8 @@ export const AppMessages = {
         USER_ALREADY_ASSIGNED_TO_PROGRAM: "User already exists in this program",
         INVALID_PROFILE_PICTURE: "You must have a profile picture before you can generate your profile. kindly update your profile picture.",
         PROFILE_GENERATION_NOT_AVAILABLE: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
+        CERTIFICATE_GENERATION_NOT_AVAILABLE:
+            "Certificate generation is currently unavailable. Please reach out to the administrator for further details.",
         ADMIN_ALREADY_ASSIGNED: "Profile generation is currently unavailable. Please reach out to the administrator for further details.",
         VERIFY_ACCOUNT:
             "For your account's ongoing security, we require you to establish a new password.  Logging in with the default password is no longer possible due to enhanced security measures.",
@@ -40,6 +42,7 @@ export const AppMessages = {
         USER_REGISTERED_SUCCESSFULLY: "User registered for program successfully",
 
         PROFILE_GENERATION_AVAILABLE: "Profile Generation Enabled",
+        CERTIFICATE_GENERATION_AVAILABLE: "Certificate Generation Enabled",
     },
     INFO: {
         INVALID_OPERATION: "Invalid operation.",

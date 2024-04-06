@@ -54,6 +54,20 @@ export interface AddProgramProfileFramePayload extends ContextTypes {
     }
 }
 
+export interface AddProgramCertificateFramePayload extends ContextTypes {
+    input: {
+        certificateFrameHeight: string
+        certificateFrameWidth: string
+    }
+    query: {
+        programId: string
+    }
+    files: {
+        frame: RequestFileContents
+    }
+}
+
+
 export interface CreateProgramNodesPayload extends ContextTypes {
     input: {
         nodes: Node[]

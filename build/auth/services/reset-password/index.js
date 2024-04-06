@@ -44,40 +44,38 @@ var ResetPassword = /** @class */ (function () {
     function ResetPassword(dbUser) {
         var _this = this;
         this.dbUser = dbUser;
-        this.handle = function (_a) {
-            var input = _a.input;
-            return __awaiter(_this, void 0, void 0, function () {
-                var password, resetToken, user, hashedPassword;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            password = input.password, resetToken = input.resetToken;
-                            return [4 /*yield*/, this.dbUser.findOne({ where: { resetToken: resetToken } })];
-                        case 1:
-                            user = _b.sent();
-                            if (!user)
-                                throw new core_1.ForbiddenError("Invalid or Expired token");
-                            if (!user.resetToken || !user.resetTokenExpiresIn || (0, core_1.isDateExpired)(user === null || user === void 0 ? void 0 : user.resetTokenExpiresIn)) {
-                                throw new core_1.ForbiddenError("Token Expired, request a new password reset mail");
-                            }
-                            return [4 /*yield*/, (0, core_1.hashData)(password)];
-                        case 2:
-                            hashedPassword = _b.sent();
-                            user.password = hashedPassword;
-                            user.resetToken = null;
-                            user.resetTokenExpiresIn = null;
-                            return [4 /*yield*/, user.save()];
-                        case 3:
-                            _b.sent();
-                            core_1.logger.info("Successfully Reset Password");
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.PASSWORD_RESET,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var password, resetToken, user, hashedPassword;
+            var input = _b.input;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        password = input.password, resetToken = input.resetToken;
+                        return [4 /*yield*/, this.dbUser.findOne({ where: { resetToken: resetToken } })];
+                    case 1:
+                        user = _c.sent();
+                        if (!user)
+                            throw new core_1.ForbiddenError("Invalid or Expired token");
+                        if (!user.resetToken || !user.resetTokenExpiresIn || (0, core_1.isDateExpired)(user === null || user === void 0 ? void 0 : user.resetTokenExpiresIn)) {
+                            throw new core_1.ForbiddenError("Token Expired, request a new password reset mail");
+                        }
+                        return [4 /*yield*/, (0, core_1.hashData)(password)];
+                    case 2:
+                        hashedPassword = _c.sent();
+                        user.password = hashedPassword;
+                        user.resetToken = null;
+                        user.resetTokenExpiresIn = null;
+                        return [4 /*yield*/, user.save()];
+                    case 3:
+                        _c.sent();
+                        core_1.logger.info("Successfully Reset Password");
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.PASSWORD_RESET,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return ResetPassword;
 }());

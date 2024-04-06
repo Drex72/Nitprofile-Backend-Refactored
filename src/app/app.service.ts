@@ -1,11 +1,10 @@
-import express from "express"
-import cors from "cors"
 import cookieParser from "cookie-parser"
+import cors from "cors"
+import express from "express"
 import fileUpload from "express-fileupload"
-import compression from "compression"
 
-import { corsOptions, notFoundHandler, errorHandler, compressionOptions, globalRateLimiter } from "@/core"
 import { appRouter } from "@/app"
+import { corsOptions, errorHandler, notFoundHandler } from "@/core"
 
 export const app = express()
 
@@ -18,7 +17,6 @@ app.use(
         useTempFiles: true,
     }),
 )
-
 
 app.use(cors(corsOptions))
 app.use(express.static("public"))

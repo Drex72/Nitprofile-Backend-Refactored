@@ -67,7 +67,11 @@ class RegisterProgramUsers {
                         where: { email: user.email },
                     })
 
-                    if (existingUser) {
+                    if (existingUser && existingUser.role !== "USER") {
+                        throw new BadRequestError(`User with Email ${existingUser.email} already exists and is not a user`)
+                    }
+
+                    if (existingUser && existingUser.role === "USER") {
                         const userProgramExists = await this.dbUserPrograms.findOne({
                             where: { userId: existingUser.id, programId: program.id },
                         })

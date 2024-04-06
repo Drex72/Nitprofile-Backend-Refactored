@@ -46,54 +46,52 @@ var AssignAdminToProgram = /** @class */ (function () {
         var _this = this;
         this.dbPrograms = dbPrograms;
         this.dbAdminAssignedPrograms = dbAdminAssignedPrograms;
-        this.handle = function (_a) {
-            var input = _a.input;
-            return __awaiter(_this, void 0, void 0, function () {
-                var adminId, programId, programExists, existingUser, adminAssigned, SUCCESS_MESSAGE;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            adminId = input.adminId, programId = input.programId;
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 1:
-                            programExists = _b.sent();
-                            if (!programExists)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            return [4 /*yield*/, model_1.Users.findOne({
-                                    where: { id: adminId, role: "ADMIN" },
-                                })];
-                        case 2:
-                            existingUser = _b.sent();
-                            if (!existingUser)
-                                throw new core_1.UnAuthorizedError('This admin doesnt exist');
-                            return [4 /*yield*/, this.dbAdminAssignedPrograms.findOne({
-                                    where: {
-                                        programId: programId,
-                                        userId: adminId,
-                                    },
-                                })];
-                        case 3:
-                            adminAssigned = _b.sent();
-                            if (adminAssigned)
-                                throw new core_1.UnAuthorizedError("Admin is already assigned to this program");
-                            return [4 /*yield*/, this.dbAdminAssignedPrograms.create({
-                                    userId: adminId,
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var adminId, programId, programExists, existingUser, adminAssigned, SUCCESS_MESSAGE;
+            var input = _b.input;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        adminId = input.adminId, programId = input.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 1:
+                        programExists = _c.sent();
+                        if (!programExists)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        return [4 /*yield*/, model_1.Users.findOne({
+                                where: { id: adminId, role: "ADMIN" },
+                            })];
+                    case 2:
+                        existingUser = _c.sent();
+                        if (!existingUser)
+                            throw new core_1.UnAuthorizedError('This admin doesnt exist');
+                        return [4 /*yield*/, this.dbAdminAssignedPrograms.findOne({
+                                where: {
                                     programId: programId,
-                                })];
-                        case 4:
-                            _b.sent();
-                            SUCCESS_MESSAGE = "Admin ".concat(existingUser.firstName, " assigned to program ").concat(programExists.name, " successfully");
-                            core_1.logger.info(SUCCESS_MESSAGE);
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.CREATED,
-                                    message: SUCCESS_MESSAGE,
-                                }];
-                    }
-                });
+                                    userId: adminId,
+                                },
+                            })];
+                    case 3:
+                        adminAssigned = _c.sent();
+                        if (adminAssigned)
+                            throw new core_1.UnAuthorizedError("Admin is already assigned to this program");
+                        return [4 /*yield*/, this.dbAdminAssignedPrograms.create({
+                                userId: adminId,
+                                programId: programId,
+                            })];
+                    case 4:
+                        _c.sent();
+                        SUCCESS_MESSAGE = "Admin ".concat(existingUser.firstName, " assigned to program ").concat(programExists.name, " successfully");
+                        core_1.logger.info(SUCCESS_MESSAGE);
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.CREATED,
+                                message: SUCCESS_MESSAGE,
+                            }];
+                }
             });
-        };
+        }); };
     }
     return AssignAdminToProgram;
 }());

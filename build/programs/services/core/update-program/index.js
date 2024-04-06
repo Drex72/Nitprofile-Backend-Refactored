@@ -44,42 +44,40 @@ var UpdateProgram = /** @class */ (function () {
     function UpdateProgram(dbPrograms) {
         var _this = this;
         this.dbPrograms = dbPrograms;
-        this.handle = function (_a) {
-            var input = _a.input, query = _a.query;
-            return __awaiter(_this, void 0, void 0, function () {
-                var startDate, endDate, programId, program;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            startDate = input.startDate, endDate = input.endDate;
-                            programId = query.programId;
-                            return [4 /*yield*/, this.dbPrograms.findOne({
-                                    where: { id: programId },
-                                })];
-                        case 1:
-                            program = _b.sent();
-                            if (!program)
-                                throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
-                            if (startDate || endDate) {
-                                this._validateDates({
-                                    dbEndDate: program.endDate,
-                                    dbStartDate: program.startDate,
-                                    requestEndDate: endDate,
-                                    requestStartDate: startDate,
-                                });
-                            }
-                            return [4 /*yield*/, this.dbPrograms.update(input, { where: { id: programId } })];
-                        case 2:
-                            _b.sent();
-                            core_1.logger.info("Program with ID ".concat(programId, " Updated successfully"));
-                            return [2 /*return*/, {
-                                    code: core_1.HttpStatus.OK,
-                                    message: common_1.AppMessages.SUCCESS.PROGRAM_UPDATED,
-                                }];
-                    }
-                });
+        this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
+            var startDate, endDate, programId, program;
+            var input = _b.input, query = _b.query;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        startDate = input.startDate, endDate = input.endDate;
+                        programId = query.programId;
+                        return [4 /*yield*/, this.dbPrograms.findOne({
+                                where: { id: programId },
+                            })];
+                    case 1:
+                        program = _c.sent();
+                        if (!program)
+                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
+                        if (startDate || endDate) {
+                            this._validateDates({
+                                dbEndDate: program.endDate,
+                                dbStartDate: program.startDate,
+                                requestEndDate: endDate,
+                                requestStartDate: startDate,
+                            });
+                        }
+                        return [4 /*yield*/, this.dbPrograms.update(input, { where: { id: programId } })];
+                    case 2:
+                        _c.sent();
+                        core_1.logger.info("Program with ID ".concat(programId, " Updated successfully"));
+                        return [2 /*return*/, {
+                                code: core_1.HttpStatus.OK,
+                                message: common_1.AppMessages.SUCCESS.PROGRAM_UPDATED,
+                            }];
+                }
             });
-        };
+        }); };
         this._validateDates = function (data) {
             var dbEndDate = data.dbEndDate, dbStartDate = data.dbStartDate, requestEndDate = data.requestEndDate, requestStartDate = data.requestStartDate;
             if (requestStartDate && requestStartDate < new Date(Date.now())) {

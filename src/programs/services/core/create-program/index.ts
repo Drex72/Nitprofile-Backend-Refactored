@@ -1,5 +1,5 @@
 import { Users } from "@/auth/model"
-import { type Context, HttpStatus, BadRequestError, logger, UnAuthorizedError } from "@/core"
+import { BadRequestError, HttpStatus, UnAuthorizedError, logger, type Context } from "@/core"
 import { AppMessages } from "@/core/common"
 import { Program } from "@/programs/models"
 import { type CreateProgramPayload } from "@/programs/payload_interfaces"
@@ -14,7 +14,7 @@ class CreateProgram {
             where: { name },
         })
 
-        if (programExists) throw new BadRequestError(AppMessages.FAILURE.PROGRAM_EXISTS)
+        if (programExists) throw new BadRequestError("Program with Name Already Exists!")
 
         const existingUser = await Users.findOne({
             where: { id: user?.id },
