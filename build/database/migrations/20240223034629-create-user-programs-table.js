@@ -75,10 +75,10 @@ module.exports = {
                                 onUpdate: "CASCADE",
                                 onDelete: "CASCADE",
                             },
-                            profileImageUrl: Sequelize.STRING,
+                            profileImageUrl: Sequelize.STRING(500),
                             profileGenerationDate: Sequelize.DATE,
                             completedTraining: Sequelize.BOOLEAN,
-                            certificateImageUrl: Sequelize.STRING,
+                            certificateImageUrl: Sequelize.STRING(500),
                             certificateGenerationDate: Sequelize.DATE,
                             acceptanceMailSent: Sequelize.BOOLEAN,
                             createdAt: {

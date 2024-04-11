@@ -51,9 +51,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addProgramProfileFrame = void 0;
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var models_1 = require("@/programs/models");
+var core_1 = require("../../../../core");
+var common_1 = require("../../../../core/common");
+var models_1 = require("../../../../programs/models");
 var fs_1 = __importDefault(require("fs"));
 var AddProgramProfileFrame = /** @class */ (function () {
     function AddProgramProfileFrame(dbPrograms) {

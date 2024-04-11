@@ -59,8 +59,8 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ControllerHandler = void 0;
-var core_1 = require("@/core");
-var authGuard_1 = require("@/auth/helpers/authGuard");
+var core_1 = require("../../core");
+var authGuard_1 = require("../../auth/helpers/authGuard");
 var common_1 = require("../common");
 var ControllerHandler = /** @class */ (function () {
     function ControllerHandler() {

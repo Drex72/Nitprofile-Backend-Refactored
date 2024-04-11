@@ -17,9 +17,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminsAssignedPrograms = void 0;
 var sequelize_1 = require("sequelize");
-var core_1 = require("@/core");
-var user_model_1 = require("@/auth/model/user.model");
-var program_model_1 = require("@/programs/models/program.model");
+var core_1 = require("../../core");
+var user_model_1 = require("../../auth/model/user.model");
+var program_model_1 = require("../../programs/models/program.model");
 var AdminsAssignedPrograms = /** @class */ (function (_super) {
     __extends(AdminsAssignedPrograms, _super);
     function AdminsAssignedPrograms() {

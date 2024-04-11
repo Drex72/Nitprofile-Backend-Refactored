@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.handleSetAssociations = void 0;
-var model_1 = require("@/auth/model");
-var models_1 = require("@/programs/models");
+var model_1 = require("../../auth/model");
+var models_1 = require("../../programs/models");
 var handleSetAssociations = function () {
     model_1.Users.hasMany(models_1.Program, { foreignKey: "createdBy", as: "program" });
     models_1.Program.belongsTo(model_1.Users, { foreignKey: "createdBy", as: "user" });

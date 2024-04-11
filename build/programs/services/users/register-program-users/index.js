@@ -40,13 +40,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerProgramUsers = void 0;
-var app_1 = require("@/app");
-var app_cache_1 = require("@/app/app-cache");
-var user_1 = require("@/auth/helpers/user");
-var model_1 = require("@/auth/model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var models_1 = require("@/programs/models");
+var app_1 = require("../../../../app");
+var app_cache_1 = require("../../../../app/app-cache");
+var user_1 = require("../../../../auth/helpers/user");
+var model_1 = require("../../../../auth/model");
+var core_1 = require("../../../../core");
+var common_1 = require("../../../../core/common");
+var models_1 = require("../../../../programs/models");
 var convert_csv_to_json_1 = __importDefault(require("convert-csv-to-json"));
 var csvSchema = core_1.Joi.object({
     email: core_1.Joi.string().required().trim(),

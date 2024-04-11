@@ -37,8 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findAllNotificationEntities = void 0;
-var core_1 = require("@/core");
-var models_1 = require("@/notifications/models");
+var core_1 = require("../../../core");
+var models_1 = require("../../../notifications/models");
 var FindNotificationEntity = /** @class */ (function () {
     function FindNotificationEntity(dbNotificationEntity) {
         var _this = this;

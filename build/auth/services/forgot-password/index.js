@@ -37,11 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.forgotPassword = void 0;
-var app_1 = require("@/app");
-var user_model_1 = require("@/auth/model/user.model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var mails_1 = require("@/mails");
+var app_1 = require("../../../app");
+var user_model_1 = require("../../../auth/model/user.model");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
+var mails_1 = require("../../../mails");
 var ForgotPassword = /** @class */ (function () {
     function ForgotPassword(dbUser) {
         var _this = this;

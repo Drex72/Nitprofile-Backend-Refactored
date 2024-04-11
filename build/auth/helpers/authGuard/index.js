@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authGuard = void 0;
-var core_1 = require("@/core");
+var core_1 = require("../../../core");
 var token_1 = require("../token");
 var AuthGuard = /** @class */ (function () {
     function AuthGuard(tokenService) {

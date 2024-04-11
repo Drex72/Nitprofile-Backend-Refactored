@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findProgramAssignedAdmins = void 0;
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var models_1 = require("@/programs/models");
+var core_1 = require("../../../../core");
+var common_1 = require("../../../../core/common");
+var models_1 = require("../../../../programs/models");
 var FindAssignedAdmins = /** @class */ (function () {
     function FindAssignedAdmins(dbPrograms) {
         var _this = this;

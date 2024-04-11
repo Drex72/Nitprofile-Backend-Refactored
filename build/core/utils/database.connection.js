@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeDbConnection = void 0;
 var associations_1 = require("../../database/associations");
-var core_1 = require("@/core");
+var core_1 = require("../../core");
 var initializeDbConnection = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {

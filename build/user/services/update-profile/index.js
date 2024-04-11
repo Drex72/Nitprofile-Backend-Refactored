@@ -48,9 +48,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProfile = void 0;
-var model_1 = require("@/auth/model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
+var model_1 = require("../../../auth/model");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
 var UpdateProfile = /** @class */ (function () {
     function UpdateProfile(dbUser) {
         var _this = this;

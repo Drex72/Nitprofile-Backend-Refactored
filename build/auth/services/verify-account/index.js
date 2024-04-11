@@ -37,10 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyUserAccount = void 0;
-var app_cache_1 = require("@/app/app-cache");
-var user_model_1 = require("@/auth/model/user.model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
+var app_cache_1 = require("../../../app/app-cache");
+var user_model_1 = require("../../../auth/model/user.model");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
 var VerifyAccount = /** @class */ (function () {
     function VerifyAccount(dbUser) {
         var _this = this;

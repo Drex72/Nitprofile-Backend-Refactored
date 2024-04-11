@@ -51,9 +51,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateProfilePicture = void 0;
-var model_1 = require("@/auth/model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
+var model_1 = require("../../../auth/model");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
 var fs_1 = __importDefault(require("fs"));
 var UpdateProfilePicture = /** @class */ (function () {
     function UpdateProfilePicture(dbUser) {

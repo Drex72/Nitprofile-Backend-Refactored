@@ -53,7 +53,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cache = exports.AppCacheManager = void 0;
 var ioredis_1 = require("ioredis");
-var core_1 = require("@/core");
+var core_1 = require("../../core");
 var AppCacheManager = /** @class */ (function (_super) {
     __extends(AppCacheManager, _super);
     function AppCacheManager(options) {

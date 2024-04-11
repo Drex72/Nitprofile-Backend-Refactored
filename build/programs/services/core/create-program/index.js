@@ -48,10 +48,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProgram = void 0;
-var model_1 = require("@/auth/model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var models_1 = require("@/programs/models");
+var model_1 = require("../../../../auth/model");
+var core_1 = require("../../../../core");
+var common_1 = require("../../../../core/common");
+var models_1 = require("../../../../programs/models");
 var CreateProgram = /** @class */ (function () {
     function CreateProgram(dbPrograms) {
         var _this = this;

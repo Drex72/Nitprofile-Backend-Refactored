@@ -38,9 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startApp = void 0;
 var http_1 = require("http");
-var web_socket_1 = require("@/web-socket");
-var app_1 = require("@/app");
-var core_1 = require("@/core");
+var web_socket_1 = require("../web-socket");
+var app_1 = require("../app");
+var core_1 = require("../core");
 var startApp = function () { return __awaiter(void 0, void 0, void 0, function () {
     var server, io;
     return __generator(this, function (_a) {

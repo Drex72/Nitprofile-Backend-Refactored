@@ -48,10 +48,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signIn = void 0;
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var token_1 = require("@/auth/helpers/token");
-var user_model_1 = require("@/auth/model/user.model");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
+var token_1 = require("../../../auth/helpers/token");
+var user_model_1 = require("../../../auth/model/user.model");
 var SignIn = /** @class */ (function () {
     function SignIn(dbUser, tokenService) {
         var _this = this;

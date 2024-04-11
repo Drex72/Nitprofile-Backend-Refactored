@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = exports.getTransporter = void 0;
 var nodemailer_1 = require("nodemailer");
 var nodemailer_sendgrid_1 = __importDefault(require("nodemailer-sendgrid"));
-var core_1 = require("@/core");
+var core_1 = require("../core");
 var getTransporter = function () {
     var options = {
         apiKey: core_1.config.sendGrid.sendGridApikey,

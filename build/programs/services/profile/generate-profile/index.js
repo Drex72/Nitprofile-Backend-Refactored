@@ -37,11 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateProfile = void 0;
-var model_1 = require("@/auth/model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var formatNode_1 = require("@/programs/helpers/formatNode");
-var models_1 = require("@/programs/models");
+var model_1 = require("../../../../auth/model");
+var core_1 = require("../../../../core");
+var common_1 = require("../../../../core/common");
+var formatNode_1 = require("../../../../programs/helpers/formatNode");
+var models_1 = require("../../../../programs/models");
 var GenerateProfile = /** @class */ (function () {
     function GenerateProfile(dbPrograms, dbUserPrograms, dbProgramNodes, dbUser) {
         var _this = this;
@@ -79,7 +79,7 @@ var GenerateProfile = /** @class */ (function () {
                         if (!existingUser)
                             throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
                         return [4 /*yield*/, this.dbProgramNodes.scope("").findAll({
-                                where: { programId: programId },
+                                where: { programId: programId, category: "profile" },
                             })];
                     case 4:
                         programNodes = _c.sent();
@@ -89,11 +89,9 @@ var GenerateProfile = /** @class */ (function () {
                         profilePictureNode = programNodes.find(function (node) { return node.type === "image" && node.overlay; });
                         if (profilePictureNode && !existingUser.profilePicPublicId)
                             throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROFILE_PICTURE);
-                        console.log({ programUrl: userProgram.profileImageUrl });
                         if (userProgram.profileImageUrl && userProgram.profileImageUrl.length > 20)
                             profile_url = userProgram.profileImageUrl;
                         if (!(!userProgram.profileImageUrl || userProgram.profileImageUrl.length < 20 || existingUser.changed("profilePicSecureUrl"))) return [3 /*break*/, 7];
-                        console.log("hey");
                         refactoredNodes_1 = [];
                         return [4 /*yield*/, Promise.all(programNodes.map(function (node) { return __awaiter(_this, void 0, void 0, function () {
                                 var formattedNode;
@@ -123,7 +121,6 @@ var GenerateProfile = /** @class */ (function () {
                             nodes: refactoredNodes_1,
                             width: program.profileFrameWidth,
                         });
-                        console.log(profile_url);
                         userProgram.profileImageUrl = profile_url;
                         userProgram.profileGenerationDate = new Date();
                         return [4 /*yield*/, userProgram.save()];
@@ -131,7 +128,6 @@ var GenerateProfile = /** @class */ (function () {
                         _c.sent();
                         _c.label = 7;
                     case 7:
-                        console.log({ profile_url: profile_url }, "hey");
                         if (!profile_url)
                             throw new core_1.BadRequestError("Could not Generate Profile, Please try again");
                         core_1.logger.info("Profile for User ".concat(existingUser.id, " Generated successfully"));

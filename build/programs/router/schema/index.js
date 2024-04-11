@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProgramNodesSchems = exports.createProgramNodeSchema = exports.addProgramProfileFrameSchema = exports.assignAdminToProgramSchema = exports.resendProgramUserMailSchema = exports.createProgramUserSchema = exports.updateProgramSchema = exports.findProgramSchema = exports.createProgramSchema = void 0;
+exports.getProgramNodesSchems = exports.createProgramNodeSchema = exports.addProgramCertificateFrameSchema = exports.addProgramProfileFrameSchema = exports.assignAdminToProgramSchema = exports.resendProgramUserMailSchema = exports.createProgramUserSchema = exports.updateProgramSchema = exports.findProgramSchema = exports.createProgramSchema = void 0;
 var Joi = __importStar(require("joi"));
 exports.createProgramSchema = {
     inputSchema: Joi.object({
@@ -77,6 +77,15 @@ exports.addProgramProfileFrameSchema = {
     inputSchema: Joi.object({
         profileFrameHeight: Joi.number().required(),
         profileFrameWidth: Joi.number().required(),
+    }),
+    querySchema: Joi.object({
+        programId: Joi.string().length(36).trim().required(),
+    }),
+};
+exports.addProgramCertificateFrameSchema = {
+    inputSchema: Joi.object({
+        certificateFrameHeight: Joi.number().required(),
+        certificateFrameWidth: Joi.number().required(),
     }),
     querySchema: Joi.object({
         programId: Joi.string().length(36).trim().required(),

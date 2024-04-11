@@ -37,10 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createNotification = void 0;
-var core_1 = require("@/core");
-var models_1 = require("@/notifications/models");
-var user_model_1 = require("@/auth/model/user.model");
-var web_socket_1 = require("@/web-socket");
+var core_1 = require("../../core");
+var models_1 = require("../../notifications/models");
+var user_model_1 = require("../../auth/model/user.model");
+var web_socket_1 = require("../../web-socket");
 var CreateNotification = /** @class */ (function () {
     function CreateNotification(dbNotificationEntity, dbNotifications, dbUsers) {
         var _this = this;

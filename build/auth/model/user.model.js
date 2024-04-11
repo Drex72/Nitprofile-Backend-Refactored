@@ -17,7 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Users = exports.auth_roles = void 0;
 var sequelize_1 = require("sequelize");
-var core_1 = require("@/core");
+var core_1 = require("../../core");
 exports.auth_roles = ["SUPER ADMIN", "ADMIN", "USER", "DEVELOPER"];
 var Users = /** @class */ (function (_super) {
     __extends(Users, _super);

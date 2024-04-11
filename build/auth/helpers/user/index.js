@@ -48,9 +48,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create_user = void 0;
-var common_1 = require("@/core/common");
-var core_1 = require("@/core");
-var user_model_1 = require("@/auth/model/user.model");
+var common_1 = require("../../../core/common");
+var core_1 = require("../../../core");
+var user_model_1 = require("../../../auth/model/user.model");
 var CreateUser = /** @class */ (function () {
     function CreateUser(dbUser) {
         var _this = this;

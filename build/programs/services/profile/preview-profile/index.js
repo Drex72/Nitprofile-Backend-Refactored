@@ -37,11 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.previewProfile = void 0;
-var model_1 = require("@/auth/model");
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var formatNode_1 = require("@/programs/helpers/formatNode");
-var models_1 = require("@/programs/models");
+var model_1 = require("../../../../auth/model");
+var core_1 = require("../../../../core");
+var common_1 = require("../../../../core/common");
+var formatNode_1 = require("../../../../programs/helpers/formatNode");
+var models_1 = require("../../../../programs/models");
 var PreviewProfile = /** @class */ (function () {
     function PreviewProfile(dbPrograms, dbAdminPrograms, dbProgramNodes, dbUser) {
         var _this = this;
@@ -50,7 +50,7 @@ var PreviewProfile = /** @class */ (function () {
         this.dbProgramNodes = dbProgramNodes;
         this.dbUser = dbUser;
         this.handle = function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
-            var programId, adminProgram, program, programNodes, existingUser, profilePictureNode, profile_url, refactoredNodes_1;
+            var programId, adminProgram, program, programNodes, existingUser, profile_url, refactoredNodes_1;
             var _this = this;
             var query = _b.query, user = _b.user;
             return __generator(this, function (_c) {
@@ -74,7 +74,7 @@ var PreviewProfile = /** @class */ (function () {
                         if (!program)
                             throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROGRAM);
                         return [4 /*yield*/, this.dbProgramNodes.scope("").findAll({
-                                where: { programId: programId },
+                                where: { programId: programId, category: "profile" },
                             })];
                     case 3:
                         programNodes = _c.sent();
@@ -85,9 +85,6 @@ var PreviewProfile = /** @class */ (function () {
                             throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_TOKEN_PROVIDED);
                         if (!program.profileFrameSecureUrl)
                             throw new core_1.BadRequestError("No Profile Frame Uploaded!");
-                        profilePictureNode = programNodes.find(function (node) { return node.type === "image" && !node.overlay; });
-                        if (profilePictureNode && !existingUser.profilePicPublicId)
-                            throw new core_1.BadRequestError(common_1.AppMessages.FAILURE.INVALID_PROFILE_PICTURE);
                         if (!programNodes.length) {
                             profile_url = program.profileFrameSecureUrl;
                         }

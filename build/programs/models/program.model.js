@@ -53,8 +53,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Program = void 0;
 var sequelize_1 = require("sequelize");
-var core_1 = require("@/core");
-var user_model_1 = require("@/auth/model/user.model");
+var core_1 = require("../../core");
+var user_model_1 = require("../../auth/model/user.model");
 var Program = /** @class */ (function (_super) {
     __extends(Program, _super);
     function Program() {

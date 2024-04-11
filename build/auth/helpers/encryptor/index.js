@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.encryptor = exports.Encryptor = void 0;
 var crypto_js_1 = __importDefault(require("crypto-js"));
-var core_1 = require("@/core");
+var core_1 = require("../../../core");
 var Encryptor = /** @class */ (function () {
     function Encryptor(encryptorSecretKey) {
         if (encryptorSecretKey === void 0) { encryptorSecretKey = core_1.config.auth.encryptorSecretKey; }

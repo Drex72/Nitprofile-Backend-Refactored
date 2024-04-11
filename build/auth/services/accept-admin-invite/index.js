@@ -59,10 +59,10 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.acceptInvitation = void 0;
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var user_1 = require("@/auth/helpers/user");
-var app_cache_1 = require("@/app/app-cache");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
+var user_1 = require("../../../auth/helpers/user");
+var app_cache_1 = require("../../../app/app-cache");
 var AcceptInvitation = /** @class */ (function () {
     function AcceptInvitation() {
         var _this = this;

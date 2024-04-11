@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = void 0;
-var mails_1 = require("@/mails");
-var core_1 = require("@/core");
-var listeners_1 = require("@/programs/listeners");
-var listeners_2 = require("@/notifications/listeners");
+var mails_1 = require("../../mails");
+var core_1 = require("../../core");
+var listeners_1 = require("../../programs/listeners");
+var listeners_2 = require("../../notifications/listeners");
 /**
  * Event Listener Registry.
  */

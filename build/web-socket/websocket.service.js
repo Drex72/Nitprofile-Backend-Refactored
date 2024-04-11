@@ -17,7 +17,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WebsocketSecurityContext = exports.Websocket = void 0;
 var socket_io_1 = require("socket.io");
-var core_1 = require("@/core");
+var core_1 = require("../core");
 var WEBSOCKET_CORS = {
     origin: core_1.allowedOrigins,
     methods: ["GET", "POST"],

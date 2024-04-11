@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resetPassword = void 0;
-var core_1 = require("@/core");
-var common_1 = require("@/core/common");
-var user_model_1 = require("@/auth/model/user.model");
+var core_1 = require("../../../core");
+var common_1 = require("../../../core/common");
+var user_model_1 = require("../../../auth/model/user.model");
 var ResetPassword = /** @class */ (function () {
     function ResetPassword(dbUser) {
         var _this = this;

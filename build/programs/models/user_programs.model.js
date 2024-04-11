@@ -16,10 +16,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserPrograms = void 0;
+var user_model_1 = require("../../auth/model/user.model");
+var core_1 = require("../../core");
+var program_model_1 = require("../../programs/models/program.model");
 var sequelize_1 = require("sequelize");
-var core_1 = require("@/core");
-var user_model_1 = require("@/auth/model/user.model");
-var program_model_1 = require("@/programs/models/program.model");
 var UserPrograms = /** @class */ (function (_super) {
     __extends(UserPrograms, _super);
     function UserPrograms() {
@@ -54,13 +54,13 @@ UserPrograms.init({
         defaultValue: false,
     },
     profileImageUrl: {
-        type: sequelize_1.DataTypes.DATE,
+        type: sequelize_1.DataTypes.STRING(500),
     },
     profileGenerationDate: {
         type: sequelize_1.DataTypes.DATE,
     },
     certificateImageUrl: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.STRING(500),
     },
     certificateGenerationDate: {
         type: sequelize_1.DataTypes.DATE,

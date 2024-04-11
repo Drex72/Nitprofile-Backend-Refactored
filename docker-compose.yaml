@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-    # API
     app:
         build: ./
         restart: unless-stopped
@@ -22,7 +21,6 @@ services:
         depends_on:
             - db
 
-    # Database
     db:
         image: postgres
         restart: always
@@ -37,14 +35,9 @@ services:
             POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
             POSTGRES_DB: ${DATABASE_NAME}
 
-    # Adminer
     adminer:
         image: adminer
         container_name: adminer
         restart: always
         ports:
-            - 8080:8080
-
-volumes:
-    pgdata:
-        driver: local
+            - "8081:8080"  # Port changed to avoid conflict

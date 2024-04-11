@@ -37,8 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendNewUserMail = void 0;
-var core_1 = require("@/core");
-var mails_1 = require("@/mails");
+var core_1 = require("../../core");
+var mails_1 = require("../../mails");
 var models_1 = require("../models");
 var SendUserEmail = /** @class */ (function () {
     function SendUserEmail(dbUserPrograms) {

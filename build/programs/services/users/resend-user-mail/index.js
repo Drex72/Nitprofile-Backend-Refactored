@@ -37,12 +37,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resendUserMail = void 0;
-var model_1 = require("@/auth/model");
-var common_1 = require("@/core/common");
-var core_1 = require("@/core");
-var models_1 = require("@/programs/models");
-var app_cache_1 = require("@/app/app-cache");
-var mails_1 = require("@/mails");
+var model_1 = require("../../../../auth/model");
+var common_1 = require("../../../../core/common");
+var core_1 = require("../../../../core");
+var models_1 = require("../../../../programs/models");
+var app_cache_1 = require("../../../../app/app-cache");
+var mails_1 = require("../../../../mails");
 var ResendUserMail = /** @class */ (function () {
     function ResendUserMail(dbPrograms, dbUsers, dbUserPrograms) {
         var _this = this;

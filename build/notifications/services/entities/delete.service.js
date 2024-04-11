@@ -37,9 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNotificationEntity = void 0;
-var core_1 = require("@/core");
-var models_1 = require("@/notifications/models");
-var common_1 = require("@/core/common");
+var core_1 = require("../../../core");
+var models_1 = require("../../../notifications/models");
+var common_1 = require("../../../core/common");
 var DeleteNotificationEntity = /** @class */ (function () {
     function DeleteNotificationEntity(dbNotificationEntity) {
         var _this = this;

@@ -1,8 +1,8 @@
 "use strict";
 // // /middlewares/refactored-middlewares/withPermission.ts
-// import { UserPermissions, Users } from "@/auth/model"
-// import { UnAuthorizedError, type ITokenSignedPayload } from "@/core"
-// import { AppMessages } from "@/core/common"
+// import { UserPermissions, Users } from "../../../auth/model"
+// import { UnAuthorizedError, type ITokenSignedPayload } from "../../../core"
+// import { AppMessages } from "../../../core/common"
 // import Resource from "@/database/models/Resources"
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hello = void 0;
