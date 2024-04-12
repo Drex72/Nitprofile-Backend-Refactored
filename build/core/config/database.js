@@ -24,10 +24,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sequelize = void 0;
-var sequelize_1 = require("sequelize");
-var config_1 = require("./config");
-var pg = __importStar(require("pg"));
-var _a = config_1.config.db, dbHost = _a.dbHost, dbName = _a.dbName, dbPassword = _a.dbPassword, dbType = _a.dbType, dbUser = _a.dbUser;
+const sequelize_1 = require("sequelize");
+const config_1 = require("./config");
+const pg = __importStar(require("pg"));
+const { dbHost, dbName, dbPassword, dbType, dbUser } = config_1.config.db;
 exports.sequelize = new sequelize_1.Sequelize(dbName, dbUser, dbPassword, {
     host: dbHost,
     dialect: dbType,

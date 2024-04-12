@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authRateLimiter = exports.globalRateLimiter = void 0;
-var express_rate_limit_1 = __importDefault(require("express-rate-limit"));
-var moment_1 = __importDefault(require("moment"));
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const moment_1 = __importDefault(require("moment"));
 exports.globalRateLimiter = (0, express_rate_limit_1.default)({
     windowMs: (0, moment_1.default)().add(12, "hours").unix(), // 24 hrs in milliseconds
     max: 400,

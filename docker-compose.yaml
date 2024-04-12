@@ -5,20 +5,13 @@ services:
         build: ./
         restart: unless-stopped
         env_file: ./.env
-        environment:
-            DATABASE_NAME: ${DATABASE_NAME}
-            DATABASE_HOST: ${DATABASE_HOST}
-            DATABASE_PORT: 5455
-            DATABASE_USER: ${DATABASE_USER}
-            DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-            DATABASE_TYPE: ${DATABASE_TYPE}
         ports:
             - $PORT:$PORT
         stdin_open: true
         tty: true
         volumes:
-            - .:/home/bun/app
-            - /home/bun/app/node_modules
+            - .:/app
+            - /app/node_modules
         depends_on:
             - db
 
@@ -31,11 +24,10 @@ services:
         ports:
             - "5434:5432"
         environment:
-            POSTGRES_HOST_AUTH_METHOD: md5
             PGDATA: /var/lib/postgresql/data/pgdata
-            POSTGRES_USER: ${DATABASE_USER}
-            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-            POSTGRES_DB: ${DATABASE_NAME}
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: rootpassword
+            POSTGRES_DB: nitprofile_db
 
     # Adminer
     adminer:

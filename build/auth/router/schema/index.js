@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.acceptInvitationSchema = exports.inviteAdminSchema = exports.resetPasswordSchema = exports.forgotPasswordSchema = exports.verifyAccount = exports.signInSchema = void 0;
-var Joi = __importStar(require("joi"));
+const Joi = __importStar(require("joi"));
 exports.signInSchema = {
     inputSchema: Joi.object({
         password: Joi.string().trim().required(),

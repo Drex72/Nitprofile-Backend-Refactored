@@ -1,5 +1,5 @@
 "use strict";
-var dotenv = require("dotenv");
+const dotenv = require("dotenv");
 dotenv.config();
 module.exports = {
     development: {
@@ -17,8 +17,6 @@ module.exports = {
             underscored: true,
         },
         dialect: "postgres",
-        ssl: true,
-        dialectOptions: { ssl: { require: true } },
     },
     production: {
         username: process.env.DATABASE_USER,

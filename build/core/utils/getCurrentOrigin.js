@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.currentOrigin = void 0;
-var __1 = require("..");
-var getCurrentOrigin = function () {
-    switch (__1.config.appEnvironment) {
+const __1 = require("..");
+const getCurrentOrigin = () => {
+    switch (__1.config?.appEnvironment) {
         case "development":
             return __1.config.urls.devOrigin;
         case "staging":

@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateprofileSchema = void 0;
-var Joi = __importStar(require("joi"));
+const Joi = __importStar(require("joi"));
 exports.updateprofileSchema = {
     inputSchema: Joi.object({
         firstName: Joi.string().trim().optional(),

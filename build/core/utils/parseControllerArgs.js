@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ParseContextArgs = /** @class */ (function () {
-    function ParseContextArgs() {
-        this.parse = function (req) {
+class ParseContextArgs {
+    constructor() {
+        this.parse = (req) => {
             return {
                 input: req.body,
                 params: req.params,
@@ -13,16 +13,15 @@ var ParseContextArgs = /** @class */ (function () {
             };
         };
     }
-    ParseContextArgs.parseFileContents = function (files) {
-        if (!files)
-            return null;
-        var fileObjects = {};
-        for (var key in files) {
-            var file = files[key];
-            fileObjects[key] = file;
-        }
-        return fileObjects;
-    };
-    return ParseContextArgs;
-}());
+}
+ParseContextArgs.parseFileContents = (files) => {
+    if (!files)
+        return null;
+    const fileObjects = {};
+    for (let key in files) {
+        const file = files[key];
+        fileObjects[key] = file;
+    }
+    return fileObjects;
+};
 exports.default = new ParseContextArgs();
