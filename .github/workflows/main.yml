@@ -3,9 +3,7 @@ name: CI/CD Pipeline - runs tests and deploys to Azure VM
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: ["development"]
-  # pull_request:
-  #   branches: [ "king" ]
+    branches: ["deployment"]
 
   workflow_dispatch:
 
