@@ -35,7 +35,7 @@ jobs:
         port: ${{ secrets.PORT }}
         command_timeout: 200m
         script: |
-          mkdir refactored-nitprofile/
-          cd refactored-nitprofile/
+          git clone https://github.com/Drex72/Nitprofile-Backend-Refactored.git
+          cd Nitprofile-Backend-Refactored/
           git pull origin deployment
           docker-compose up -d
