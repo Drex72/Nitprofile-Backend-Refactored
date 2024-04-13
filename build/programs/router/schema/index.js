@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProgramNodesSchems = exports.createProgramNodeSchema = exports.addProgramCertificateFrameSchema = exports.addProgramProfileFrameSchema = exports.assignAdminToProgramSchema = exports.resendProgramUserMailSchema = exports.createProgramUserSchema = exports.updateProgramSchema = exports.findProgramSchema = exports.createProgramSchema = void 0;
-var Joi = __importStar(require("joi"));
+const Joi = __importStar(require("joi"));
 exports.createProgramSchema = {
     inputSchema: Joi.object({
         name: Joi.string().trim().required(),
@@ -91,13 +91,13 @@ exports.addProgramCertificateFrameSchema = {
         programId: Joi.string().length(36).trim().required(),
     }),
 };
-var baseNodeSchema = Joi.object({
+const baseNodeSchema = Joi.object({
     type: Joi.string().required(),
     x: Joi.number().required(),
     y: Joi.number().required(),
     gravity: Joi.string().required().valid("north_east", "north_west", "south_east", "south_west", "center"),
 });
-var imageNodeSchema = baseNodeSchema.keys({
+const imageNodeSchema = baseNodeSchema.keys({
     type: Joi.string().valid("image").required(),
     overlay: Joi.string().optional(),
     width: Joi.number().min(50).required(),
@@ -105,7 +105,7 @@ var imageNodeSchema = baseNodeSchema.keys({
     radius: Joi.number().required(),
     crop: Joi.string().required(),
 });
-var textNodeSchema = baseNodeSchema.keys({
+const textNodeSchema = baseNodeSchema.keys({
     type: Joi.string().valid("text").required(),
     font_family: Joi.string().required(),
     font_size: Joi.number().required(),

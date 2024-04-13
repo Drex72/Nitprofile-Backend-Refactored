@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertArrayToObject = void 0;
-var convertArrayToObject = function (array) {
-    var result = {};
-    array.forEach(function (item) {
-        var _a = item.split("="), key = _a[0], value = _a[1];
+const convertArrayToObject = (array) => {
+    const result = {};
+    array.forEach((item) => {
+        const [key, value] = item.split("=");
         result[key] = value;
     });
     return result;

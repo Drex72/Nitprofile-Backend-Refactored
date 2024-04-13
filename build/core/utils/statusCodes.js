@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var HttpStatus = {
+const HttpStatus = {
     OK: 200,
     CREATED: 201,
     NO_CONTENT: 204,

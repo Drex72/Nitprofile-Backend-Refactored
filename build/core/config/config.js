@@ -27,11 +27,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
-var dotenv = __importStar(require("dotenv"));
-var joi_1 = __importDefault(require("joi"));
+const dotenv = __importStar(require("dotenv"));
+const joi_1 = __importDefault(require("joi"));
 dotenv.config();
 // Define validation schema for environment variables
-var envSchema = joi_1.default.object()
+const envSchema = joi_1.default.object()
     .keys({
     NODE_ENV: joi_1.default.string().valid("development", "production", "staging").required(),
     PORT: joi_1.default.number().required(),
@@ -71,10 +71,10 @@ var envSchema = joi_1.default.object()
 })
     .unknown();
 // Validate environment variables against the schema
-var _a = envSchema.prefs({ errors: { label: "key" } }).validate(process.env), validatedEnvVars = _a.value, validationError = _a.error;
+const { value: validatedEnvVars, error: validationError } = envSchema.prefs({ errors: { label: "key" } }).validate(process.env);
 // Throw an error if validation fails
 if (validationError) {
-    throw new Error("Config validation error: ".concat(validationError.message));
+    throw new Error(`Config validation error: ${validationError.message}`);
 }
 exports.config = Object.freeze({
     port: validatedEnvVars.PORT,

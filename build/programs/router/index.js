@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.programRouter = void 0;
-var controlBuilder_1 = require("../../core/middlewares/controlBuilder");
-var admins_1 = require("../../programs/services/admins");
-var core_1 = require("../../programs/services/core");
-var profile_1 = require("../../programs/services/profile");
-var program_nodes_1 = require("../../programs/services/program_nodes");
-var users_1 = require("../../programs/services/users");
-var express_1 = require("express");
-var schema_1 = require("./schema");
-var certificate_1 = require("../services/certificate");
+const controlBuilder_1 = require("@/core/middlewares/controlBuilder");
+const admins_1 = require("@/programs/services/admins");
+const core_1 = require("@/programs/services/core");
+const profile_1 = require("@/programs/services/profile");
+const program_nodes_1 = require("@/programs/services/program_nodes");
+const users_1 = require("@/programs/services/users");
+const express_1 = require("express");
+const schema_1 = require("./schema");
+const certificate_1 = require("../services/certificate");
 exports.programRouter = (0, express_1.Router)();
 // Create a program
 exports.programRouter

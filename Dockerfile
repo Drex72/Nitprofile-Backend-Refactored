@@ -1,20 +1,14 @@
-
-# NODE ONLY DOCKER
-
 FROM node:18-alpine
+ 
+WORKDIR /app
 
-WORKDIR /home/bun/app
-
-COPY ./package.json ./
-
-RUN npm install
+COPY package.json .
 
 COPY . .
 
-ENV PORT 3000
+RUN npm install
 
-EXPOSE $PORT
-
-CMD [ "npm", "run", "build:prod" ]
-
+EXPOSE 8000
+ 
+CMD ["npm","run", "start:dev"]
 

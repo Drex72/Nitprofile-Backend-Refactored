@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.notificationRouter = void 0;
-var express_1 = require("express");
-var controlBuilder_1 = require("../../core/middlewares/controlBuilder");
-var services_1 = require("../../notifications/services");
-var schema_1 = require("./schema");
+const express_1 = require("express");
+const controlBuilder_1 = require("@/core/middlewares/controlBuilder");
+const services_1 = require("@/notifications/services");
+const schema_1 = require("./schema");
 exports.notificationRouter = (0, express_1.Router)();
-exports.notificationRouter.get("/health", function (req, res) {
+exports.notificationRouter.get("/health", (req, res) => {
     res.status(200).json({
         message: "Notification Service is up and running!",
         status: 200,

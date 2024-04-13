@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildDevLogger = exports.prodDevLogger = void 0;
-var winston_1 = require("winston");
-var combine = winston_1.format.combine, printf = winston_1.format.printf, timestamp = winston_1.format.timestamp, colorize = winston_1.format.colorize;
+const winston_1 = require("winston");
+const { combine, printf, timestamp, colorize } = winston_1.format;
 function logFormat() {
-    return printf(function (info) {
-        return "".concat(info.timestamp, " ").concat(info.level, ": ").concat(info.stack || info.message);
+    return printf((info) => {
+        return `${info.timestamp} ${info.level}: ${info.stack || info.message}`;
     });
 }
 function prodDevLogger() {

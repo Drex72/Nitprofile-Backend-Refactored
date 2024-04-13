@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.joiValidate = exports.Joi = void 0;
 // @ts-nocheck
-var joi_1 = __importDefault(require("joi"));
+const joi_1 = __importDefault(require("joi"));
 exports.Joi = joi_1.default;
-var joiValidate = function (schema, obj) {
-    var _a = schema.validate(obj), error = _a.error, value = _a.value;
+const joiValidate = (schema, obj) => {
+    const { error, value } = schema.validate(obj);
     if (error)
         throw error;
     return value;
