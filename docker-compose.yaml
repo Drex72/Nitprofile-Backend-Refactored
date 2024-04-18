@@ -1,6 +1,5 @@
 version: "3.8"
 services:
-    # API
     app:
         build: ./
         restart: unless-stopped
@@ -15,7 +14,6 @@ services:
         depends_on:
             - db
 
-    # Database
     db:
         image: postgres
         restart: always
@@ -29,25 +27,14 @@ services:
             POSTGRES_PASSWORD: rootpassword
             POSTGRES_DB: nitprofile_db
 
-    # Adminer
     adminer:
         image: adminer
         container_name: adminer
         restart: always
         ports:
-            - 8080:8080
-    redis:
-        image: redis:latest
-        restart: always
-        ports:
-        - "6379:6379"
-        volumes:
-        - ./redis.conf:/usr/local/etc/redis/redis.conf
-        environment:
-        - REDIS_PASSWORD=my-password
-        - REDIS_PORT=6379
-        - REDIS_DATABASES=16
+            - "8081:8080"  # Port changed to avoid conflict
 
-volumes:
-    pgdata:
-        driver: local
+networks:
+  default:
+    name: nithub
+    external: false
