@@ -8,6 +8,8 @@ const getCurrentOrigin = () => {
             return config.urls.stagingOrigin
         case "production":
             return config.urls.liveOrigin
+        default :
+        return "http://localhost:3000"
     }
 }
 
