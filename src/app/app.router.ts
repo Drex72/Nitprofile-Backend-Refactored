@@ -12,8 +12,7 @@ appRouter.use("/programs", programRouter)
 
 appRouter.use("/profile", profileRouter)
 
-appRouter.get("/health", (req, res) => {
-     console.log(req.ip, req.socket.remoteAddress)
+appRouter.get("/health", (_, res) => {
     res.status(HttpStatus.OK).json({
         message: "Api up",
         version: "1.0",
