@@ -14,7 +14,7 @@ appRouter.use("/profile", profileRouter)
 
 appRouter.get("/health", (_, res) => {
     res.status(HttpStatus.OK).json({
-        message: "Api up",
+        message: "Api ups",
         version: "1.0",
     })
 })
