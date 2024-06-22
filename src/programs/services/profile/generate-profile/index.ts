@@ -44,7 +44,7 @@ class GenerateProfile {
             throw new BadRequestError(AppMessages.FAILURE.PROFILE_GENERATION_NOT_AVAILABLE)
         }
 
-        const profilePictureNode = programNodes.find((node) => node.type === "image" && node.overlay)
+        const profilePictureNode = programNodes.find((node) => node.type === "image")
 
         if (profilePictureNode && !existingUser.profilePicPublicId) throw new BadRequestError(AppMessages.FAILURE.INVALID_PROFILE_PICTURE)
 

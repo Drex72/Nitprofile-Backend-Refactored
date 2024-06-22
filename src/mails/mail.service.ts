@@ -12,21 +12,29 @@ export const getTransporter = () => {
 }
 
 export const sendEmail = async (emailDto: SendEmailRequestInterface) => {
-    const { to, subject, body } = emailDto
-    const from = config.sendGrid.sendgrid_email
+    try {
+        const { to, subject, body } = emailDto
+        const from = config.sendGrid.sendgrid_email
+    
+        const transporter = getTransporter()
+    
+        const mailOptions = {
+            from,
+            to,
+            subject,
+            html: body,
+        }
+    
+        await transporter.sendMail(mailOptions)
+    
+        logger.info(`Mail sent Successfully to ${to}`)
+    
+        return emailDto
+    } catch (error) {
 
-    const transporter = getTransporter()
+        logger.error(`Error sending mail to ${emailDto.to}`, error)
 
-    const mailOptions = {
-        from,
-        to,
-        subject,
-        html: body,
+        throw error
     }
-
-    await transporter.sendMail(mailOptions)
-
-    logger.info(`Mail sent Successfully to ${to}`)
-
-    return emailDto
+   
 }

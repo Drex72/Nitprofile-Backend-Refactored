@@ -61,13 +61,13 @@ class EnableProfileGeneration {
 
         const users: string[] = programUsers.map((user) => user.id)
 
-        dispatch("event:newNotification", {
-            actor: { id: user.id },
-            entity_type: "PROFILE_AVAILABLE",
-            item_id: programId,
-            message: `Profile Generation for Program ${program.name} is now Available.`,
-            notifier: users,
-        })
+        // dispatch("event:newNotification", {
+        //     actor: { id: user.id },
+        //     entity_type: "PROFILE_AVAILABLE",
+        //     item_id: programId,
+        //     message: `Profile Generation for Program ${program.name} is now Available.`,
+        //     notifier: users,
+        // })
 
         return {
             code: HttpStatus.OK,

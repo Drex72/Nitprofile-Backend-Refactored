@@ -1,15 +1,15 @@
+import { sequelize, type IAuthRoles } from "@/core"
+import { Program } from "@/programs/models"
 import {
     DataTypes,
-    type CreationOptional,
-    type InferAttributes,
-    type InferCreationAttributes,
     Model,
     UUIDV4,
     type BelongsToManyGetAssociationsMixin,
+    type CreationOptional,
+    type InferAttributes,
+    type InferCreationAttributes,
     type NonAttribute,
 } from "sequelize"
-import { sequelize, type IAuthRoles } from "@/core"
-import { Program, UserPrograms } from "@/programs/models"
 
 export const auth_roles = ["SUPER ADMIN", "ADMIN", "USER", "DEVELOPER"] as const
 
@@ -141,6 +141,5 @@ Users.init(
         sequelize,
         timestamps: true,
         freezeTableName: true,
-        
     },
 )
